@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HistòriaLab - Ruta del Temps</title>
+  
+  <!-- Fonts: Fredoka & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6.5.1 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React & React DOM UMD -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  
+  <!-- Framer Motion -->
+  <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Babel Standalone -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Banc de Preguntes de la Plataforma -->
+  <script src="questions.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            display: ['Fredoka', 'sans-serif'],
+          },
+          colors: {
+            duoGreen: '#58cc02',
+            duoGreenDark: '#46a302',
+            duoBlue: '#1cb0f6',
+            duoBlueDark: '#1899d6',
+            duoOrange: '#ff9600',
+            duoOrangeDark: '#e08400',
+            duoPurple: '#ce82ff',
+            duoPurpleDark: '#b060e0',
+            duoRed: '#ff4b4b',
+            duoRedDark: '#ea2b2b',
+            duoYellow: '#ffc800',
+            duoYellowDark: '#e0b000',
+            duoEmerald: '#10b981',
+            duoEmeraldDark: '#059669',
+          },
+          boxShadow: {
+            'duo-3d': '0 4px 0 0 rgba(0, 0, 0, 0.15)',
+            'btn-green': '0 4px 0 0 #46a302',
+            'btn-blue': '0 4px 0 0 #1899d6',
+            'btn-orange': '0 4px 0 0 #e08400',
+            'btn-purple': '0 4px 0 0 #b060e0',
+            'btn-red': '0 4px 0 0 #ea2b2b',
+            'btn-yellow': '0 4px 0 0 #e0b000',
+            'btn-slate': '0 4px 0 0 #cbd5e1',
+            'btn-emerald': '0 4px 0 0 #059669',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #F4F6F8;
+      color: #1E293B;
+      user-select: none;
+      overflow-x: hidden;
+    }
+
+    /* Animacions de feedback visual */
+    @keyframes shake {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      15% { transform: translate(-12px, 8px) rotate(-1deg); }
+      30% { transform: translate(12px, -8px) rotate(1deg); }
+      45% { transform: translate(-8px, -6px) rotate(-0.5deg); }
+      60% { transform: translate(8px, 6px) rotate(0.5deg); }
+      75% { transform: translate(-4px, 2px); }
+    }
+    .screen-shake {
+      animation: shake 0.45s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    @keyframes flashRed {
+      0% { box-shadow: inset 0 0 0 0 rgba(255, 75, 75, 0); }
+      30% { box-shadow: inset 0 0 60px 15px rgba(255, 75, 75, 0.45); }
+      100% { box-shadow: inset 0 0 0 0 rgba(255, 75, 75, 0); }
+    }
+    .flash-red {
+      animation: flashRed 0.5s ease-out;
+    }
+
+    @keyframes flashGreen {
+      0% { box-shadow: inset 0 0 0 0 rgba(88, 204, 2, 0); }
+      30% { box-shadow: inset 0 0 60px 15px rgba(88, 204, 2, 0.45); }
+      100% { box-shadow: inset 0 0 0 0 rgba(88, 204, 2, 0); }
+    }
+    .flash-green {
+      animation: flashGreen 0.5s ease-out;
+    }
+
+    @keyframes pulseHeart {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    .animate-pulse-heart {
+      animation: pulseHeart 0.8s infinite ease-in-out;
+    }
+
+    /* Custom scrollbar clara */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #E2E8F0;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+  </style>
+</head>
+<body class="bg-[#F4F6F8] text-slate-800 min-h-screen selection:bg-duoGreen selection:text-white flex flex-col justify-between">
+  <div id="root" class="flex-1 flex flex-col"></div>
+
+  <!-- Footer requerit -->
+  <footer class="w-full text-center text-xs text-slate-500 py-4 border-t border-slate-200 bg-white">
+    Aquesta plataforma pot cometre errors.
+  </footer>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+    const { motion, AnimatePresence } = window.Motion;
+
+    // Capítol 4 (La Restauració Borbònica) afegit a QuestionBank
+    if (window.QuestionBank && window.QuestionBank.CHAPTER_DATA) {
+      if (!window.QuestionBank.CHAPTER_DATA[4]) {
+        window.QuestionBank.CHAPTER_DATA[4] = {
+          id: 4,
+          title: "Capítol 4: La Restauració Borbònica",
+          desc: "Pròximament...",
+          color: "bg-amber-600",
+          available: false,
+          timeline: [],
+          kahoot: [],
+          xafarderia: {},
+          boe: [],
+          conecta: [],
+          veritat: [],
+          motPerdut: {}
+        };
+      }
+    }
+
+    // --- SINTETITZADOR D'ÀUDIO WEB AUDIO API ---
+    const playSound = (type) => {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+
+        if (type === 'pop') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(400, now);
+          osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } else if (type === 'success') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+          osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+          osc.start(now);
+          osc.stop(now + 0.45);
+        } else if (type === 'error') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(240, now);
+          osc.frequency.exponentialRampToValueAtTime(120, now + 0.3);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        } else if (type === 'cpr') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(150, now);
+          osc.frequency.exponentialRampToValueAtTime(350, now + 0.08);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'heartbeat') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(80, now);
+          osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
+          gain.gain.setValueAtTime(0.4, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+          osc.start(now);
+          osc.stop(now + 0.2);
+        } else if (type === 'heal') {
+          osc.type = 'triangle';
+          [350, 450, 550, 700, 900].forEach((freq, idx) => {
+            osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+          });
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+          osc.start(now);
+          osc.stop(now + 0.5);
+        } else if (type === 'lifeGain') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, now); // D5
+          osc.frequency.setValueAtTime(880.00, now + 0.1); // A5
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'gemGain') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(783.99, now); // G5
+          osc.frequency.setValueAtTime(1174.66, now + 0.08); // D6
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        } else if (type === 'fanfare') {
+          osc.type = 'triangle';
+          [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((freq, idx) => {
+            osc.frequency.setValueAtTime(freq, now + idx * 0.09);
+          });
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+          osc.start(now);
+          osc.stop(now + 0.65);
+        }
+      } catch (e) {
+        console.warn("Àudio no permès", e);
+      }
+    };
+
+    // --- CONFETTI ---
+    const triggerConfetti = () => {
+      if (window.confetti) {
+        window.confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    };
+
+    // --- MAPA RUTA DEL TEMPS ---
+    function PathMap({ selectedChapter, setSelectedChapter, nodeProgress, setCurrentView, isPro }) {
+      const CHAPTER_DATA = window.QuestionBank.CHAPTER_DATA;
+      const chapter = CHAPTER_DATA[selectedChapter];
+
+      const nodes = [
+        { key: 'timeline', name: 'Línia del Temps', icon: 'fa-timeline', color: 'bg-duoGreen', shadow: 'shadow-btn-green' },
+        { key: 'kahoot', name: 'Preguntes Flaix', icon: 'fa-bolt', color: 'bg-duoOrange', shadow: 'shadow-btn-orange' },
+        { key: 'xafarderia', name: 'Xafarderia de Cort', icon: 'fa-sitemap', color: 'bg-duoBlue', shadow: 'shadow-btn-blue' },
+        { key: 'boe', name: 'Decrets del BOE', icon: 'fa-scroll', color: 'bg-duoPurple', shadow: 'shadow-btn-purple' },
+        { key: 'conecta', name: 'Conecta Història', icon: 'fa-link', color: 'bg-duoRed', shadow: 'shadow-btn-red' },
+        { key: 'veritat', name: 'Veritat o Mentida', icon: 'fa-circle-check', color: 'bg-duoYellow', shadow: 'shadow-btn-yellow' },
+        { key: 'motPerdut', name: 'El Mot Perdut', icon: 'fa-pen-clip', color: 'bg-duoEmerald', shadow: 'shadow-btn-emerald' },
+      ];
+
+      const isLockedForNonPro = !isPro && selectedChapter !== 1;
+
+      return (
+        <div className="space-y-6 pb-12">
+          {/* Selector de Capítols */}
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
+            {Object.values(CHAPTER_DATA).map(chap => {
+              const isActive = chap.id === selectedChapter;
+              const isChapLocked = !isPro && chap.id !== 1;
+              return (
+                <button
+                  key={chap.id}
+                  onClick={() => {
+                    playSound('pop');
+                    setSelectedChapter(chap.id);
+                  }}
+                  className={`flex-1 min-w-[170px] p-3 rounded-2xl border-b-4 font-display font-black text-left transition-all ${
+                    isActive 
+                      ? `${chap.color} text-white shadow-lg border-black/20 scale-[1.02]` 
+                      : isChapLocked
+                        ? 'bg-slate-100 text-slate-400 border-slate-200 opacity-80'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-xs opacity-90 uppercase mb-1">
+                    <span>Capítol {chap.id}</span>
+                    {(!chap.available || isChapLocked) && (
+                      <span className="bg-amber-100 text-amber-800 text-[9px] font-black px-1.5 py-0.5 rounded-full border border-amber-300">
+                        {isChapLocked ? 'Bloquejat' : 'Pròximament'}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-sm line-clamp-1">{chap.title.split(': ')[1] || chap.title}</div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Banner del Capítol Actiu */}
+          <div className={`${chapter.color} text-white p-6 rounded-3xl shadow-duo-3d border-b-4 border-black/20 relative overflow-hidden`}>
+            <div className="relative z-10 max-w-lg">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="bg-white/20 backdrop-blur-md px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider">
+                  Capítol {chapter.id}
+                </span>
+                {(!chapter.available || isLockedForNonPro) && (
+                  <span className="bg-amber-400 text-slate-900 px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider">
+                    {isLockedForNonPro ? 'Upgrade Requerit' : 'Pròximament'}
+                  </span>
+                )}
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-display font-black leading-tight mb-2">
+                {chapter.title}
+              </h2>
+              <p className="text-white/90 text-sm font-medium">
+                {chapter.desc}
+              </p>
+            </div>
+            <i className="fa-solid fa-monument absolute -right-4 -bottom-6 text-9xl opacity-15 pointer-events-none"></i>
+          </div>
+
+          {/* Si el capítol no està disponible o està bloquejat per no-pro */}
+          {!chapter.available || isLockedForNonPro ? (
+            <div className="bg-white border-2 border-dashed border-amber-300 rounded-3xl p-8 text-center space-y-4 shadow-sm">
+              <div className="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-3xl mx-auto border-4 border-amber-200">
+                <i className="fa-solid fa-lock"></i>
+              </div>
+              <div className="max-w-md mx-auto space-y-2">
+                <h3 className="text-xl font-display font-black text-slate-800">
+                  {!chapter.available ? "Capítol en desenvolupament" : "Fes upgrade per seguir"}
+                </h3>
+                <p className="text-slate-500 text-sm font-medium">
+                  {!chapter.available 
+                    ? "El Capítol 4 (La Restauració Borbònica) estarà disponible molt aviat. Continua completant els capítols anteriors per guanyar XP i gemes!"
+                    : "Aquest capítol està bloquejat per a usuaris estàndard. Fes upgrade per seguir i desbloquejar tots els continguts de la plataforma."}
+                </p>
+              </div>
+            </div>
+          ) : (
+            /* Ruta Zig-Zag de Nodes de Joc */
+            <div className="relative py-4 flex flex-col items-center space-y-8">
+              {nodes.map((node, index) => {
+                const progressKey = `c${selectedChapter}_${node.key}`;
+                const stars = nodeProgress[progressKey] || 0;
+                
+                // Alineació en Zig-Zag
+                const offsetClass = index % 2 === 0 ? '-translate-x-12 sm:-translate-x-20' : 'translate-x-12 sm:translate-x-20';
+
+                return (
+                  <div key={node.key} className={`relative flex flex-col items-center ${offsetClass}`}>
+                    
+                    {/* Botó del Node */}
+                    <button
+                      onClick={() => { playSound('pop'); setCurrentView(node.key); }}
+                      className={`w-20 h-20 sm:w-24 sm:h-24 rounded-3xl ${node.color} ${node.shadow} text-white flex flex-col items-center justify-center text-2xl sm:text-3xl font-black transition-transform hover:scale-110 active:translate-y-1 relative group shadow-lg border-2 border-white/20`}
+                    >
+                      <i className={`fa-solid ${node.icon}`}></i>
+                      
+                      {/* Indicador d'Estrelles */}
+                      {stars > 0 && (
+                        <div className="absolute -top-3 bg-amber-400 text-slate-900 border-2 border-white text-xs px-2 py-0.5 rounded-full font-black flex items-center gap-1 shadow-sm">
+                          <i className="fa-solid fa-star text-[10px]"></i>
+                          <span>{stars}</span>
+                        </div>
+                      )}
+                    </button>
+
+                    {/* Nom del Mòdul */}
+                    <span className="mt-2 font-display font-black text-xs sm:text-sm text-slate-700 bg-white px-3 py-1 rounded-xl shadow-sm border border-slate-200 text-center max-w-[130px]">
+                      {node.name}
+                    </span>
+
+                  </div>
+                );
+              })}
+
+              {/* Node Extra Kahoot al Final del Capítol */}
+              <div className="relative flex flex-col items-center pt-6">
+                <button
+                  onClick={() => { playSound('pop'); setCurrentView('extraKahoot'); }}
+                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-r from-amber-500 via-duoOrange to-duoYellow shadow-btn-orange text-white flex flex-col items-center justify-center text-3xl sm:text-4xl font-black transition-transform hover:scale-110 active:translate-y-1 relative group shadow-xl border-4 border-amber-300"
+                >
+                  <i className="fa-solid fa-crown text-amber-200 animate-bounce"></i>
+                  <span className="text-[10px] font-black uppercase tracking-wider bg-black/30 px-2 py-0.5 rounded-full mt-1">
+                    EXTRA
+                  </span>
+                </button>
+                <span className="mt-2 font-display font-black text-xs sm:text-sm text-amber-900 bg-amber-100 px-3.5 py-1.5 rounded-xl shadow-sm border border-amber-300 text-center max-w-[180px]">
+                  Preguntes Extra Kahoot (Totes)
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- COMPONENT BOTIGA (SHOP) ---
+    function ShopView({ gems, setGems, hearts, setHearts, inventory, setInventory, setCurrentView }) {
+      const shopItems = [
+        {
+          id: 'hearts',
+          title: 'Poció de Vides (+2 ❤️)',
+          desc: 'Restaura immediatament 2 vides per continuar jugant sense interrompre la lliçó.',
+          price: 25,
+          icon: 'fa-heart-circle-plus',
+          color: 'bg-duoRed text-white',
+          btnColor: 'bg-duoRed shadow-btn-red hover:bg-duoRedDark',
+          disabled: hearts >= 5 || gems < 25,
+          disabledText: hearts >= 5 ? 'Vides al Màxim' : 'Gemes Insuficients',
+          onBuy: () => {
+            setGems(g => g - 25);
+            setHearts(h => Math.min(5, h + 2));
+            playSound('heal');
+          }
+        },
+        {
+          id: 'fiftyFifty',
+          title: 'Comodí 50/50',
+          desc: 'Descarta 2 opcions incorrectes en preguntes tipus Kahoot o Kahoot Extra.',
+          price: 30,
+          icon: 'fa-wand-magic-sparkles',
+          color: 'bg-duoYellow text-slate-900',
+          btnColor: 'bg-duoYellow shadow-btn-yellow hover:bg-duoYellowDark text-slate-900',
+          disabled: gems < 30,
+          disabledText: 'Gemes Insuficients',
+          ownedText: `Tens: ${inventory.fiftyFifty}`,
+          onBuy: () => {
+            setGems(g => g - 30);
+            setInventory(prev => ({ ...prev, fiftyFifty: prev.fiftyFifty + 1 }));
+            playSound('gemGain');
+          }
+        },
+        {
+          id: 'doubleXp',
+          title: 'Multiplicador 2x XP',
+          desc: 'Duplica tota la experiència (XP) que aconsegueixis en la pròxima resposta correcta.',
+          price: 35,
+          icon: 'fa-bolt-lightning',
+          color: 'bg-duoBlue text-white',
+          btnColor: 'bg-duoBlue shadow-btn-blue hover:bg-duoBlueDark',
+          disabled: inventory.doubleXp || gems < 35,
+          disabledText: inventory.doubleXp ? 'Ja Activat!' : 'Gemes Insuficients',
+          onBuy: () => {
+            setGems(g => g - 35);
+            setInventory(prev => ({ ...prev, doubleXp: true }));
+            playSound('gemGain');
+          }
+        },
+        {
+          id: 'shield',
+          title: 'Escut Protecció de Vida',
+          desc: 'Protegeix el teu cor. El primer error que facis no et restarà cap vida.',
+          price: 40,
+          icon: 'fa-shield-halved',
+          color: 'bg-duoPurple text-white',
+          btnColor: 'bg-duoPurple shadow-btn-purple hover:bg-duoPurpleDark',
+          disabled: gems < 40,
+          disabledText: 'Gemes Insuficients',
+          ownedText: `Tens: ${inventory.shield}`,
+          onBuy: () => {
+            setGems(g => g - 40);
+            setInventory(prev => ({ ...prev, shield: prev.shield + 1 }));
+            playSound('gemGain');
+          }
+        }
+      ];
+
+      return (
+        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
+          <div className="flex items-center justify-between">
+            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
+              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar al Mapa
+            </button>
+            <span className="bg-emerald-500 text-white text-xs font-black uppercase px-3 py-1 rounded-full shadow-sm flex items-center gap-1.5">
+              <i className="fa-solid fa-gem text-amber-200"></i>
+              {gems} Gemes Disponibles
+            </span>
+          </div>
+
+          <div className="text-center space-y-2">
+            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center text-3xl mx-auto border-2 border-emerald-300 shadow-sm">
+              <i className="fa-solid fa-store"></i>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-display font-black text-slate-800">
+              Botiga d'Articles Històrics
+            </h2>
+            <p className="text-slate-500 text-xs sm:text-sm font-semibold max-w-md mx-auto">
+              Equipa't amb millores especials utilitzant les teves gemes per superar tots els reptes!
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {shopItems.map(item => (
+              <div key={item.id} className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center text-xl font-black shadow-sm`}>
+                      <i className={`fa-solid ${item.icon}`}></i>
+                    </div>
+                    {item.ownedText && (
+                      <span className="text-[11px] font-black bg-slate-200 text-slate-700 px-2.5 py-1 rounded-full">
+                        {item.ownedText}
+                      </span>
+                    )}
+                    {item.id === 'doubleXp' && inventory.doubleXp && (
+                      <span className="text-[11px] font-black bg-sky-200 text-sky-800 px-2.5 py-1 rounded-full animate-pulse">
+                        Activat
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="font-display font-black text-slate-800 text-base">{item.title}</h3>
+                  <p className="text-xs text-slate-500 font-medium leading-relaxed">{item.desc}</p>
+                </div>
+
+                <button
+                  disabled={item.disabled}
+                  onClick={() => { playSound('pop'); item.onBuy(); }}
+                  className={`w-full font-display font-black text-sm py-2.5 rounded-xl transition-transform active:translate-y-1 flex items-center justify-center gap-2 ${
+                    item.disabled 
+                      ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none border-0' 
+                      : `${item.btnColor} text-white`
+                  }`}
+                >
+                  {item.disabled ? (
+                    <span>{item.disabledText}</span>
+                  ) : (
+                    <>
+                      <span>Comprar per {item.price}</span>
+                      <i className="fa-solid fa-gem text-amber-200"></i>
+                    </>
+                  )}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // --- GAME 1: LÍNIA DEL TEMPS ---
+    function GameTimeline({ chapter, setCurrentView, onSuccess, onError, onFinish }) {
+      const [items, setItems] = useState([]);
+
+      useEffect(() => {
+        const randomItems = window.QuestionBank.getTimeline(chapter.id, 5);
+        setItems([...randomItems].sort(() => Math.random() - 0.5));
+      }, [chapter.id]);
+
+      const moveItem = (from, to) => {
+        playSound('pop');
+        const updated = [...items];
+        const [moved] = updated.splice(from, 1);
+        updated.splice(to, 0, moved);
+        setItems(updated);
+      };
+
+      const checkOrder = () => {
+        const fullList = chapter.timeline;
+        let isCorrect = true;
+
+        for (let i = 0; i < items.length - 1; i++) {
+          const idxCurrent = fullList.findIndex(x => x.id === items[i].id);
+          const idxNext = fullList.findIndex(x => x.id === items[i + 1].id);
+          if (idxCurrent > idxNext) {
+            isCorrect = false;
+            break;
+          }
+        }
+
+        if (isCorrect) {
+          onSuccess("¡LÍNIA TEMPORAL CORRECTA!", "Has ordenat tots els esdeveniments en l'ordre cronològic exacte.", "Molt bé! La seqüència temporal és fonamental per comprendre la història.", 30, () => {
+            onFinish(3);
+            setCurrentView('path');
+          });
+        } else {
+          onError("L'ORDRE NO ÉS CORRECTE", "Revisa les dates de cada esdeveniment i torna a intentar-ho.", "L'ordre dels esdeveniments altera la relació de causa i efecte.");
+        }
+      };
+
+      return (
+        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
+          <div className="flex items-center justify-between">
+            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
+              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
+            </button>
+            <span className="bg-duoGreen text-white text-xs font-black uppercase px-3 py-1 rounded-full">
+              Línia del Temps
+            </span>
+          </div>
+
+          <div className="space-y-1">
+            <h2 className="text-2xl font-display font-black text-slate-800">
+              Ordena la Seqüència Històrica
+            </h2>
+            <p className="text-slate-500 text-sm font-semibold">
+              Utilitza les fletxes per ordenar els esdeveniments des del més antic (dalt) fins al més recent (baix).
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            {items.map((item, idx) => (
+              <motion.div 
+                key={item.id}
+                layout
+                className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex items-center justify-between gap-3 shadow-sm hover:border-duoGreen transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-duoGreen/10 text-duoGreen flex items-center justify-center text-lg font-black shrink-0">
+                    <i className={`fa-solid ${item.icon}`}></i>
+                  </div>
+                  <div>
+                    <h4 className="font-display font-bold text-slate-800 text-sm sm:text-base">{item.text}</h4>
+                    <span className="text-xs font-black text-duoGreen bg-green-100 px-2 py-0.5 rounded-md">{item.year}</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <button 
+                    disabled={idx === 0}
+                    onClick={() => moveItem(idx, idx - 1)}
+                    className="w-8 h-8 rounded-lg bg-slate-200 hover:bg-duoGreen hover:text-white disabled:opacity-30 flex items-center justify-center font-bold text-xs"
+                  >
+                    <i className="fa-solid fa-chevron-up"></i>
+                  </button>
+                  <button 
+                    disabled={idx === items.length - 1}
+                    onClick={() => moveItem(idx, idx + 1)}
+                    className="w-8 h-8 rounded-lg bg-slate-200 hover:bg-duoGreen hover:text-white disabled:opacity-30 flex items-center justify-center font-bold text-xs"
+                  >
+                    <i className="fa-solid fa-chevron-down"></i>
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <button
+            onClick={checkOrder}
+            className="w-full bg-duoGreen hover:bg-duoGreenDark text-white font-display font-black text-lg py-3.5 rounded-2xl shadow-btn-green transition-transform active:translate-y-1"
+          >
+            COMPROVAR LÍNIA TEMPORAL
+          </button>
+        </div>
+      );
+    }
+
+    // --- GAME 2: PREGUNTES FLAIX (KAHOOT) ---
+    function GameKahoot({ chapter, setCurrentView, onSuccess, onError, onFinish, inventory, setInventory }) {
+      const [questions, setQuestions] = useState([]);
+      const [currentIndex, setCurrentIndex] = useState(0);
+      const [sliderVal, setSliderVal] = useState(1800);
+      const [multiSelected, setMultiSelected] = useState([]);
+      const [disabledOptions, setDisabledOptions] = useState([]);
+
+      useEffect(() => {
+        const qList = window.QuestionBank.getKahoot(chapter.id, 3);
+        setQuestions(qList);
+        setDisabledOptions([]);
+        if (qList.length > 0 && qList[0].type === 'slider') {
+          setSliderVal(qList[0].minYear || 1800);
+        }
+      }, [chapter.id]);
+
+      if (questions.length === 0) return null;
+
+      const q = questions[currentIndex];
+
+      const handleClassicAnswer = (option) => {
+        if (option.correct) {
+          onSuccess("¡RESPOSTA CORRECTA!", "Has escollit l'opció exacta.", q.exp, 20, nextQuestion);
+        } else {
+          onError("RESPOSTA INCORRECTA", "Aquesta opció no és la vàlida.", q.exp);
+        }
+      };
+
+      const handleSliderSubmit = () => {
+        if (sliderVal === q.targetYear) {
+          onSuccess("¡ANY EXACTE!", `En efecte, va succeir l'any ${q.targetYear}.`, q.exp, 25, nextQuestion);
+        } else {
+          onError("ANY INCORRECTE", `T'has desviat. L'any exacte era ${q.targetYear}.`, q.exp);
+        }
+      };
+
+      const handleMultiSubmit = () => {
+        const correctIds = q.options.filter(o => o.correct).map(o => o.id);
+        const isExact = correctIds.length === multiSelected.length && correctIds.every(id => multiSelected.includes(id));
+
+        if (isExact) {
+          onSuccess("¡SELECCIÓ PERFECTA!", "Has identificat totes les característiques correctes.", q.exp, 30, nextQuestion);
+        } else {
+          onError("SELECCIÓ INCOMPLETA O INCORRECTA", "No has marcat exactament les opcions que pertanyen.", q.exp);
+        }
+      };
+
+      const nextQuestion = () => {
+        setDisabledOptions([]);
+        if (currentIndex + 1 < questions.length) {
+          setCurrentIndex(c => c + 1);
+          setMultiSelected([]);
+          const nextQ = questions[currentIndex + 1];
+          if (nextQ && nextQ.type === 'slider') {
+            setSliderVal(nextQ.minYear || 1800);
+          }
+        } else {
+          onFinish(3);
+          setCurrentView('path');
+        }
+      };
+
+      return (
+        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
+          <div className="flex items-center justify-between">
+            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
+              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
+            </button>
+            <span className="bg-duoOrange text-white text-xs font-black uppercase px-3 py-1 rounded-full">
+              Pregunta {currentIndex + 1} de {questions.length}
+            </span>
+          </div>
+
+          <h2 className="text-xl sm:text-2xl font-display font-black text-slate-800">
+            {q.question}
+          </h2>
+
+          {/* OPCIÓ TIPUS 1: CLÀSSIC */}
+          {q.type === 'classic' && (
+            <div className="space-y-3">
+              {inventory && inventory.fiftyFifty > 0 && disabledOptions.length === 0 && (
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => {
+                      playSound('pop');
+                      const incorrectIndexes = q.options
+                        .map((opt, i) => opt.correct ? null : i)
+                        .filter(val => val !== null);
+                      const shuffled = [...incorrectIndexes].sort(() => Math.random() - 0.5);
+                      const toDisable = shuffled.slice(0, 2);
+                      setDisabledOptions(toDisable);
+                      setInventory(prev => ({ ...prev, fiftyFifty: prev.fiftyFifty - 1 }));
+                    }}
+                    className="bg-amber-400 hover:bg-amber-500 text-slate-900 font-display font-black text-xs px-3 py-1.5 rounded-xl border-b-2 border-amber-600 flex items-center gap-1.5 shadow-sm"
+                  >
+                    <i className="fa-solid fa-wand-magic-sparkles"></i>
+                    Usar Comodí 50/50 ({inventory.fiftyFifty} disponibles)
+                  </button>
+                </div>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {q.options.map((opt, i) => {
+                  const isDisabled = disabledOptions.includes(i);
+                  if (isDisabled) {
+                    return (
+                      <div key={i} className="p-4 rounded-2xl font-display font-bold text-slate-300 bg-slate-100 border-2 border-slate-200 line-through opacity-50 flex items-center justify-between">
+                        <span>{opt.text}</span>
+                        <span className="text-xs bg-slate-200 text-slate-500 px-2 py-0.5 rounded-full font-black">Descartat 50/50</span>
+                      </div>
+                    );
+                  }
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => handleClassicAnswer(opt)}
+                      className={`${opt.color} p-4 rounded-2xl font-display font-black text-left text-base shadow-sm hover:scale-[1.02] active:translate-y-1 transition-transform border-b-4`}
+                    >
+                      {opt.text}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* OPCIÓ TIPUS 2: SLIDER ANY */}
+          {q.type === 'slider' && (
+            <div className="space-y-6 text-center py-4">
+              <div className="text-5xl font-display font-black text-duoOrange">
+                {sliderVal}
+              </div>
+              <input 
+                type="range" 
+                min={q.minYear} 
+                max={q.maxYear} 
+                value={sliderVal} 
+                onChange={(e) => setSliderVal(parseInt(e.target.value))}
+                className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-duoOrange"
+              />
+              <button
+                onClick={handleSliderSubmit}
+                className="w-full bg-duoOrange hover:bg-duoOrangeDark text-white font-display font-black text-lg py-3 rounded-2xl shadow-btn-orange"
+              >
+                VALIDAR ANY HISTÒRIC
+              </button>
+            </div>
+          )}
+
+          {/* OPCIÓ TIPUS 3: MULTI-SELECCIÓ */}
+          {q.type === 'multi' && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {q.options.map((opt) => {
+                  const isSel = multiSelected.includes(opt.id);
+                  return (
+                    <button
+                      key={opt.id}
+                      onClick={() => {
+                        playSound('pop');
+                        setMultiSelected(prev => isSel ? prev.filter(x => x !== opt.id) : [...prev, opt.id]);
+                      }}
+                      className={`p-4 rounded-2xl font-display font-bold text-left text-sm border-2 transition-all flex items-center justify-between ${
+                        isSel ? 'bg-duoOrange/10 border-duoOrange text-duoOrange font-black' : 'bg-slate-50 border-slate-200 text-slate-700'
+                      }`}
+                    >
+                      <span>{opt.text}</span>
+                      <i className={`fa-solid ${isSel ? 'fa-square-check text-duoOrange' : 'fa-square text-slate-300'}`}></i>
+                    </button>
+                  );
+                })}
+              </div>
+              <button
+                onClick={handleMultiSubmit}
+                className="w-full bg-duoOrange hover:bg-duoOrangeDark text-white font-display font-black text-lg py-3 rounded-2xl shadow-btn-orange"
+              >
+                CONFIRMAR SELECCIÓ
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- GAME EXTRA: KAHOOT DE TOTES LES PREGUNTES DEL CAPÍTOL ---
+    function GameExtraKahoot({ chapter, setCurrentView, onSuccess, onError, onFinish, inventory, setInventory }) {
+      const [questions, setQuestions] = useState([]);
+      const [currentIndex, setCurrentIndex] = useState(0);
+      const [sliderVal, setSliderVal] = useState(1800);
+      const [multiSelected, setMultiSelected] = useState([]);
+      const [disabledOptions, setDisabledOptions] = useState([]);
+
+      useEffect(() => {
+        const qList = window.QuestionBank.getKahoot(chapter.id, 999);
+        setQuestions(qList);
+        setDisabledOptions([]);
+        if (qList.length > 0 && qList[0].type === 'slider') {
+          setSliderVal(qList[0].minYear || 1800);
+        }
+      }, [chapter.id]);
+
+      if (questions.length === 0) return null;
+
+      const q = questions[currentIndex];
+
+      const handleClassicAnswer = (option) => {
+        if (option.correct) {
+          onSuccess("¡RESPOSTA CORRECTA!", "Has encertat la pregunta en el Repàs Extra.", q.exp, 25, nextQuestion);
+        } else {
+          onError("RESPOSTA INCORRECTA", "Aquesta opció no és la vàlida.", q.exp);
+        }
+      };
+
+      const handleSliderSubmit = () => {
+        if (sliderVal === q.targetYear) {
+          onSuccess("¡ANY EXACTE!", `En efecte, va succeir l'any ${q.targetYear}.`, q.exp, 25, nextQuestion);
+        } else {
+          onError("ANY INCORRECTE", `T'has desviat. L'any exacte era ${q.targetYear}.`, q.exp);
+        }
+      };
+
+      const handleMultiSubmit = () => {
+        const correctIds = q.options.filter(o => o.correct).map(o => o.id);
+        const isExact = correctIds.length === multiSelected.length && correctIds.every(id => multiSelected.includes(id));
+
+        if (isExact) {
+          onSuccess("¡SELECCIÓ PERFECTA!", "Has identificat totes les característiques correctes.", q.exp, 30, nextQuestion);
+        } else {
+          onError("SELECCIÓ INCOMPLETA O INCORRECTA", "No has marcat exactament les opcions que pertanyen.", q.exp);
+        }
+      };
+
+      const nextQuestion = () => {
+        setDisabledOptions([]);
+        if (currentIndex + 1 < questions.length) {
+          setCurrentIndex(c => c + 1);
+          setMultiSelected([]);
+          const nextQ = questions[currentIndex + 1];
+          if (nextQ && nextQ.type === 'slider') {
+            setSliderVal(nextQ.minYear || 1800);
+          }
+        } else {
+          onFinish(3);
+          setCurrentView('path');
+        }
+      };
+
+      return (
+        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
+          <div className="flex items-center justify-between">
+            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
+              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
+            </button>
+            <span className="bg-gradient-to-r from-amber-500 to-duoOrange text-white text-xs font-black uppercase px-3.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
+              <i className="fa-solid fa-crown text-amber-200"></i>
+              Repàs Extra: {currentIndex + 1} de {questions.length}
+            </span>
+          </div>
+
+          {/* Barra de Progrés */}
+          <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden border border-slate-200">
+            <div 
+              className="bg-gradient-to-r from-amber-400 to-duoOrange h-full transition-all duration-300"
+              style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
+            ></div>
+          </div>
+
+          <h2 className="text-xl sm:text-2xl font-display font-black text-slate-800">
+            {q.question}
+          </h2>
+
+          {/* OPCIÓ TIPUS 1: CLÀSSIC */}
+          {q.type === 'classic' && (
+            <div className="space-y-3">
+              {inventory && inventory.fiftyFifty > 0 && disabledOptions.length === 0 && (
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => {
+                      playSound('pop');
+                      const incorrectIndexes = q.options
+                        .map((opt, i) => opt.correct ? null : i)
+                        .filter(val => val !== null);
+                      const shuffled = [...incorrectIndexes].sort(() => Math.random() - 0.5);
+                      const toDisable = shuffled.slice(0, 2);
+                      setDisabledOptions(toDisable);
+                      setInventory(prev => ({ ...prev, fiftyFifty: prev.fiftyFifty - 1 }));
+                    }}
+                    className="bg-amber-400 hover:bg-amber-500 text-slate-900 font-display font-black text-xs px-3 py-1.5 rounded-xl border-b-2 border-amber-600 flex items-center gap-1.5 shadow-sm"
+                  >
+                    <i className="fa-solid fa-wand-magic-sparkles"></i>
+                    Usar Comodí 50/50 ({inventory.fiftyFifty} disponibles)
+                  </button>
+                </div>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {q.options.map((opt, i) => {
+                  const isDisabled = disabledOptions.includes(i);
+                  if (isDisabled) {
+                    return (
+                      <div key={i} className="p-4 rounded-2xl font-display font-bold text-slate-300 bg-slate-100 border-2 border-slate-200 line-through opacity-50 flex items-center justify-between">
+                        <span>{opt.text}</span>
+                        <span className="text-xs bg-slate-200 text-slate-500 px-2 py-0.5 rounded-full font-black">Descartat 50/50</span>
+                      </div>
+                    );
+                  }
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => handleClassicAnswer(opt)}
+                      className={`${opt.color} p-4 rounded-2xl font-display font-black text-left text-base shadow-sm hover:scale-[1.02] active:translate-y-1 transition-transform border-b-4`}
+                    >
+                      {opt.text}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* OPCIÓ TIPUS 2: SLIDER ANY */}
+          {q.type === 'slider' && (
+            <div className="space-y-6 text-center py-4">
+              <div className="text-5xl font-display font-black text-duoOrange">
+                {sliderVal}
+              </div>
+              <input 
+                type="range" 
+                min={q.minYear} 
+                max={q.maxYear} 
+                value={sliderVal} 
+                onChange={(e) => setSliderVal(parseInt(e.target.value))}
+                className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-duoOrange"
+              />
+              <button
+                onClick={handleSliderSubmit}
+                className="w-full bg-duoOrange hover:bg-duoOrangeDark text-white font-display font-black text-lg py-3 rounded-2xl shadow-btn-orange"
+              >
+                VALIDAR ANY HISTÒRIC
+              </button>
+            </div>
+          )}
+
+          {/* OPCIÓ TIPUS 3: MULTI-SELECCIÓ */}
+          {q.type === 'multi' && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {q.options.map((opt) => {
+                  const isSel = multiSelected.includes(opt.id);
+                  return (
+                    <button
+                      key={opt.id}
+                      onClick={() => {
+                        playSound('pop');
+                        setMultiSelected(prev => isSel ? prev.filter(x => x !== opt.id) : [...prev, opt.id]);
+                      }}
+                      className={`p-4 rounded-2xl font-display font-bold text-left text-sm border-2 transition-all flex items-center justify-between ${
+                        isSel ? 'bg-duoOrange/10 border-duoOrange text-duoOrange font-black' : 'bg-slate-50 border-slate-200 text-slate-700'
+                      }`}
+                    >
+                      <span>{opt.text}</span>
+                      <i className={`fa-solid ${isSel ? 'fa-square-check text-duoOrange' : 'fa-square text-slate-300'}`}></i>
+                    </button>
+                  );
+                })}
+              </div>
+              <button
+                onClick={handleMultiSubmit}
+                className="w-full bg-duoOrange hover:bg-duoOrangeDark text-white font-display font-black text-lg py-3 rounded-2xl shadow-btn-orange"
+              >
+                CONFIRMAR SELECCIÓ
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- GAME 3: XAFARDERIA DE CORT ---
+    function GameXafarderia({ chapter, setCurrentView, onSuccess, onError, onFinish }) {
+      const [data, setData] = useState(null);
+      const [assigned, setAssigned] = useState({});
+
+      useEffect(() => {
+        setData(window.QuestionBank.getXafarderia(chapter.id));
+        setAssigned({});
+      }, [chapter.id]);
+
+      if (!data) return null;
+
+      const handleAssign = (slotId, charName) => {
+        playSound('pop');
+        setAssigned(prev => ({ ...prev, [slotId]: charName }));
+      };
+
+      const validate = () => {
+        let allCorrect = true;
+        data.slots.forEach(slot => {
+          if (assigned[slot.id] !== slot.correct) {
+            allCorrect = false;
+          }
+        });
+
+        if (allCorrect && Object.keys(assigned).length === data.slots.length) {
+          onSuccess("¡ORGANIGRAMA PERFECTE!", "Has col·locat cada personatge en la seva relació històrica exacta.", "Coneixer les relacions de poder és clau per entendre les decisions d'Estat.", 35, () => {
+            onFinish(3);
+            setCurrentView('path');
+          });
+        } else {
+          onError("S'HAN DETECTAT ERRORS", "Revisa les posicions i les relacions de la Cort.", "Alguns personatges no estan assignats al seu rol corresponent.");
+        }
+      };
+
+      return (
+        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
+          <div className="flex items-center justify-between">
+            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
+              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
+            </button>
+            <span className="bg-duoBlue text-white text-xs font-black uppercase px-3 py-1 rounded-full">
+              Xafarderia de Cort
+            </span>
+          </div>
+
+          <div className="text-center space-y-2">
+            <span className={`inline-block px-4 py-1.5 rounded-2xl text-white font-display font-black text-xs uppercase ${data.color}`}>
+              {data.centerRole}
+            </span>
+            <h2 className="text-2xl font-display font-black text-slate-800">
+              {data.title}
+            </h2>
+            <p className="text-slate-500 text-xs sm:text-sm font-semibold max-w-md mx-auto">
+              {data.desc}
+            </p>
+          </div>
+
+          {/* Slots a omplir */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {data.slots.map(slot => (
+              <div key={slot.id} className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 space-y-2">
+                <div className="flex items-center gap-2 text-duoBlue font-display font-black text-xs">
+                  <i className={`fa-solid ${slot.icon}`}></i>
+                  <span>{slot.label}</span>
+                </div>
+                <p className="text-xs text-slate-500 font-medium">{slot.relation}</p>
+                <select
+                  value={assigned[slot.id] || ""}
+                  onChange={(e) => handleAssign(slot.id, e.target.value)}
+                  className="w-full bg-white border-2 border-slate-200 rounded-xl p-2 font-display font-bold text-sm text-slate-800 focus:border-duoBlue outline-none"
+                >
+                  <option value="">-- Selecciona Personatge --</option>
+                  {data.chars.map((c, i) => (
+                    <option key={i} value={c.name}>{c.name} ({c.role})</option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={validate}
+            className="w-full bg-duoBlue hover:bg-duoBlueDark text-white font-display font-black text-lg py-3.5 rounded-2xl shadow-btn-blue"
+          >
+            RESOLDRE ORGANIGRAMA DE CORT
+          </button>
+        </div>
+      );
+    }
+
+    // --- GAME 4: DECRETS DEL BOE ---
+    function GameBOE({ chapter, setCurrentView, onSuccess, onError, onFinish }) {
+      const [docs, setDocs] = useState([]);
+      const [idx, setIdx] = useState(0);
+
+      useEffect(() => {
+        setDocs(window.QuestionBank.getBOE(chapter.id, 2));
+        setIdx(0);
+      }, [chapter.id]);
+
+      if (docs.length === 0) return null;
+      const currentDoc = docs[idx];
+
+      const handleChoice = (type) => {
+        if (type === currentDoc.type) {
+          onSuccess("¡DECRET CLASSIFICAT!", "Has identificat el corrent ideològic del text.", currentDoc.exp, 25, () => {
+            if (idx + 1 < docs.length) {
+              setIdx(i => i + 1);
+            } else {
+              onFinish(3);
+              setCurrentView('path');
+            }
+          });
+        } else {
+          onError("INCORRECTE", "Aquest text no respon a aquesta ideologia política.", currentDoc.exp);
+        }
+      };
+
+      return (
+        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
+          <div className="flex items-center justify-between">
+            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
+              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
+            </button>
+            <span className="bg-duoPurple text-white text-xs font-black uppercase px-3 py-1 rounded-full">
+              Text Oficial BOE ({idx + 1}/{docs.length})
+            </span>
+          </div>
+
+          <div className="bg-amber-50 border-2 border-amber-200 rounded-3xl p-6 relative space-y-3">
+            <i className="fa-solid fa-quote-left text-amber-300 text-3xl"></i>
+            <p className="font-serif italic text-base sm:text-lg text-slate-800 leading-relaxed">
+              {currentDoc.text}
+            </p>
+            <div className="text-right text-xs font-black text-amber-700 uppercase">
+              — {currentDoc.sub}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <h4 className="font-display font-black text-slate-700 text-sm text-center">
+              A quin corrent ideològic correspon aquest text?
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <button
+                onClick={() => handleChoice('absolutisme')}
+                className="bg-duoRed hover:bg-red-600 text-white font-display font-black p-3.5 rounded-2xl shadow-btn-red text-sm"
+              >
+                Absolutisme
+              </button>
+              <button
+                onClick={() => handleChoice('moderat')}
+                className="bg-duoBlue hover:bg-blue-600 text-white font-display font-black p-3.5 rounded-2xl shadow-btn-blue text-sm"
+              >
+                Liberal Moderat
+              </button>
+              <button
+                onClick={() => handleChoice('progressista')}
+                className="bg-duoGreen hover:bg-green-600 text-white font-display font-black p-3.5 rounded-2xl shadow-btn-green text-sm"
+              >
+                Liberal Progressista
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // --- GAME 5: CONECTA HISTÒRIA ---
+    function GameConecta({ chapter, setCurrentView, onSuccess, onError, onFinish }) {
+      const [pairs, setPairs] = useState([]);
+      const [lefts, setLefts] = useState([]);
+      const [rights, setRights] = useState([]);
+      const [selectedLeft, setSelectedLeft] = useState(null);
+      const [matched, setMatched] = useState([]);
+
+      useEffect(() => {
+        const loadedPairs = window.QuestionBank.getConecta(chapter.id, 4);
+        setPairs(loadedPairs);
+        setLefts([...loadedPairs].sort(() => Math.random() - 0.5));
+        setRights([...loadedPairs].sort(() => Math.random() - 0.5));
+        setSelectedLeft(null);
+        setMatched([]);
+      }, [chapter.id]);
+
+      const handleLeftClick = (item) => {
+        playSound('pop');
+        setSelectedLeft(item);
+      };
+
+      const handleRightClick = (item) => {
+        if (!selectedLeft) return;
+
+        if (selectedLeft.id === item.id) {
+          playSound('success');
+          const newMatched = [...matched, item.id];
+          setMatched(newMatched);
+          setSelectedLeft(null);
+
+          if (newMatched.length === pairs.length) {
+            onSuccess("¡TOTS ELS CONCEPTES CONECTATS!", "Has aparellat tots els conceptes correctament.", "Molt bé! La relació de termes reforça el coneixement sintètic.", 30, () => {
+              onFinish(3);
+              setCurrentView('path');
+            });
+          }
+        } else {
+          onError("PARELLA INCORRECTA", "Aquest concepte no es correspon amb la definició triada.", selectedLeft.exp);
+          setSelectedLeft(null);
+        }
+      };
+
+      return (
+        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
+          <div className="flex items-center justify-between">
+            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
+              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
+            </button>
+            <span className="bg-duoRed text-white text-xs font-black uppercase px-3 py-1 rounded-full">
+              Conecta Parelles
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            {/* Columna Esquerra */}
+            <div className="space-y-3">
+              {lefts.map(item => {
+                const isMatched = matched.includes(item.id);
+                const isSelected = selectedLeft?.id === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    disabled={isMatched}
+                    onClick={() => handleLeftClick(item)}
+                    className={`w-full p-4 rounded-2xl font-display font-black text-xs sm:text-sm text-left border-2 transition-all ${
+                      isMatched ? 'bg-emerald-100 border-emerald-400 text-emerald-800 opacity-50' :
+                      isSelected ? 'bg-duoRed text-white border-duoRedDark scale-105' :
+                      'bg-slate-50 border-slate-200 hover:border-duoRed text-slate-800'
+                    }`}
+                  >
+                    {item.left}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Columna Dreta */}
+            <div className="space-y-3">
+              {rights.map(item => {
+                const isMatched = matched.includes(item.id);
+                return (
+                  <button
+                    key={item.id}
+                    disabled={isMatched}
+                    onClick={() => handleRightClick(item)}
+                    className={`w-full p-4 rounded-2xl font-display font-medium text-xs sm:text-sm text-left border-2 transition-all ${
+                      isMatched ? 'bg-emerald-100 border-emerald-400 text-emerald-800 opacity-50' :
+                      'bg-slate-50 border-slate-200 hover:border-duoRed text-slate-800'
+                    }`}
+                  >
+                    {item.right}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // --- GAME 6: VERITAT O MENTIDA ---
+    function GameVeritat({ chapter, setCurrentView, onSuccess, onError, onFinish }) {
+      const [items, setItems] = useState([]);
+      const [idx, setIdx] = useState(0);
+
+      useEffect(() => {
+        setItems(window.QuestionBank.getVeritat(chapter.id, 3));
+        setIdx(0);
+      }, [chapter.id]);
+
+      if (items.length === 0) return null;
+      const current = items[idx];
+
+      const handleAnswer = (userBool) => {
+        if (userBool === current.isTrue) {
+          onSuccess("¡VERDICTE ENCERTAT!", userBool ? "És completament cert." : "Efectivament és fals.", current.exp, 20, () => {
+            if (idx + 1 < items.length) {
+              setIdx(i => i + 1);
+            } else {
+              onFinish(3);
+              setCurrentView('path');
+            }
+          });
+        } else {
+          onError("VERDICTE INCORRECTE", "No és correcte.", current.exp);
+        }
+      };
+
+      return (
+        <div className="max-w-xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6 text-center">
+          <div className="flex items-center justify-between">
+            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
+              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
+            </button>
+            <span className="bg-duoYellow text-slate-900 text-xs font-black uppercase px-3 py-1 rounded-full">
+              Targeta {idx + 1}/{items.length}
+            </span>
+          </div>
+
+          <div className="bg-amber-50 border-2 border-amber-200 rounded-3xl p-8 space-y-4">
+            <i className="fa-solid fa-lightbulb text-4xl text-duoYellow"></i>
+            <h3 className="text-xl sm:text-2xl font-display font-black text-slate-800 leading-snug">
+              «{current.statement}»
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <button
+              onClick={() => handleAnswer(true)}
+              className="bg-duoGreen hover:bg-duoGreenDark text-white font-display font-black text-lg py-4 rounded-2xl shadow-btn-green"
+            >
+              <i className="fa-solid fa-check mr-2"></i> VERITAT
+            </button>
+            <button
+              onClick={() => handleAnswer(false)}
+              className="bg-duoRed hover:bg-duoRedDark text-white font-display font-black text-lg py-4 rounded-2xl shadow-btn-red"
+            >
+              <i className="fa-solid fa-xmark mr-2"></i> MENTIDA
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // --- GAME 7: EL MOT PERDUT ---
+    function GameMotPerdut({ chapter, setCurrentView, onSuccess, onError, onFinish }) {
+      const [data, setData] = useState(null);
+      const [answers, setAnswers] = useState({});
+
+      useEffect(() => {
+        setData(window.QuestionBank.getMotPerdut(chapter.id));
+        setAnswers({});
+      }, [chapter.id]);
+
+      if (!data) return null;
+
+      const handleSelect = (blankId, val) => {
+        playSound('pop');
+        setAnswers(prev => ({ ...prev, [blankId]: val }));
+      };
+
+      const validate = () => {
+        let allOk = true;
+        data.blanks.forEach(b => {
+          if (answers[b.id] !== b.answer) allOk = false;
+        });
+
+        if (allOk && Object.keys(answers).length === data.blanks.length) {
+          onSuccess("¡TEXT COMPLETAT!", "Has omplert tots els mots perduts correctament.", data.exp, 30, () => {
+            onFinish(3);
+            setCurrentView('path');
+          });
+        } else {
+          onError("TEXT INCORRECTE", "Alguns mots no encaixen en el context històric.", data.exp);
+        }
+      };
+
+      return (
+        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
+          <div className="flex items-center justify-between">
+            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
+              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
+            </button>
+            <span className="bg-duoEmerald text-white text-xs font-black uppercase px-3 py-1 rounded-full">
+              El Mot Perdut
+            </span>
+          </div>
+
+          <h2 className="text-2xl font-display font-black text-slate-800">
+            {data.title}
+          </h2>
+
+          <div className="bg-slate-50 border-2 border-slate-200 rounded-3xl p-6 text-base sm:text-lg font-medium text-slate-700 leading-relaxed">
+            {data.text}
+          </div>
+
+          <div className="space-y-4">
+            {data.blanks.map((b, i) => (
+              <div key={b.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-emerald-50/50 p-4 rounded-2xl border border-emerald-200">
+                <span className="font-display font-black text-emerald-800 text-sm">Forat {i + 1}:</span>
+                <div className="flex gap-2">
+                  {b.options.map((opt, j) => (
+                    <button
+                      key={j}
+                      onClick={() => handleSelect(b.id, opt)}
+                      className={`px-3 py-1.5 rounded-xl font-display font-bold text-xs sm:text-sm border-2 transition-all ${
+                        answers[b.id] === opt ? 'bg-duoEmerald text-white border-duoEmeraldDark scale-105' : 'bg-white border-slate-200 text-slate-700'
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={validate}
+            className="w-full bg-duoEmerald hover:bg-duoEmeraldDark text-white font-display font-black text-lg py-3.5 rounded-2xl shadow-btn-emerald"
+          >
+            VALIDAR TEXT HISTÒRIC
+          </button>
+        </div>
+      );
+    }
+
+    // --- COMPONENT PRINCIPAL PLATAFORMA ---
+    function App() {
+      // PRO STATE & URL CHECK (Persistent)
+      const [isPro, setIsPro] = useState(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('pro') === 'true') {
+          localStorage.setItem('hl_is_pro', 'true');
+          return true;
+        }
+        return localStorage.getItem('hl_is_pro') === 'true';
+      });
+
+      // Redirigir automàticament a PRO si ja ho va ser abans (o via url)
+      useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('pro') !== 'true' && localStorage.getItem('hl_is_pro') === 'true') {
+          // Si ja era pro prèviament guardat, assegurar url o estat
+        }
+      }, []);
+
+      // CARGA DE PROGRESS PERMANENT LOCALSTORAGE
+      const [hearts, setHearts] = useState(() => {
+        const saved = localStorage.getItem('hl_hearts');
+        return saved !== null ? parseInt(saved, 10) : 5;
+      });
+
+      const [xp, setXp] = useState(() => {
+        const saved = localStorage.getItem('hl_xp');
+        return saved !== null ? parseInt(saved, 10) : 0;
+      });
+
+      const [gems, setGems] = useState(() => {
+        const saved = localStorage.getItem('hl_gems');
+        return saved !== null ? parseInt(saved, 10) : 20;
+      });
+
+      const [streak, setStreak] = useState(() => {
+        const saved = localStorage.getItem('hl_streak');
+        return saved !== null ? parseInt(saved, 10) : 1;
+      });
+
+      const [selectedChapter, setSelectedChapter] = useState(() => {
+        const saved = localStorage.getItem('hl_selectedChapter');
+        let ch = saved !== null ? parseInt(saved, 10) : 1;
+        const urlParams = new URLSearchParams(window.location.search);
+        const proStatus = urlParams.get('pro') === 'true' || localStorage.getItem('hl_is_pro') === 'true';
+        if (!proStatus) ch = 1;
+        return ch;
+      });
+
+      const [inventory, setInventory] = useState(() => {
+        const saved = localStorage.getItem('hl_inventory');
+        return saved ? JSON.parse(saved) : { fiftyFifty: 0, doubleXp: false, shield: 0 };
+      });
+
+      const [nodeProgress, setNodeProgress] = useState(() => {
+        const saved = localStorage.getItem('hl_nodeProgress');
+        return saved ? JSON.parse(saved) : {
+          'c1_timeline': 0, 'c1_kahoot': 0, 'c1_xafarderia': 0, 'c1_boe': 0, 'c1_conecta': 0, 'c1_veritat': 0, 'c1_motPerdut': 0, 'c1_extraKahoot': 0,
+          'c2_timeline': 0, 'c2_kahoot': 0, 'c2_xafarderia': 0, 'c2_boe': 0, 'c2_conecta': 0, 'c2_veritat': 0, 'c2_motPerdut': 0, 'c2_extraKahoot': 0,
+          'c3_timeline': 0, 'c3_kahoot': 0, 'c3_xafarderia': 0, 'c3_boe': 0, 'c3_conecta': 0, 'c3_veritat': 0, 'c3_motPerdut': 0, 'c3_extraKahoot': 0,
+          'c4_timeline': 0, 'c4_kahoot': 0, 'c4_xafarderia': 0, 'c4_boe': 0, 'c4_conecta': 0, 'c4_veritat': 0, 'c4_motPerdut': 0, 'c4_extraKahoot': 0,
+        };
+      });
+
+      const [currentView, setCurrentView] = useState('path');
+      const [screenEffect, setScreenEffect] = useState('');
+      const [showCprModal, setShowCprModal] = useState(false);
+      const [showNoLivesModal, setShowNoLivesModal] = useState(false);
+      const [cprClicks, setCprClicks] = useState(0);
+      const [extraLifeToast, setExtraLifeToast] = useState(false);
+
+      // GUARDAT AUTOMÀTIC A LOCALSTORAGE
+      useEffect(() => {
+        localStorage.setItem('hl_hearts', hearts);
+        localStorage.setItem('hl_xp', xp);
+        localStorage.setItem('hl_gems', gems);
+        localStorage.setItem('hl_streak', streak);
+        localStorage.setItem('hl_selectedChapter', selectedChapter);
+        localStorage.setItem('hl_inventory', JSON.stringify(inventory));
+        localStorage.setItem('hl_nodeProgress', JSON.stringify(nodeProgress));
+      }, [hearts, xp, gems, streak, selectedChapter, inventory, nodeProgress]);
+
+      // Bottom Sheet Modal
+      const [sheet, setSheet] = useState({
+        isOpen: false,
+        type: 'success',
+        title: '',
+        message: '',
+        explanation: '',
+        xpEarned: 0,
+        onContinue: null
+      });
+
+      const triggerError = (title, message, exp) => {
+        playSound('error');
+
+        let wasShielded = false;
+        if (inventory.shield > 0) {
+          wasShielded = true;
+          setInventory(prev => ({ ...prev, shield: prev.shield - 1 }));
+        } else {
+          setHearts(h => {
+            const next = Math.max(0, h - 1);
+            if (next === 0) {
+              setTimeout(() => {
+                if (isPro) {
+                  setCprClicks(0);
+                  setShowCprModal(true);
+                } else {
+                  setShowNoLivesModal(true);
+                }
+              }, 600);
+            }
+            return next;
+          });
+        }
+
+        setScreenEffect('screen-shake flash-red');
+        setTimeout(() => setScreenEffect(''), 500);
+
+        setSheet({
+          isOpen: true,
+          type: 'error',
+          title: wasShielded ? "¡ESCUT ACTIVAT!" : (title || "¡ERROR HISTÒRIC!"),
+          message: wasShielded ? "L'escut protector t'ha salvat de perdre una vida." : (message || "Aquesta opció no és correcta."),
+          explanation: exp || "Revisa els conceptes de la lliçó.",
+          xpEarned: 0,
+          onContinue: () => setSheet(s => ({ ...s, isOpen: false }))
+        });
+      };
+
+      const triggerSuccess = (title, message, exp, points = 20, callback = null) => {
+        playSound('success');
+        triggerConfetti();
+
+        let earnedXp = points;
+        if (inventory.doubleXp) {
+          earnedXp = points * 2;
+          setInventory(prev => ({ ...prev, doubleXp: false }));
+        }
+
+        setXp(x => x + earnedXp);
+        setGems(g => g + 5);
+        playSound('gemGain');
+
+        setScreenEffect('flash-green');
+        setTimeout(() => setScreenEffect(''), 500);
+
+        if (hearts < 5 && Math.random() < 0.25) {
+          setHearts(h => Math.min(5, h + 1));
+          playSound('lifeGain');
+          setExtraLifeToast(true);
+          setTimeout(() => setExtraLifeToast(false), 2500);
+        }
+
+        setSheet({
+          isOpen: true,
+          type: 'success',
+          title: title || "¡MOLT BÉ!",
+          message: message || "Has respost exactament com un historiador.",
+          explanation: (inventory.doubleXp ? "⚡ ¡2x XP Aplicat! " : "") + (exp || ""),
+          xpEarned: earnedXp,
+          onContinue: () => {
+            setSheet(s => ({ ...s, isOpen: false }));
+            if (callback) callback();
+          }
+        });
+      };
+
+      const handleCprClick = () => {
+        if (!isPro) return;
+        if (cprClicks + 1 >= 10) {
+          playSound('heal');
+          playSound('heartbeat');
+          triggerConfetti();
+          setCprClicks(10);
+          setTimeout(() => {
+            setHearts(5);
+            setShowCprModal(false);
+            setCurrentView('path');
+          }, 1200);
+        } else {
+          playSound('cpr');
+          setCprClicks(c => c + 1);
+        }
+      };
+
+      const completeNode = (nodeKey, stars) => {
+        setNodeProgress(prev => ({
+          ...prev,
+          [nodeKey]: Math.max(prev[nodeKey] || 0, stars)
+        }));
+        setGems(g => g + 10);
+      };
+
+      return (
+        <div className={`min-h-screen bg-[#F4F6F8] text-slate-800 flex flex-col font-sans transition-all duration-300 ${screenEffect}`}>
+          
+          {/* HEADER FIX DUOLINGO STYLE */}
+          <header className="sticky top-0 z-40 bg-white border-b-2 border-slate-200 shadow-sm px-4 py-3">
+            <div className="max-w-4xl mx-auto flex items-center justify-between">
+              
+              <div 
+                onClick={() => { playSound('pop'); setCurrentView('path'); }}
+                className="flex items-center gap-2.5 cursor-pointer group"
+              >
+                <div className="w-10 h-10 rounded-2xl bg-duoGreen flex items-center justify-center text-white text-xl font-black shadow-btn-green group-hover:scale-105 transition-transform">
+                  <i className="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-xl font-display font-black tracking-tight text-slate-800 leading-none">
+                      Història<span className="text-duoGreen">Lab</span>
+                    </h1>
+                    {isPro && (
+                      <span className="bg-amber-400 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">
+                        PRO
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+                    Senda del Temps
+                  </span>
+                </div>
+              </div>
+
+              {/* Indicadors Gamificats amb GEMES i BOTIGA */}
+              <div className="flex items-center gap-2 sm:gap-4 font-display font-black text-sm">
+                
+                {/* BOTIGA */}
+                <button 
+                  onClick={() => { playSound('pop'); setCurrentView('shop'); }}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-2xl border-2 font-display font-black text-sm shadow-sm transition-transform hover:scale-105 active:translate-y-0.5 ${
+                    currentView === 'shop' 
+                      ? 'bg-emerald-500 text-white border-emerald-600' 
+                      : 'bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100'
+                  }`}
+                >
+                  <i className="fa-solid fa-store text-base"></i>
+                  <span className="hidden sm:inline">Botiga</span>
+                </button>
+
+                {/* VIDES */}
+                <div className="flex items-center gap-1.5 bg-red-50 text-duoRed border-2 border-red-200 px-3 py-1 rounded-2xl shadow-sm relative">
+                  <i className="fa-solid fa-heart text-base animate-pulse"></i>
+                  <span>{hearts}/5</span>
+
+                  <AnimatePresence>
+                    {extraLifeToast && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                        animate={{ opacity: 1, y: -25, scale: 1 }}
+                        exit={{ opacity: 0, y: -35 }}
+                        className="absolute whitespace-nowrap bg-duoRed text-white text-xs px-2 py-0.5 rounded-full shadow-md font-black"
+                      >
+                        +1 ❤️ VIDA!
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* GEMES */}
+                <div className="flex items-center gap-1.5 bg-emerald-50 text-duoEmerald border-2 border-emerald-200 px-3 py-1 rounded-2xl shadow-sm">
+                  <i className="fa-solid fa-gem text-base"></i>
+                  <span>{gems}</span>
+                </div>
+
+                {/* RATXA */}
+                <div className="flex items-center gap-1.5 bg-amber-50 text-duoOrange border-2 border-amber-200 px-3 py-1 rounded-2xl shadow-sm">
+                  <i className="fa-solid fa-fire text-base"></i>
+                  <span>{streak} d.</span>
+                </div>
+
+                {/* XP */}
+                <div className="flex items-center gap-1.5 bg-sky-50 text-duoBlue border-2 border-sky-200 px-3 py-1 rounded-2xl shadow-sm">
+                  <i className="fa-solid fa-bolt text-base"></i>
+                  <span>{xp} XP</span>
+                </div>
+
+              </div>
+
+            </div>
+          </header>
+
+          {/* CONTINGUT PRINCIPAL */}
+          <main className="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 my-2">
+            <AnimatePresence mode="wait">
+              {currentView === 'path' && (
+                <PathMap 
+                  key="path" 
+                  selectedChapter={selectedChapter} 
+                  setSelectedChapter={setSelectedChapter} 
+                  nodeProgress={nodeProgress} 
+                  setCurrentView={setCurrentView} 
+                  isPro={isPro}
+                />
+              )}
+              {currentView === 'shop' && (
+                <ShopView 
+                  key="shop"
+                  gems={gems} 
+                  setGems={setGems} 
+                  hearts={hearts} 
+                  setHearts={setHearts} 
+                  inventory={inventory} 
+                  setInventory={setInventory} 
+                  setCurrentView={setCurrentView} 
+                />
+              )}
+              {currentView === 'timeline' && (
+                <GameTimeline chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_timeline`, s)} />
+              )}
+              {currentView === 'kahoot' && (
+                <GameKahoot chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_kahoot`, s)} inventory={inventory} setInventory={setInventory} />
+              )}
+              {currentView === 'extraKahoot' && (
+                <GameExtraKahoot chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_extraKahoot`, s)} inventory={inventory} setInventory={setInventory} />
+              )}
+              {currentView === 'xafarderia' && (
+                <GameXafarderia chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_xafarderia`, s)} />
+              )}
+              {currentView === 'boe' && (
+                <GameBOE chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_boe`, s)} />
+              )}
+              {currentView === 'conecta' && (
+                <GameConecta chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_conecta`, s)} />
+              )}
+              {currentView === 'veritat' && (
+                <GameVeritat chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_veritat`, s)} />
+              )}
+              {currentView === 'motPerdut' && (
+                <GameMotPerdut chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_motPerdut`, s)} />
+              )}
+            </AnimatePresence>
+          </main>
+
+          {/* MINIJOC REANIMACIÓ CPR (Vides = 0) - Només PRO */}
+          <AnimatePresence>
+            {showCprModal && isPro && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 text-white text-center"
+              >
+                <div className="max-w-md w-full bg-slate-800 border-4 border-duoRed rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
+                  <div className="space-y-2">
+                    <span className="bg-duoRed text-white text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full">
+                      ¡ALERTA DE CORATGE!
+                    </span>
+                    <h2 className="text-2xl sm:text-3xl font-display font-black">
+                      REANIMACIÓ CARDÍACA (CPR)
+                    </h2>
+                    <p className="text-xs text-slate-300 font-semibold">
+                      Has perdut totes les vides! Prem el cor 10 vegades per reanimar el teu progrés!
+                    </p>
+                  </div>
+
+                  <div className="py-4">
+                    <button
+                      onClick={handleCprClick}
+                      className="w-32 h-32 bg-duoRed text-white rounded-full mx-auto flex flex-col items-center justify-center shadow-btn-red hover:scale-105 active:scale-95 transition-transform animate-pulse-heart border-4 border-white/20"
+                    >
+                      <i className="fa-solid fa-heart-pulse text-5xl"></i>
+                      <span className="text-xs font-black mt-1">{cprClicks}/10</span>
+                    </button>
+                  </div>
+
+                  <div className="w-full bg-slate-700 h-3 rounded-full overflow-hidden">
+                    <div 
+                      className="bg-duoRed h-full transition-all duration-200"
+                      style={{ width: `${(cprClicks / 10) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* MODAL SENSE VIDES (Usuaris No-PRO: Opció comprar o esperar demà) */}
+          <AnimatePresence>
+            {showNoLivesModal && !isPro && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 text-white text-center"
+              >
+                <div className="max-w-md w-full bg-slate-800 border-4 border-duoRed rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
+                  <div className="w-20 h-20 bg-red-500/20 text-duoRed rounded-full flex items-center justify-center text-3xl mx-auto border-4 border-duoRed/30">
+                    <i className="fa-solid fa-heart-crack animate-pulse"></i>
+                  </div>
+                  <div className="space-y-2">
+                    <span className="bg-duoRed text-white text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full">
+                      ¡SENSE VIDES!
+                    </span>
+                    <h2 className="text-2xl sm:text-3xl font-display font-black">
+                      NO TENS MÉS VIDES
+                    </h2>
+                    <p className="text-xs text-slate-300 font-semibold leading-relaxed">
+                      Has esgotat totes les teves vides. Pots comprar vides a la botiga o esperar fins demà i ja!
+                    </p>
+                  </div>
+
+                  <div className="space-y-3 pt-2">
+                    <button
+                      onClick={() => {
+                        setShowNoLivesModal(false);
+                        setCurrentView('shop');
+                      }}
+                      className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-display font-black py-3.5 rounded-2xl shadow-btn-emerald transition-transform active:translate-y-1 flex items-center justify-center gap-2 text-base"
+                    >
+                      <i className="fa-solid fa-store"></i>
+                      Comprar Vides a la Botiga
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* BOTTOM SHEET FEEDBACK MODAL */}
+          <AnimatePresence>
+            {sheet.isOpen && (
+              <motion.div 
+                initial={{ opacity: 0, y: 100 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 100 }}
+                className={`fixed bottom-0 left-0 right-0 z-50 p-6 rounded-t-3xl border-t-4 shadow-2xl ${
+                  sheet.type === 'success' ? 'bg-emerald-50 border-duoGreen text-emerald-950' : 'bg-red-50 border-duoRed text-red-950'
+                }`}
+              >
+                <div className="max-w-xl mx-auto space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-xl font-black text-white ${
+                        sheet.type === 'success' ? 'bg-duoGreen' : 'bg-duoRed'
+                      }`}>
+                        <i className={`fa-solid ${sheet.type === 'success' ? 'fa-check' : 'fa-xmark'}`}></i>
+                      </div>
+                      <h3 className="text-xl font-display font-black">{sheet.title}</h3>
+                    </div>
+
+                    {sheet.xpEarned > 0 && (
+                      <span className="bg-amber-400 text-slate-900 font-display font-black text-xs px-3 py-1 rounded-full shadow-sm">
+                        +{sheet.xpEarned} XP
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="font-bold text-sm">{sheet.message}</p>
+                  
+                  {sheet.explanation && (
+                    <div className="bg-white/80 p-3 rounded-xl border text-xs font-medium text-slate-700">
+                      <strong>Explicació Històrica:</strong> {sheet.explanation}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={sheet.onContinue}
+                    className={`w-full font-display font-black text-lg py-3 rounded-2xl text-white shadow-md transition-transform active:translate-y-1 ${
+                      sheet.type === 'success' ? 'bg-duoGreen hover:bg-duoGreenDark shadow-btn-green' : 'bg-duoRed hover:bg-duoRedDark shadow-btn-red'
+                    }`}
+                  >
+                    CONTINUAR
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+        </div>
+      );
+    }
+
+    // Renderitzat React inicial
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
