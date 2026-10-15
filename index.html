@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HistòriaLab - Ruta del Temps</title>
-  <meta name="61ad4938367a3a84ffb5719237f40d15baa1e413" content="61ad4938367a3a84ffb5719237f40d15baa1e413" />
   
   <!-- Fonts: Fredoka & Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -169,6 +168,37 @@
       }
     }
 
+    // --- COMPONENTS DE BANNER (Nous) ---
+    const AdBanner728 = () => {
+      const bannerRef = useRef(null);
+      useEffect(() => {
+        if (bannerRef.current && !bannerRef.current.hasChildNodes()) {
+          const script1 = document.createElement('script');
+          script1.innerHTML = `atOptions = {'key' : 'de7a06efe398eecb3dd558c0f6f63f33','format' : 'iframe','height' : 90,'width' : 728,'params' : {}};`;
+          const script2 = document.createElement('script');
+          script2.src = "https://www.highrevenueformat.com/de7a06efe398eecb3dd558c0f6f63f33/invoke.js";
+          bannerRef.current.appendChild(script1);
+          bannerRef.current.appendChild(script2);
+        }
+      }, []);
+      return <div className="w-full flex justify-center py-4"><div ref={bannerRef} className="w-[728px] h-[90px] bg-slate-200 rounded overflow-hidden shadow-sm flex items-center justify-center text-slate-400 text-xs">Publicitat</div></div>;
+    };
+
+    const AdBanner300 = () => {
+      const bannerRef = useRef(null);
+      useEffect(() => {
+        if (bannerRef.current && !bannerRef.current.hasChildNodes()) {
+          const script1 = document.createElement('script');
+          script1.innerHTML = `atOptions = {'key' : 'de7a06efe398eecb3dd558c0f6f63f33','format' : 'iframe','height' : 250,'width' : 300,'params' : {}};`;
+          const script2 = document.createElement('script');
+          script2.src = "https://www.highrevenueformat.com/75c77c441f4e7f62f1f1b2fa3a53ec10/invoke.js";
+          bannerRef.current.appendChild(script1);
+          bannerRef.current.appendChild(script2);
+        }
+      }, []);
+      return <div ref={bannerRef} className="w-[300px] h-[250px] mx-auto bg-slate-200 rounded overflow-hidden shadow-sm flex items-center justify-center text-slate-400 text-xs">Anunci</div>;
+    };
+
     // --- SINTETITZADOR D'ÀUDIO WEB AUDIO API ---
     const playSound = (type) => {
       try {
@@ -278,7 +308,7 @@
     };
 
     // --- MAPA RUTA DEL TEMPS ---
-    function PathMap({ selectedChapter, setSelectedChapter, nodeProgress, setCurrentView, isPro }) {
+    function PathMap({ selectedChapter, setSelectedChapter, nodeProgress, setCurrentView, isPro, unlockedChapters, handleUnlockChapter }) {
       const CHAPTER_DATA = window.QuestionBank.CHAPTER_DATA;
       const chapter = CHAPTER_DATA[selectedChapter];
 
@@ -292,7 +322,7 @@
         { key: 'motPerdut', name: 'El Mot Perdut', icon: 'fa-pen-clip', color: 'bg-duoEmerald', shadow: 'shadow-btn-emerald' },
       ];
 
-      const isLockedForNonPro = !isPro && selectedChapter !== 1;
+      const isLockedForNonPro = !isPro && selectedChapter !== 1 && !unlockedChapters.includes(selectedChapter);
 
       return (
         <div className="space-y-6 pb-12">
@@ -300,7 +330,7 @@
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
             {Object.values(CHAPTER_DATA).map(chap => {
               const isActive = chap.id === selectedChapter;
-              const isChapLocked = !isPro && chap.id !== 1;
+              const isChapLocked = !isPro && chap.id !== 1 && !unlockedChapters.includes(chap.id);
               return (
                 <button
                   key={chap.id}
@@ -329,6 +359,8 @@
               );
             })}
           </div>
+
+          <AdBanner728 />
 
           {/* Banner del Capítol Actiu */}
           <div className={`${chapter.color} text-white p-6 rounded-3xl shadow-duo-3d border-b-4 border-black/20 relative overflow-hidden`}>
@@ -361,13 +393,21 @@
               </div>
               <div className="max-w-md mx-auto space-y-2">
                 <h3 className="text-xl font-display font-black text-slate-800">
-                  {!chapter.available ? "Capítol en desenvolupament" : "Fes upgrade per seguir"}
+                  {!chapter.available ? "Capítol en desenvolupament" : "Capítol Bloquejat"}
                 </h3>
                 <p className="text-slate-500 text-sm font-medium">
                   {!chapter.available 
                     ? "El Capítol 4 (La Restauració Borbònica) estarà disponible molt aviat. Continua completant els capítols anteriors per guanyar XP i gemes!"
-                    : "Aquest capítol està bloquejat per a usuaris estàndard. Fes upgrade per seguir i desbloquejar tots els continguts de la plataforma."}
+                    : "Aquest capítol està bloquejat per a usuaris estàndard. Pots desbloquejar-lo veient un anunci o fent upgrade."}
                 </p>
+                {isLockedForNonPro && chapter.available && (
+                  <button 
+                    onClick={() => handleUnlockChapter(chapter.id)}
+                    className="mt-4 w-full bg-duoPurple hover:bg-duoPurpleDark text-white font-display font-black text-sm py-3 rounded-xl shadow-btn-purple transition-transform active:translate-y-1"
+                  >
+                    <i className="fa-solid fa-play mr-2"></i> Desbloquejar veient un anunci
+                  </button>
+                )}
               </div>
             </div>
           ) : (
@@ -512,6 +552,8 @@
             </span>
           </div>
 
+          <AdBanner728 />
+
           <div className="text-center space-y-2">
             <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center text-3xl mx-auto border-2 border-emerald-300 shadow-sm">
               <i className="fa-solid fa-store"></i>
@@ -631,6 +673,8 @@
               Utilitza les fletxes per ordenar els esdeveniments des del més antic (dalt) fins al més recent (baix).
             </p>
           </div>
+
+          <AdBanner728 />
 
           <div className="space-y-3">
             {items.map((item, idx) => (
@@ -756,6 +800,8 @@
           <h2 className="text-xl sm:text-2xl font-display font-black text-slate-800">
             {q.question}
           </h2>
+
+          <AdBanner728 />
 
           {/* OPCIÓ TIPUS 1: CLÀSSIC */}
           {q.type === 'classic' && (
@@ -938,6 +984,8 @@
             </span>
           </div>
 
+          <AdBanner728 />
+
           {/* Barra de Progrés */}
           <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden border border-slate-200">
             <div 
@@ -1102,6 +1150,8 @@
             </span>
           </div>
 
+          <AdBanner728 />
+
           <div className="text-center space-y-2">
             <span className={`inline-block px-4 py-1.5 rounded-2xl text-white font-display font-black text-xs uppercase ${data.color}`}>
               {data.centerRole}
@@ -1185,6 +1235,8 @@
               Text Oficial BOE ({idx + 1}/{docs.length})
             </span>
           </div>
+
+          <AdBanner728 />
 
           <div className="bg-amber-50 border-2 border-amber-200 rounded-3xl p-6 relative space-y-3">
             <i className="fa-solid fa-quote-left text-amber-300 text-3xl"></i>
@@ -1279,6 +1331,8 @@
             </span>
           </div>
 
+          <AdBanner728 />
+
           <div className="grid grid-cols-2 gap-4">
             {/* Columna Esquerra */}
             <div className="space-y-3">
@@ -1365,6 +1419,8 @@
             </span>
           </div>
 
+          <AdBanner728 />
+
           <div className="bg-amber-50 border-2 border-amber-200 rounded-3xl p-8 space-y-4">
             <i className="fa-solid fa-lightbulb text-4xl text-duoYellow"></i>
             <h3 className="text-xl sm:text-2xl font-display font-black text-slate-800 leading-snug">
@@ -1433,6 +1489,8 @@
               El Mot Perdut
             </span>
           </div>
+
+          <AdBanner728 />
 
           <h2 className="text-2xl font-display font-black text-slate-800">
             {data.title}
@@ -1514,12 +1572,17 @@
         return saved !== null ? parseInt(saved, 10) : 1;
       });
 
+      const [unlockedChapters, setUnlockedChapters] = useState(() => {
+        const saved = localStorage.getItem('hl_unlockedChapters');
+        return saved ? JSON.parse(saved) : [1];
+      });
+
       const [selectedChapter, setSelectedChapter] = useState(() => {
         const saved = localStorage.getItem('hl_selectedChapter');
         let ch = saved !== null ? parseInt(saved, 10) : 1;
         const urlParams = new URLSearchParams(window.location.search);
         const proStatus = urlParams.get('pro') === 'true' || localStorage.getItem('hl_is_pro') === 'true';
-        if (!proStatus) ch = 1;
+        if (!proStatus && !(saved && JSON.parse(localStorage.getItem('hl_unlockedChapters') || '[1]').includes(ch))) ch = 1;
         return ch;
       });
 
@@ -1544,6 +1607,11 @@
       const [showNoLivesModal, setShowNoLivesModal] = useState(false);
       const [cprClicks, setCprClicks] = useState(0);
       const [extraLifeToast, setExtraLifeToast] = useState(false);
+      
+      // Estado Modal Publicidad Falsa
+      const [showAdModal, setShowAdModal] = useState(false);
+      const [adCountdown, setAdCountdown] = useState(20);
+      const [adCallback, setAdCallback] = useState(null);
 
       // GUARDAT AUTOMÀTIC A LOCALSTORAGE
       useEffect(() => {
@@ -1552,9 +1620,21 @@
         localStorage.setItem('hl_gems', gems);
         localStorage.setItem('hl_streak', streak);
         localStorage.setItem('hl_selectedChapter', selectedChapter);
+        localStorage.setItem('hl_unlockedChapters', JSON.stringify(unlockedChapters));
         localStorage.setItem('hl_inventory', JSON.stringify(inventory));
         localStorage.setItem('hl_nodeProgress', JSON.stringify(nodeProgress));
-      }, [hearts, xp, gems, streak, selectedChapter, inventory, nodeProgress]);
+      }, [hearts, xp, gems, streak, selectedChapter, unlockedChapters, inventory, nodeProgress]);
+
+      // Lógica de cuenta regresiva del anuncio
+      useEffect(() => {
+        let timer;
+        if (showAdModal && adCountdown > 0) {
+          timer = setInterval(() => {
+            setAdCountdown(prev => prev - 1);
+          }, 1000);
+        }
+        return () => clearInterval(timer);
+      }, [showAdModal, adCountdown]);
 
       // Bottom Sheet Modal
       const [sheet, setSheet] = useState({
@@ -1566,6 +1646,17 @@
         xpEarned: 0,
         onContinue: null
       });
+
+      const startAd = (callback) => {
+        setAdCountdown(20);
+        setAdCallback(() => callback);
+        setShowAdModal(true);
+      };
+
+      const closeAd = () => {
+        setShowAdModal(false);
+        if (adCallback) adCallback();
+      };
 
       const triggerError = (title, message, exp) => {
         playSound('error');
@@ -1659,6 +1750,23 @@
           playSound('cpr');
           setCprClicks(c => c + 1);
         }
+      };
+
+      const handleUnlockChapter = (chapId) => {
+        startAd(() => {
+          setUnlockedChapters(prev => [...prev, chapId]);
+          playSound('gemGain');
+        });
+      };
+
+      const handleRecoverLifeWithAd = () => {
+        setShowNoLivesModal(false);
+        startAd(() => {
+          setHearts(h => Math.min(5, h + 1));
+          playSound('lifeGain');
+          setExtraLifeToast(true);
+          setTimeout(() => setExtraLifeToast(false), 2500);
+        });
       };
 
       const completeNode = (nodeKey, stars) => {
@@ -1769,6 +1877,8 @@
                   nodeProgress={nodeProgress} 
                   setCurrentView={setCurrentView} 
                   isPro={isPro}
+                  unlockedChapters={unlockedChapters}
+                  handleUnlockChapter={handleUnlockChapter}
                 />
               )}
               {currentView === 'shop' && (
@@ -1809,6 +1919,44 @@
               )}
             </AnimatePresence>
           </main>
+
+          {/* MODAL FAKE ANUNCIO */}
+          <AnimatePresence>
+            {showAdModal && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center p-4 text-white"
+              >
+                <div className="absolute top-4 right-4 text-sm font-bold text-gray-400">
+                  {adCountdown > 0 ? (
+                    `Recompensa en ${adCountdown}s`
+                  ) : (
+                    <button onClick={closeAd} className="bg-gray-800 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-700">
+                      <i className="fa-solid fa-xmark"></i>
+                    </button>
+                  )}
+                </div>
+                
+                <div className="mb-4 text-gray-400 text-xs uppercase tracking-widest">Patrocinat</div>
+                
+                <AdBanner300 />
+
+                <div className="mt-8 text-center px-4 max-w-sm">
+                  <h3 className="text-xl font-display font-bold">Espera per obtenir la teva recompensa</h3>
+                  <p className="text-gray-400 text-sm mt-2">En donar suport als nostres patrocinadors, ens ajudes a mantenir la plataforma gratuïta.</p>
+                </div>
+
+                <div className="w-full max-w-xs bg-gray-800 h-2 rounded-full overflow-hidden mt-8">
+                  <div 
+                    className="bg-duoGreen h-full transition-all duration-1000 linear"
+                    style={{ width: `${((20 - adCountdown) / 20) * 100}%` }}
+                  ></div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* MINIJOC REANIMACIÓ CPR (Vides = 0) - Només PRO */}
           <AnimatePresence>
@@ -1853,7 +2001,7 @@
             )}
           </AnimatePresence>
 
-          {/* MODAL SENSE VIDES (Usuaris No-PRO: Opció comprar o esperar demà) */}
+          {/* MODAL SENSE VIDES (Usuaris No-PRO: Opció comprar, anuncio o esperar) */}
           <AnimatePresence>
             {showNoLivesModal && !isPro && (
               <motion.div 
@@ -1874,11 +2022,19 @@
                       NO TENS MÉS VIDES
                     </h2>
                     <p className="text-xs text-slate-300 font-semibold leading-relaxed">
-                      Has esgotat totes les teves vides. Pots comprar vides a la botiga o esperar fins demà i ja!
+                      Has esgotat totes les teves vides. Pots recuperar vides amb un anunci, comprant a la botiga o esperant.
                     </p>
                   </div>
 
                   <div className="space-y-3 pt-2">
+                    <button
+                      onClick={handleRecoverLifeWithAd}
+                      className="w-full bg-duoPurple hover:bg-duoPurpleDark text-white font-display font-black py-3.5 rounded-2xl shadow-btn-purple transition-transform active:translate-y-1 flex items-center justify-center gap-2 text-base"
+                    >
+                      <i className="fa-solid fa-play"></i>
+                      Recuperar 1 vida amb un anunci
+                    </button>
+                    
                     <button
                       onClick={() => {
                         setShowNoLivesModal(false);
