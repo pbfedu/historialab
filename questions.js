@@ -11,11 +11,11 @@ const CHAPTER_DATA = {
   color: "bg-duoYellow",
   available: true,
   timeline: [
-    { id: "t0_1", text: "Guerra de Successió Espanyola", year: "1701-1714", icon: "fa-shield-halved", exp: "Conflicte internacional i civil després de la mort de Carles II sense descendència [1, 2]." },
-    { id: "t0_2", text: "Decrets de Nova Planta", year: "1707-1716", icon: "fa-file-signature", exp: "Abolició dels furs i institucions de la Corona d'Aragó i imposició del model centralista de Castella [3]." },
-    { id: "t0_3", text: "Reinat de Carles III", year: "1759-1788", icon: "fa-crown", exp: "Etapa de Despotisme Il·lustrat amb reformes econòmiques, educatives i d'infraestructures [4, 5]." },
-    { id: "t0_4", text: "Independència dels Estats Units", year: "1776", icon: "fa-flag", exp: "Nascuda de la insurrecció de les tretze colònies, crea la primera Constitució escrita de la història [6]." },
-    { id: "t0_5", text: "Liberalització del comerç amb Amèrica", year: "1778", icon: "fa-ship", exp: "Obertura comercial que va beneficiar l'exportació catalana de vins, aiguardents i indianes [3, 4]." }
+    { id: "t0_1", text: "Guerra de Successió Espanyola", year: "???", icon: "fa-shield-halved", exp: "Conflicte internacional i civil després de la mort de Carles II sense descendència [1, 2]." },
+    { id: "t0_2", text: "Decrets de Nova Planta", year: "???", icon: "fa-file-signature", exp: "Abolició dels furs i institucions de la Corona d'Aragó i imposició del model centralista de Castella [3]." },
+    { id: "t0_3", text: "Reinat de Carles III", year: "???", icon: "fa-crown", exp: "Etapa de Despotisme Il·lustrat amb reformes econòmiques, educatives i d'infraestructures [4, 5]." },
+    { id: "t0_4", text: "Independència dels Estats Units", year: "???", icon: "fa-flag", exp: "Nascuda de la insurrecció de les tretze colònies, crea la primera Constitució escrita de la història [6]." },
+    { id: "t0_5", text: "Liberalització del comerç amb Amèrica", year: "???", icon: "fa-ship", exp: "Obertura comercial que va beneficiar l'exportació catalana de vins, aiguardents i indianes [3, 4]." }
   ],
   kahoot: [
     {
@@ -149,9 +149,9 @@ const CHAPTER_DATA = {
     ],
     chars: [
       { name: "Felip V", role: "Rei Centralista" },
-      { name: "Sociedades Económicas", role: "Entitat Reformista" },
-      { name: "Montesquieu, Voltaire i Rousseau", role: "Filòsofs Il·lustrats" },
-      { name: "Comerciants i Indians", role: "Elit Econòmica Catalana" }
+      { name: "Sociedades Económicas", role: "" },
+      { name: "Montesquieu, Voltaire i Rousseau", role: "" },
+      { name: "Comerciants i Indians", role: "" }
     ]
   },
   boe: [
@@ -194,14 +194,14 @@ const CHAPTER_DATA = {
   color: "bg-duoGreen",
   available: true,
   timeline: [
-    { id: "t1_1", text: "Tractat de Fontainebleau", year: "1807", icon: "fa-file-signature", exp: "Permet el pas de les tropes de Napoleó per Espanya cap a Portugal." },
-    { id: "t1_2", text: "Motí d'Aranjuez", year: "Març 1808", icon: "fa-hand-fist", exp: "Caiguda de Manuel Godoy i abdicació forçada de Carles IV en Ferran VII." },
-    { id: "t1_3", text: "Aixecament del 2 de Maig i Abdicacions de Baiona", year: "Maig 1808", icon: "fa-fire-flame-curved", exp: "Revolta popular a Madrid i cessió forçada de la corona a Josep I Bonaparte." },
-    { id: "t1_4", text: "Batalla de Bailèn", year: "Juliol 1808", icon: "fa-shield-halved", exp: "Primera gran derrota de l'exèrcit napoleònic a camp obert a Europa." },
-    { id: "t1_5", text: "Setge de Girona", year: "1809", icon: "fa-fort-awesome", exp: "Resistència heroica i tres setges consecutius que van devastar la ciutat de Girona." },
-    { id: "t1_6", text: "Convocatòria de les Corts de Cadis", year: "1810", icon: "fa-building-columns", exp: "La Junta Suprema Central convoca reunió de diputats liberals i absolutistes a Cadis." },
-    { id: "t1_7", text: "Promulgació de 'La Pepa'", year: "1812", icon: "fa-scroll", exp: "Aprovació de la primera Constitució liberal d'Espanya el dia de Sant Josep." },
-    { id: "t1_8", text: "Tractat de Valençay", year: "1813", icon: "fa-handshake", exp: "Napoleó reconeix Ferran VII com a rei d'Espanya i retira les seves tropes." }
+    { id: "t1_1", text: "Tractat de Fontainebleau", year: "???", icon: "fa-file-signature", exp: "Permet el pas de les tropes de Napoleó per Espanya cap a Portugal." },
+    { id: "t1_2", text: "Motí d'Aranjuez", year: "???", icon: "fa-hand-fist", exp: "Caiguda de Manuel Godoy i abdicació forçada de Carles IV en Ferran VII." },
+    { id: "t1_3", text: "Aixecament del 2 de Maig i Abdicacions de Baiona", year: "???", icon: "fa-fire-flame-curved", exp: "Revolta popular a Madrid i cessió forçada de la corona a Josep I Bonaparte." },
+    { id: "t1_4", text: "Batalla de Bailèn", year: "???", icon: "fa-shield-halved", exp: "Primera gran derrota de l'exèrcit napoleònic a camp obert a Europa." },
+    { id: "t1_5", text: "Setge de Girona", year: "???", icon: "fa-fort-awesome", exp: "Resistència heroica i tres setges consecutius que van devastar la ciutat de Girona." },
+    { id: "t1_6", text: "Convocatòria de les Corts de Cadis", year: "???", icon: "fa-building-columns", exp: "La Junta Suprema Central convoca reunió de diputats liberals i absolutistes a Cadis." },
+    { id: "t1_7", text: "Promulgació de 'La Pepa'", year: "???", icon: "fa-scroll", exp: "Aprovació de la primera Constitució liberal d'Espanya el dia de Sant Josep." },
+    { id: "t1_8", text: "Tractat de Valençay", year: "???", icon: "fa-handshake", exp: "Napoleó reconeix Ferran VII com a rei d'Espanya i retira les seves tropes." }
   ],
   kahoot: [
     {
@@ -334,10 +334,10 @@ const CHAPTER_DATA = {
       { id: "s4", label: "OPOSICIÓ POPULAR", relation: "S'organitzen en juntes de defensa i guerrilles", correct: "Patriotes Espanyols", icon: "fa-flag" }
     ],
     chars: [
-      { name: "Napoleó Bonaparte", role: "Emperador Francès" },
-      { name: "Joaquim Murat", role: "Mariscal Francès" },
-      { name: "Afrancesats", role: "Elit Il·lustrada" },
-      { name: "Patriotes Espanyols", role: "Resistència Popular" }
+      { name: "Napoleó Bonaparte", role: "" },
+      { name: "Joaquim Murat", role: "" },
+      { name: "Afrancesats", role: "" },
+      { name: "Patriotes Espanyols", role: "" }
     ]
   },
   boe: [
@@ -380,14 +380,14 @@ const CHAPTER_DATA = {
   color: "bg-duoPurple",
   available: true,
   timeline: [
-    { id: "t3_1", text: "Primera Guerra Carlina i Conveni de Bergara", year: "1833-1840", icon: "fa-shield-halved", exp: "Conflicte dinàstic i ideològic entre isabelins (liberals) i carlins; acaba amb el pacte entre Espartero i Maroto que manté els furs bascos." },
-    { id: "t3_2", text: "Desamortització de Mendizábal i Constitució de 1837", year: "1836-1837", icon: "fa-coins", exp: "Expropiació de béns de l'Església per finançar la guerra i aprovació d'una Constitució de caràcter progressista." },
-    { id: "t3_3", text: "Creació de la Guàrdia Civil i Dècada Moderada", year: "1844", icon: "fa-user-shield", exp: "Fundació de la Guàrdia Civil pel General Narváez per mantenir l'ordre públic al camp i iniciar el domini moderat." },
-    { id: "t3_4", text: "Inauguració del primer ferrocarril peninsular", year: "1848", icon: "fa-train", exp: "Obertura de la línia Barcelona-Mataró promoguda per Miquel Biada." },
-    { id: "t3_5", text: "La Vicalvarada i inici del Bienni Progressista", year: "1854", icon: "fa-bolt", exp: "Pronunciament d'O'Donnell que porta Espartero al poder i obre una etapa de reformes profundes." },
-    { id: "t3_6", text: "Llei de Ferrocarrils, Desamortització de Madoz i Vaga General", year: "1855", icon: "fa-industry", exp: "Aprovació de la legislació econòmica clau i primera vaga general a Espanya (origina a Barcelona per les selfactines)." },
-    { id: "t3_7", text: "La Gloriosa Revolució i exili d'Isabel II", year: "1868", icon: "fa-flag", exp: "Pronunciament de Topete, Prim i Serrano, batalla d'Alcolea i destronament de la reina Isabel II." },
-    { id: "t3_8", text: "Proclamació de la Primera República Espanyola", year: "1873-1874", icon: "fa-building-columns", exp: "Les Corts proclamen la República davant l'abdicació d'Amadeu de Savoia; patirà una forta inestabilitat i el cantonalisme." }
+    { id: "t3_1", text: "Primera Guerra Carlina i Conveni de Bergara", year: "???", icon: "fa-shield-halved", exp: "Conflicte dinàstic i ideològic entre isabelins (liberals) i carlins; acaba amb el pacte entre Espartero i Maroto que manté els furs bascos." },
+    { id: "t3_2", text: "Desamortització de Mendizábal i Constitució de 1837", year: "???", icon: "fa-coins", exp: "Expropiació de béns de l'Església per finançar la guerra i aprovació d'una Constitució de caràcter progressista." },
+    { id: "t3_3", text: "Creació de la Guàrdia Civil i Dècada Moderada", year: "???", icon: "fa-user-shield", exp: "Fundació de la Guàrdia Civil pel General Narváez per mantenir l'ordre públic al camp i iniciar el domini moderat." },
+    { id: "t3_4", text: "Inauguració del primer ferrocarril peninsular", year: "???", icon: "fa-train", exp: "Obertura de la línia Barcelona-Mataró promoguda per Miquel Biada." },
+    { id: "t3_5", text: "La Vicalvarada i inici del Bienni Progressista", year: "???", icon: "fa-bolt", exp: "Pronunciament d'O'Donnell que porta Espartero al poder i obre una etapa de reformes profundes." },
+    { id: "t3_6", text: "Llei de Ferrocarrils, Desamortització de Madoz i Vaga General", year: "???", icon: "fa-industry", exp: "Aprovació de la legislació econòmica clau i primera vaga general a Espanya (origina a Barcelona per les selfactines)." },
+    { id: "t3_7", text: "La Gloriosa Revolució i exili d'Isabel II", year: "???", icon: "fa-flag", exp: "Pronunciament de Topete, Prim i Serrano, batalla d'Alcolea i destronament de la reina Isabel II." },
+    { id: "t3_8", text: "Proclamació de la Primera República Espanyola", year: "???", icon: "fa-building-columns", exp: "Les Corts proclamen la República davant l'abdicació d'Amadeu de Savoia; patirà una forta inestabilitat i el cantonalisme." }
   ],
   kahoot: [
     {
@@ -515,10 +515,10 @@ const CHAPTER_DATA = {
       { id: "s4", label: "GENERAL REVOLUCIONARI", relation: "Líder de 'La Gloriosa' que va buscar un nou rei constitucional", correct: "Joan Prim", icon: "fa-flag" }
     ],
     chars: [
-      { name: "Baldomero Espartero", role: "Líder Progressista" },
-      { name: "Ramón Mª Narváez", role: "Líder Moderat" },
-      { name: "Leopoldo O'Donnell", role: "Unión Liberal" },
-      { name: "Joan Prim", role: "General Revolucionari" }
+      { name: "Baldomero Espartero", role: "" },
+      { name: "Ramón Mª Narváez", role: "" },
+      { name: "Leopoldo O'Donnell", role: "" },
+      { name: "Joan Prim", role: "" }
     ]
   },
   boe: [
