@@ -31,6 +31,8 @@
 
   <!-- Banc de Preguntes de la Plataforma -->
   <script src="questions.js"></script>
+  <!-- Col·lecció d'Anuncis de la Plataforma -->
+  <script src="ads.js"></script>
 
   <script>
     tailwind.config = {
@@ -96,7 +98,7 @@
 
     @keyframes flashRed {
       0% { box-shadow: inset 0 0 0 0 rgba(255, 75, 75, 0); }
-      30% { box-shadow: inset 0 0 60px 15px rgba(255, 75, 75, 0.45); }
+      30% { shadow: inset 0 0 60px 15px rgba(255, 75, 75, 0.45); }
       100% { box-shadow: inset 0 0 0 0 rgba(255, 75, 75, 0); }
     }
     .flash-red {
@@ -168,35 +170,100 @@
       }
     }
 
-    // --- COMPONENTS DE BANNER (Nous) ---
+    // --- COMPONENTS DE BANNER (Sense anuncis per a PRO, tots enllaçats al 100%) ---
     const AdBanner728 = () => {
-      const bannerRef = useRef(null);
+      const isPro = localStorage.getItem('hl_is_pro') === 'true' || (new URLSearchParams(window.location.search)).get('pro') === 'true';
+      if (isPro) return null;
+
+      const [ad, setAd] = useState(null);
+
       useEffect(() => {
-        if (bannerRef.current && !bannerRef.current.hasChildNodes()) {
-          const script1 = document.createElement('script');
-          script1.innerHTML = `atOptions = {'key' : 'aff33ea4dc72420c4520f527ecb3b415','format' : 'iframe','height' : 90,'width' : 728,'params' : {}};`;
-          const script2 = document.createElement('script');
-          script2.src = "https://www.highrevenueformat.com/aff33ea4dc72420c4520f527ecb3b415/invoke.js";
-          bannerRef.current.appendChild(script1);
-          bannerRef.current.appendChild(script2);
+        if (window.getRandomAd728) {
+          setAd(window.getRandomAd728());
         }
       }, []);
-      return <div className="w-full flex justify-center py-4"><div ref={bannerRef} className="w-[728px] h-[90px] bg-slate-200 rounded overflow-hidden shadow-sm flex items-center justify-center text-slate-400 text-xs">Publicitat</div></div>;
+
+      if (!ad) return null;
+
+      const handleAdClick = () => {
+        if (playSound) playSound('pop');
+        window.open(ad.url || 'https://www.google.com', '_blank');
+      };
+
+      return (
+        <div className="w-full flex justify-center py-4">
+          <div 
+            onClick={handleAdClick}
+            className={`w-full max-w-[728px] min-h-[90px] ${ad.bg} ${ad.textColor} rounded-2xl p-4 shadow-md flex items-center justify-between gap-4 border border-white/20 relative overflow-hidden cursor-pointer hover:opacity-95 transition-all hover:scale-[1.01]`}
+          >
+            <div className="flex items-center gap-3 z-10">
+              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-xl shrink-0">
+                <i className={`fa-solid ${ad.icon}`}></i>
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[9px] font-black uppercase tracking-wider bg-white/30 px-2 py-0.5 rounded-full">
+                    {ad.badge}
+                  </span>
+                  <h4 className="font-display font-black text-sm sm:text-base leading-tight">{ad.title}</h4>
+                </div>
+                <p className="text-xs text-white/90 line-clamp-1 font-medium mt-0.5">{ad.subtitle}</p>
+              </div>
+            </div>
+            <div className="z-10 bg-white text-slate-900 font-display font-black text-xs px-3.5 py-2 rounded-xl shadow hover:bg-slate-100 transition-transform active:scale-95 shrink-0 pointer-events-none">
+              {ad.btnText}
+            </div>
+            <i className={`fa-solid ${ad.icon} absolute -right-3 -bottom-3 text-7xl opacity-10 pointer-events-none`}></i>
+          </div>
+        </div>
+      );
     };
 
-    const AdBanner300 = () => {
-      const bannerRef = useRef(null);
+    const AdBanner300 = ({ overrideAd }) => {
+      const isPro = localStorage.getItem('hl_is_pro') === 'true' || (new URLSearchParams(window.location.search)).get('pro') === 'true';
+      if (isPro) return null;
+
+      const [ad, setAd] = useState(overrideAd || null);
+
       useEffect(() => {
-        if (bannerRef.current && !bannerRef.current.hasChildNodes()) {
-          const script1 = document.createElement('script');
-          script1.innerHTML = `atOptions = {'key' : '68d89f83794b0bfdd6e93400c8799e53','format' : 'iframe','height' : 250,'width' : 300,'params' : {}};`;
-          const script2 = document.createElement('script');
-          script2.src = "https://www.highrevenueformat.com/68d89f83794b0bfdd6e93400c8799e53/invoke.js";
-          bannerRef.current.appendChild(script1);
-          bannerRef.current.appendChild(script2);
+        if (!overrideAd && window.getRandomAd300) {
+          setAd(window.getRandomAd300());
+        } else if (overrideAd) {
+          setAd(overrideAd);
         }
-      }, []);
-      return <div ref={bannerRef} className="w-[300px] h-[250px] mx-auto bg-slate-200 rounded overflow-hidden shadow-sm flex items-center justify-center text-slate-400 text-xs">Anunci</div>;
+      }, [overrideAd]);
+
+      if (!ad) return null;
+
+      const handleAdClick = () => {
+        if (playSound) playSound('pop');
+        window.open(ad.url || 'https://www.google.com', '_blank');
+      };
+
+      return (
+        <div 
+          onClick={handleAdClick}
+          className={`w-[300px] h-[250px] mx-auto ${ad.bg || 'bg-gradient-to-br from-indigo-500 to-purple-600'} text-white rounded-3xl p-5 shadow-lg flex flex-col justify-between relative overflow-hidden border border-white/20 text-center cursor-pointer hover:opacity-95 transition-all hover:scale-[1.02]`}
+        >
+          <div className="flex items-center justify-between z-10">
+            <span className="bg-white/20 text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full backdrop-blur-sm">
+              Publicitat
+            </span>
+            <i className={`fa-solid ${ad.icon || 'fa-ad'} text-lg`}></i>
+          </div>
+          
+          <div className="space-y-2 my-auto z-10">
+            <h4 className="font-display font-black text-lg leading-tight">{ad.title}</h4>
+            <p className="text-xs text-white/90 font-medium">{ad.desc || ad.subtitle}</p>
+          </div>
+
+          <div className="w-full bg-white text-slate-900 font-display font-black text-xs py-2.5 rounded-xl shadow hover:bg-slate-100 transition-transform active:scale-95 z-10 pointer-events-none">
+            {ad.btnText || 'Més Informació'}
+          </div>
+          
+          <i className={`fa-solid ${ad.icon || 'fa-ad'} absolute -right-6 -bottom-6 text-9xl opacity-10 pointer-events-none`}></i>
+        </div>
+      );
     };
 
     // --- SINTETITZADOR D'ÀUDIO WEB AUDIO API ---
@@ -470,7 +537,7 @@
     }
 
     // --- COMPONENT BOTIGA (SHOP) ---
-    function ShopView({ gems, setGems, hearts, setHearts, inventory, setInventory, setCurrentView }) {
+    function ShopView({ gems, setGems, hearts, setHearts, inventory, setInventory, setCurrentView, isPro, startAd }) {
       const shopItems = [
         {
           id: 'hearts',
@@ -537,6 +604,25 @@
             setInventory(prev => ({ ...prev, shield: prev.shield + 1 }));
             playSound('gemGain');
           }
+        },
+        {
+          id: 'watchAdGems',
+          title: 'Guanyar Gemes amb Anuncis (+15 💎)',
+          desc: 'Mira un Anunci Patrocinat per rebre 15 gemes. (Només disponible per a usuaris sense PRO).',
+          price: 0,
+          icon: 'fa-tv',
+          color: isPro ? 'bg-slate-400 text-white' : 'bg-emerald-600 text-white',
+          btnColor: isPro ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none' : 'bg-emerald-600 shadow-btn-emerald hover:bg-emerald-700 text-white',
+          disabled: isPro,
+          disabledText: isPro ? 'Sense Anuncis en compte PRO' : 'Veure Anunci (+15 💎)',
+          ownedText: isPro ? 'Usuari PRO' : null,
+          onBuy: () => {
+            if (isPro) return;
+            startAd(() => {
+              setGems(g => g + 15);
+              playSound('gemGain');
+            });
+          }
         }
       ];
 
@@ -599,6 +685,8 @@
                   }`}
                 >
                   {item.disabled ? (
+                    <span>{item.disabledText}</span>
+                  ) : item.id === 'watchAdGems' ? (
                     <span>{item.disabledText}</span>
                   ) : (
                     <>
@@ -1608,10 +1696,11 @@
       const [cprClicks, setCprClicks] = useState(0);
       const [extraLifeToast, setExtraLifeToast] = useState(false);
       
-      // Estado Modal Publicidad Falsa
+      // Estado Modal Publicidad
       const [showAdModal, setShowAdModal] = useState(false);
       const [adCountdown, setAdCountdown] = useState(20);
       const [adCallback, setAdCallback] = useState(null);
+      const [currentAdData, setCurrentAdData] = useState(null);
 
       // GUARDAT AUTOMÀTIC A LOCALSTORAGE
       useEffect(() => {
@@ -1648,6 +1737,13 @@
       });
 
       const startAd = (callback) => {
+        if (isPro) {
+          if (callback) callback();
+          return;
+        }
+        if (window.getRandomInterstitialAd) {
+          setCurrentAdData(window.getRandomInterstitialAd());
+        }
         setAdCountdown(20);
         setAdCallback(() => callback);
         setShowAdModal(true);
@@ -1891,6 +1987,8 @@
                   inventory={inventory} 
                   setInventory={setInventory} 
                   setCurrentView={setCurrentView} 
+                  isPro={isPro}
+                  startAd={startAd}
                 />
               )}
               {currentView === 'timeline' && (
@@ -1920,16 +2018,16 @@
             </AnimatePresence>
           </main>
 
-          {/* MODAL FAKE ANUNCIO */}
+          {/* MODAL ANUNCIO (Aleatorio de ads.js i 100% interactiu) */}
           <AnimatePresence>
-            {showAdModal && (
+            {showAdModal && !isPro && (
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center p-4 text-white"
+                className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 text-white"
               >
-                <div className="absolute top-4 right-4 text-sm font-bold text-gray-400">
+                <div className="absolute top-4 right-4 text-sm font-bold text-gray-400 z-10">
                   {adCountdown > 0 ? (
                     `Recompensa en ${adCountdown}s`
                   ) : (
@@ -1939,16 +2037,30 @@
                   )}
                 </div>
                 
-                <div className="mb-4 text-gray-400 text-xs uppercase tracking-widest">Patrocinat</div>
+                <div className="mb-4 text-gray-400 text-xs uppercase tracking-widest z-10">
+                  Patrocinat — {currentAdData ? currentAdData.brand : 'Anunci'}
+                </div>
                 
-                <AdBanner300 />
-
-                <div className="mt-8 text-center px-4 max-w-sm">
-                  <h3 className="text-xl font-display font-bold">Espera per obtenir la teva recompensa</h3>
-                  <p className="text-gray-400 text-sm mt-2">En donar suport als nostres patrocinadors, ens ajudes a mantenir la plataforma gratuïta.</p>
+                <div className="z-10">
+                  <AdBanner300 overrideAd={currentAdData} />
                 </div>
 
-                <div className="w-full max-w-xs bg-gray-800 h-2 rounded-full overflow-hidden mt-8">
+                <div 
+                  onClick={() => {
+                    if (playSound) playSound('pop');
+                    window.open(currentAdData?.url || 'https://www.google.com', '_blank');
+                  }}
+                  className="mt-6 text-center px-4 max-w-sm cursor-pointer hover:opacity-80 transition-opacity z-10"
+                >
+                  <h3 className="text-xl font-display font-bold">
+                    {currentAdData ? currentAdData.title : 'Espera per obtenir la teva recompensa'}
+                  </h3>
+                  <p className="text-gray-400 text-sm mt-2">
+                    {currentAdData ? currentAdData.desc : 'En donar suport als nostres patrocinadors, ens ajudes a mantenir la plataforma gratuïta.'}
+                  </p>
+                </div>
+
+                <div className="w-full max-w-xs bg-gray-800 h-2 rounded-full overflow-hidden mt-6 z-10">
                   <div 
                     className="bg-duoGreen h-full transition-all duration-1000 linear"
                     style={{ width: `${((20 - adCountdown) / 20) * 100}%` }}
