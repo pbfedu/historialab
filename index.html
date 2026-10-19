@@ -57,17 +57,23 @@
             duoYellowDark: '#e0b000',
             duoEmerald: '#10b981',
             duoEmeraldDark: '#059669',
+            // Colors per al Bottom Sheet tipus Duolingo
+            duoBgSuccess: '#d7ffb8',
+            duoTextSuccess: '#58a700',
+            duoBgError: '#ffdfe0',
+            duoTextError: '#ea2b2b',
           },
           boxShadow: {
-            'duo-3d': '0 4px 0 0 rgba(0, 0, 0, 0.15)',
-            'btn-green': '0 4px 0 0 #46a302',
-            'btn-blue': '0 4px 0 0 #1899d6',
-            'btn-orange': '0 4px 0 0 #e08400',
-            'btn-purple': '0 4px 0 0 #b060e0',
-            'btn-red': '0 4px 0 0 #ea2b2b',
-            'btn-yellow': '0 4px 0 0 #e0b000',
-            'btn-slate': '0 4px 0 0 #cbd5e1',
-            'btn-emerald': '0 4px 0 0 #059669',
+            'duo-3d': '0 6px 0 0 rgba(0, 0, 0, 0.1)',
+            'btn-green': '0 6px 0 0 #46a302',
+            'btn-blue': '0 6px 0 0 #1899d6',
+            'btn-orange': '0 6px 0 0 #e08400',
+            'btn-purple': '0 6px 0 0 #b060e0',
+            'btn-red': '0 6px 0 0 #ea2b2b',
+            'btn-yellow': '0 6px 0 0 #e0b000',
+            'btn-slate': '0 6px 0 0 #cbd5e1',
+            'btn-emerald': '0 6px 0 0 #059669',
+            'duo-card': '0 4px 0 0 #e2e8f0',
           }
         }
       }
@@ -77,10 +83,23 @@
   <style>
     body {
       font-family: 'Outfit', sans-serif;
-      background-color: #F4F6F8;
+      background-color: #ffffff; /* Fons més net, estil Duolingo */
       color: #1E293B;
       user-select: none;
       overflow-x: hidden;
+      background-image: radial-gradient(#f1f5f9 2px, transparent 2px);
+      background-size: 24px 24px;
+    }
+
+    /* Utilitat per botons gruixuts que es pressionen */
+    .duo-pressable:active {
+      transform: translateY(6px) !important;
+      box-shadow: none !important;
+    }
+    
+    .duo-card-pressable:active {
+      transform: translateY(4px) !important;
+      box-shadow: none !important;
     }
 
     /* Animacions de feedback visual */
@@ -122,6 +141,15 @@
       animation: pulseHeart 0.8s infinite ease-in-out;
     }
 
+    @keyframes floatDuo {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
+    }
+    .animate-float-duo {
+      animation: floatDuo 3s ease-in-out infinite;
+    }
+
     /* Custom scrollbar clara */
     ::-webkit-scrollbar {
       width: 10px;
@@ -138,12 +166,12 @@
     }
   </style>
 </head>
-<body class="bg-[#F4F6F8] text-slate-800 min-h-screen selection:bg-duoGreen selection:text-white flex flex-col justify-between">
+<body class="min-h-screen selection:bg-duoGreen selection:text-white flex flex-col justify-between">
   <div id="root" class="flex-1 flex flex-col"></div>
 
   <!-- Footer requerit -->
-  <footer class="w-full text-center text-xs text-slate-500 py-4 border-t border-slate-200 bg-white">
-    Aquesta plataforma pot cometre errors.
+  <footer class="w-full text-center text-xs font-bold text-slate-400 py-6 border-t-2 border-slate-200 bg-white">
+    Aquesta plataforma pot cometre errors. Inspirat en la gamificació.
   </footer>
 
   <script type="text/babel">
@@ -194,26 +222,26 @@
         <div className="w-full flex justify-center py-4">
           <div 
             onClick={handleAdClick}
-            className={`w-full max-w-[728px] min-h-[90px] ${ad.bg} ${ad.textColor} rounded-2xl p-4 shadow-md flex items-center justify-between gap-4 border border-white/20 relative overflow-hidden cursor-pointer hover:opacity-95 transition-all hover:scale-[1.01]`}
+            className={`w-full max-w-[728px] min-h-[90px] ${ad.bg} ${ad.textColor} rounded-[24px] p-4 shadow-duo-3d flex items-center justify-between gap-4 border-2 border-black/10 relative overflow-hidden cursor-pointer hover:opacity-95 transition-all hover:scale-[1.01] duo-card-pressable`}
           >
             <div className="flex items-center gap-3 z-10">
-              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-xl shrink-0">
+              <div className="w-12 h-12 rounded-[18px] bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl shrink-0 border border-white/30 shadow-sm">
                 <i className={`fa-solid ${ad.icon}`}></i>
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[9px] font-black uppercase tracking-wider bg-white/30 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-black uppercase tracking-wider bg-white/30 px-2.5 py-0.5 rounded-full border border-white/20">
                     {ad.badge}
                   </span>
-                  <h4 className="font-display font-black text-sm sm:text-base leading-tight">{ad.title}</h4>
+                  <h4 className="font-display font-black text-base sm:text-lg leading-tight drop-shadow-sm">{ad.title}</h4>
                 </div>
-                <p className="text-xs text-white/90 line-clamp-1 font-medium mt-0.5">{ad.subtitle}</p>
+                <p className="text-sm text-white/90 line-clamp-1 font-bold mt-0.5">{ad.subtitle}</p>
               </div>
             </div>
-            <div className="z-10 bg-white text-slate-900 font-display font-black text-xs px-3.5 py-2 rounded-xl shadow hover:bg-slate-100 transition-transform active:scale-95 shrink-0 pointer-events-none">
+            <div className="z-10 bg-white text-slate-900 font-display font-black text-sm px-4 py-2.5 rounded-[16px] shadow-sm hover:bg-slate-100 transition-transform active:scale-95 shrink-0 pointer-events-none border-b-2 border-slate-200">
               {ad.btnText}
             </div>
-            <i className={`fa-solid ${ad.icon} absolute -right-3 -bottom-3 text-7xl opacity-10 pointer-events-none`}></i>
+            <i className={`fa-solid ${ad.icon} absolute -right-4 -bottom-4 text-8xl opacity-10 pointer-events-none transform -rotate-12`}></i>
           </div>
         </div>
       );
@@ -243,25 +271,25 @@
       return (
         <div 
           onClick={handleAdClick}
-          className={`w-[300px] h-[250px] mx-auto ${ad.bg || 'bg-gradient-to-br from-indigo-500 to-purple-600'} text-white rounded-3xl p-5 shadow-lg flex flex-col justify-between relative overflow-hidden border border-white/20 text-center cursor-pointer hover:opacity-95 transition-all hover:scale-[1.02]`}
+          className={`w-[300px] h-[250px] mx-auto ${ad.bg || 'bg-gradient-to-br from-indigo-500 to-purple-600'} text-white rounded-[32px] p-6 shadow-duo-3d flex flex-col justify-between relative overflow-hidden border-2 border-black/10 text-center cursor-pointer hover:opacity-95 transition-all hover:scale-[1.02] duo-card-pressable`}
         >
           <div className="flex items-center justify-between z-10">
-            <span className="bg-white/20 text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full backdrop-blur-sm">
+            <span className="bg-white/20 text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/20">
               Publicitat
             </span>
-            <i className={`fa-solid ${ad.icon || 'fa-ad'} text-lg`}></i>
+            <i className={`fa-solid ${ad.icon || 'fa-ad'} text-2xl drop-shadow-md`}></i>
           </div>
           
-          <div className="space-y-2 my-auto z-10">
-            <h4 className="font-display font-black text-lg leading-tight">{ad.title}</h4>
-            <p className="text-xs text-white/90 font-medium">{ad.desc || ad.subtitle}</p>
+          <div className="space-y-3 my-auto z-10">
+            <h4 className="font-display font-black text-2xl leading-tight drop-shadow-sm">{ad.title}</h4>
+            <p className="text-sm text-white/90 font-bold">{ad.desc || ad.subtitle}</p>
           </div>
 
-          <div className="w-full bg-white text-slate-900 font-display font-black text-xs py-2.5 rounded-xl shadow hover:bg-slate-100 transition-transform active:scale-95 z-10 pointer-events-none">
+          <div className="w-full bg-white text-slate-900 font-display font-black text-sm py-3.5 rounded-[18px] shadow-sm hover:bg-slate-100 transition-transform active:scale-95 z-10 pointer-events-none border-b-2 border-slate-200">
             {ad.btnText || 'Més Informació'}
           </div>
           
-          <i className={`fa-solid ${ad.icon || 'fa-ad'} absolute -right-6 -bottom-6 text-9xl opacity-10 pointer-events-none`}></i>
+          <i className={`fa-solid ${ad.icon || 'fa-ad'} absolute -right-8 -bottom-8 text-[150px] opacity-10 pointer-events-none transform -rotate-12`}></i>
         </div>
       );
     };
@@ -367,9 +395,10 @@
     const triggerConfetti = () => {
       if (window.confetti) {
         window.confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.6 }
+          particleCount: 100,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#58cc02', '#1cb0f6', '#ff9600', '#ce82ff', '#ffc800']
         });
       }
     };
@@ -392,9 +421,9 @@
       const isLockedForNonPro = !isPro && selectedChapter !== 1 && !unlockedChapters.includes(selectedChapter);
 
       return (
-        <div className="space-y-6 pb-12">
-          {/* Selector de Capítols */}
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <div className="space-y-8 pb-16">
+          {/* Selector de Capítols Tipus Pestanya Duolingo */}
+          <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-none px-2">
             {Object.values(CHAPTER_DATA).map(chap => {
               const isActive = chap.id === selectedChapter;
               const isChapLocked = !isPro && chap.id !== 1 && !unlockedChapters.includes(chap.id);
@@ -405,23 +434,23 @@
                     playSound('pop');
                     setSelectedChapter(chap.id);
                   }}
-                  className={`flex-1 min-w-[170px] p-3 rounded-2xl border-b-4 font-display font-black text-left transition-all ${
+                  className={`flex-1 min-w-[200px] p-4 rounded-[24px] border-b-[6px] border-2 font-display font-black text-left transition-all active:translate-y-1 active:border-b-2 ${
                     isActive 
-                      ? `${chap.color} text-white shadow-lg border-black/20 scale-[1.02]` 
+                      ? `${chap.color} text-white shadow-duo-3d border-black/20 scale-[1.02] border-x-black/10 border-t-black/10` 
                       : isChapLocked
                         ? 'bg-slate-100 text-slate-400 border-slate-200 opacity-80'
                         : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                   }`}
                 >
-                  <div className="flex items-center justify-between text-xs opacity-90 uppercase mb-1">
-                    <span>Capítol {chap.id}</span>
+                  <div className="flex items-center justify-between text-xs opacity-90 uppercase mb-2 font-bold tracking-wider">
+                    <span>SECCIÓ {chap.id}</span>
                     {(!chap.available || isChapLocked) && (
-                      <span className="bg-amber-100 text-amber-800 text-[9px] font-black px-1.5 py-0.5 rounded-full border border-amber-300">
-                        {isChapLocked ? 'Bloquejat' : 'Pròximament'}
+                      <span className="bg-amber-100 text-amber-800 text-[10px] font-black px-2 py-0.5 rounded-full border border-amber-300">
+                        {isChapLocked ? 'Bloquejat' : 'Aviat'}
                       </span>
                     )}
                   </div>
-                  <div className="text-sm line-clamp-1">{chap.title.split(': ')[1] || chap.title}</div>
+                  <div className="text-base line-clamp-1">{chap.title.split(': ')[1] || chap.title}</div>
                 </button>
               );
             })}
@@ -430,105 +459,112 @@
           <AdBanner728 />
 
           {/* Banner del Capítol Actiu */}
-          <div className={`${chapter.color} text-white p-6 rounded-3xl shadow-duo-3d border-b-4 border-black/20 relative overflow-hidden`}>
-            <div className="relative z-10 max-w-lg">
+          <div className={`${chapter.color} text-white p-8 rounded-[32px] shadow-duo-3d border-b-[8px] border-2 border-black/20 border-x-black/10 border-t-black/10 relative overflow-hidden`}>
+            <div className="relative z-10 max-w-xl space-y-3">
               <div className="flex items-center gap-2 mb-1">
-                <span className="bg-white/20 backdrop-blur-md px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider">
-                  Capítol {chapter.id}
+                <span className="bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest border border-white/30">
+                  Unitat {chapter.id}
                 </span>
                 {(!chapter.available || isLockedForNonPro) && (
-                  <span className="bg-amber-400 text-slate-900 px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider">
-                    {isLockedForNonPro ? 'Upgrade Requerit' : 'Pròximament'}
+                  <span className="bg-amber-400 text-slate-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest border border-amber-500">
+                    {isLockedForNonPro ? 'Requereix Desbloqueig' : 'En Construcció'}
                   </span>
                 )}
               </div>
-              <h2 className="text-2xl sm:text-3xl font-display font-black leading-tight mb-2">
+              <h2 className="text-3xl sm:text-4xl font-display font-black leading-tight drop-shadow-md">
                 {chapter.title}
               </h2>
-              <p className="text-white/90 text-sm font-medium">
+              <p className="text-white/90 text-base font-bold">
                 {chapter.desc}
               </p>
             </div>
-            <i className="fa-solid fa-monument absolute -right-4 -bottom-6 text-9xl opacity-15 pointer-events-none"></i>
+            <i className="fa-solid fa-monument absolute -right-6 -bottom-10 text-[180px] opacity-15 pointer-events-none transform -rotate-12"></i>
           </div>
 
           {/* Si el capítol no està disponible o està bloquejat per no-pro */}
           {!chapter.available || isLockedForNonPro ? (
-            <div className="bg-white border-2 border-dashed border-amber-300 rounded-3xl p-8 text-center space-y-4 shadow-sm">
-              <div className="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-3xl mx-auto border-4 border-amber-200">
+            <div className="bg-white border-[3px] border-dashed border-slate-300 rounded-[32px] p-10 text-center space-y-6 shadow-sm">
+              <div className="w-24 h-24 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center text-4xl mx-auto border-[6px] border-slate-200 animate-float-duo">
                 <i className="fa-solid fa-lock"></i>
               </div>
-              <div className="max-w-md mx-auto space-y-2">
-                <h3 className="text-xl font-display font-black text-slate-800">
-                  {!chapter.available ? "Capítol en desenvolupament" : "Capítol Bloquejat"}
+              <div className="max-w-md mx-auto space-y-3">
+                <h3 className="text-2xl font-display font-black text-slate-800">
+                  {!chapter.available ? "Nivell en expansió" : "Secció Bloquejada"}
                 </h3>
-                <p className="text-slate-500 text-sm font-medium">
+                <p className="text-slate-500 text-base font-bold">
                   {!chapter.available 
-                    ? "El Capítol 4 (La Restauració Borbònica) estarà disponible molt aviat. Continua completant els capítols anteriors per guanyar XP i gemes!"
-                    : "Aquest capítol està bloquejat per a usuaris estàndard. Pots desbloquejar-lo veient un anunci o fent upgrade."}
+                    ? "El Capítol 4 (La Restauració Borbònica) estarà llest aviat. Mentrestant, repassa els capítols anteriors!"
+                    : "Aquest capítol requereix una clau especial. Pots obrir-lo veient un missatge patrocinat o sent usuari PRO."}
                 </p>
                 {isLockedForNonPro && chapter.available && (
                   <button 
                     onClick={() => handleUnlockChapter(chapter.id)}
-                    className="mt-4 w-full bg-duoPurple hover:bg-duoPurpleDark text-white font-display font-black text-sm py-3 rounded-xl shadow-btn-purple transition-transform active:translate-y-1"
+                    className="mt-6 w-full bg-duoPurple hover:bg-duoPurpleDark text-white font-display font-black text-lg py-4 rounded-[20px] shadow-btn-purple duo-pressable"
                   >
-                    <i className="fa-solid fa-play mr-2"></i> Desbloquejar veient un anunci
+                    <i className="fa-solid fa-key mr-2"></i> Obrir Nivell Gratis
                   </button>
                 )}
               </div>
             </div>
           ) : (
-            /* Ruta Zig-Zag de Nodes de Joc */
-            <div className="relative py-4 flex flex-col items-center space-y-8">
+            /* Ruta Zig-Zag de Nodes de Joc con Camino Real */
+            <div className="relative py-8 flex flex-col items-center space-y-12 w-full max-w-md mx-auto">
+              
+              {/* Línea conectora central gruesa como en Duolingo */}
+              <div className="absolute top-8 bottom-24 left-1/2 w-8 bg-slate-200 -translate-x-1/2 rounded-full z-0 border-x-[3px] border-slate-300 opacity-60"></div>
+
               {nodes.map((node, index) => {
                 const progressKey = `c${selectedChapter}_${node.key}`;
                 const stars = nodeProgress[progressKey] || 0;
                 
-                // Alineació en Zig-Zag
-                const offsetClass = index % 2 === 0 ? '-translate-x-12 sm:-translate-x-20' : 'translate-x-12 sm:translate-x-20';
+                // Alineació en Zig-Zag més pronunciada
+                const offsetClass = index % 2 === 0 ? '-translate-x-16 sm:-translate-x-24' : 'translate-x-16 sm:translate-x-24';
+
+                // Determinar si el node està actiu, completat o inactiu per al color
+                const isCompleted = stars > 0;
+                const activeColor = isCompleted ? 'bg-amber-400 shadow-btn-yellow border-amber-500 text-amber-900' : `${node.color} ${node.shadow} text-white border-black/20`;
 
                 return (
-                  <div key={node.key} className={`relative flex flex-col items-center ${offsetClass}`}>
+                  <div key={node.key} className={`relative flex flex-col items-center ${offsetClass} z-10`}>
                     
-                    {/* Botó del Node */}
+                    {/* Botó del Node Gigante y Tactil */}
                     <button
                       onClick={() => { playSound('pop'); setCurrentView(node.key); }}
-                      className={`w-20 h-20 sm:w-24 sm:h-24 rounded-3xl ${node.color} ${node.shadow} text-white flex flex-col items-center justify-center text-2xl sm:text-3xl font-black transition-transform hover:scale-110 active:translate-y-1 relative group shadow-lg border-2 border-white/20`}
+                      className={`w-24 h-24 sm:w-28 sm:h-28 rounded-full ${activeColor} flex flex-col items-center justify-center text-3xl sm:text-4xl font-black transition-transform hover:scale-110 active:scale-95 border-b-[8px] border-2 relative group shadow-lg`}
                     >
-                      <i className={`fa-solid ${node.icon}`}></i>
+                      <i className={`fa-solid ${isCompleted ? 'fa-check text-4xl' : node.icon}`}></i>
                       
-                      {/* Indicador d'Estrelles */}
+                      {/* Corona d'Estrelles si està completat */}
                       {stars > 0 && (
-                        <div className="absolute -top-3 bg-amber-400 text-slate-900 border-2 border-white text-xs px-2 py-0.5 rounded-full font-black flex items-center gap-1 shadow-sm">
-                          <i className="fa-solid fa-star text-[10px]"></i>
+                        <div className="absolute -top-4 bg-white text-amber-500 border-4 border-amber-400 text-sm px-3 py-1 rounded-full font-black flex items-center gap-1.5 shadow-md transform rotate-6 animate-float-duo">
+                          <i className="fa-solid fa-crown text-xs"></i>
                           <span>{stars}</span>
                         </div>
                       )}
                     </button>
 
-                    {/* Nom del Mòdul */}
-                    <span className="mt-2 font-display font-black text-xs sm:text-sm text-slate-700 bg-white px-3 py-1 rounded-xl shadow-sm border border-slate-200 text-center max-w-[130px]">
-                      {node.name}
-                    </span>
+                    {/* Nom del Mòdul flotante */}
+                    <div className="absolute -bottom-8 w-[160px] text-center">
+                      <span className="font-display font-black text-sm text-slate-500">
+                        {node.name}
+                      </span>
+                    </div>
 
                   </div>
                 );
               })}
 
-              {/* Node Extra Kahoot al Final del Capítol */}
-              <div className="relative flex flex-col items-center pt-6">
+              {/* Node Extra Kahoot al Final del Capítol con Mascota o Icono Gigante */}
+              <div className="relative flex flex-col items-center pt-16 z-10">
                 <button
                   onClick={() => { playSound('pop'); setCurrentView('extraKahoot'); }}
-                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-r from-amber-500 via-duoOrange to-duoYellow shadow-btn-orange text-white flex flex-col items-center justify-center text-3xl sm:text-4xl font-black transition-transform hover:scale-110 active:translate-y-1 relative group shadow-xl border-4 border-amber-300"
+                  className="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-amber-400 via-duoOrange to-duoRed shadow-btn-red text-white flex flex-col items-center justify-center text-5xl font-black transition-transform hover:scale-110 active:scale-95 border-b-[10px] border-4 border-amber-200 relative group animate-float-duo"
                 >
-                  <i className="fa-solid fa-crown text-amber-200 animate-bounce"></i>
-                  <span className="text-[10px] font-black uppercase tracking-wider bg-black/30 px-2 py-0.5 rounded-full mt-1">
-                    EXTRA
+                  <i className="fa-solid fa-trophy text-amber-100 mb-1"></i>
+                  <span className="text-[11px] font-black uppercase tracking-wider bg-black/40 px-3 py-1 rounded-full border border-white/30">
+                    EXAMEN
                   </span>
                 </button>
-                <span className="mt-2 font-display font-black text-xs sm:text-sm text-amber-900 bg-amber-100 px-3.5 py-1.5 rounded-xl shadow-sm border border-amber-300 text-center max-w-[180px]">
-                  Preguntes Extra Kahoot (Totes)
-                </span>
               </div>
             </div>
           )}
@@ -590,7 +626,7 @@
         },
         {
           id: 'shield',
-          title: 'Escut Protecció de Vida',
+          title: 'Escut de Vida',
           desc: 'Protegeix el teu cor. El primer error que facis no et restarà cap vida.',
           price: 40,
           icon: 'fa-shield-halved',
@@ -607,14 +643,14 @@
         },
         {
           id: 'watchAdGems',
-          title: 'Guanyar Gemes amb Anuncis (+15 💎)',
-          desc: 'Mira un Anunci Patrocinat per rebre 15 gemes. (Només disponible per a usuaris sense PRO).',
+          title: 'Cofre d\'Anuncis (+15 💎)',
+          desc: 'Mira un missatge ràpid patrocinat per rebre 15 gemes al moment.',
           price: 0,
           icon: 'fa-tv',
-          color: isPro ? 'bg-slate-400 text-white' : 'bg-emerald-600 text-white',
-          btnColor: isPro ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none' : 'bg-emerald-600 shadow-btn-emerald hover:bg-emerald-700 text-white',
+          color: isPro ? 'bg-slate-400 text-white' : 'bg-duoEmerald text-white',
+          btnColor: isPro ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none' : 'bg-duoEmerald shadow-btn-emerald hover:bg-duoEmeraldDark text-white',
           disabled: isPro,
-          disabledText: isPro ? 'Sense Anuncis en compte PRO' : 'Veure Anunci (+15 💎)',
+          disabledText: isPro ? 'Gratis en PRO' : 'Rebre (+15 💎)',
           ownedText: isPro ? 'Usuari PRO' : null,
           onBuy: () => {
             if (isPro) return;
@@ -627,61 +663,61 @@
       ];
 
       return (
-        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
+        <div className="max-w-3xl mx-auto bg-white rounded-[32px] p-6 sm:p-10 shadow-duo-card border-[3px] border-slate-200 space-y-8">
           <div className="flex items-center justify-between">
-            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
-              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar al Mapa
+            <button onClick={() => setCurrentView('path')} className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full font-bold text-2xl transition-colors">
+              <i className="fa-solid fa-xmark"></i>
             </button>
-            <span className="bg-emerald-500 text-white text-xs font-black uppercase px-3 py-1 rounded-full shadow-sm flex items-center gap-1.5">
-              <i className="fa-solid fa-gem text-amber-200"></i>
-              {gems} Gemes Disponibles
+            <span className="bg-emerald-100 text-duoEmeraldDark border-2 border-emerald-200 text-sm font-black px-4 py-2 rounded-2xl shadow-sm flex items-center gap-2">
+              <i className="fa-solid fa-gem text-amber-400 text-lg"></i>
+              {gems} Gemes
             </span>
           </div>
 
           <AdBanner728 />
 
-          <div className="text-center space-y-2">
-            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center text-3xl mx-auto border-2 border-emerald-300 shadow-sm">
+          <div className="text-center space-y-4">
+            <div className="w-24 h-24 bg-amber-100 text-amber-500 rounded-[28px] flex items-center justify-center text-5xl mx-auto border-[4px] border-amber-200 shadow-sm animate-float-duo">
               <i className="fa-solid fa-store"></i>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-display font-black text-slate-800">
-              Botiga d'Articles Històrics
+            <h2 className="text-3xl sm:text-4xl font-display font-black text-slate-800">
+              La Botiga del Temps
             </h2>
-            <p className="text-slate-500 text-xs sm:text-sm font-semibold max-w-md mx-auto">
-              Equipa't amb millores especials utilitzant les teves gemes per superar tots els reptes!
+            <p className="text-slate-500 text-base sm:text-lg font-bold max-w-lg mx-auto leading-relaxed">
+              Utilitza les teves gemes per obtenir avantatges històrics!
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {shopItems.map(item => (
-              <div key={item.id} className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors">
-                <div className="space-y-2">
+              <div key={item.id} className="bg-white border-[3px] border-slate-200 rounded-[24px] p-5 flex flex-col justify-between space-y-5 hover:border-slate-300 transition-colors shadow-sm">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center text-xl font-black shadow-sm`}>
+                    <div className={`w-14 h-14 rounded-[20px] ${item.color} flex items-center justify-center text-2xl font-black shadow-sm border-2 border-black/10`}>
                       <i className={`fa-solid ${item.icon}`}></i>
                     </div>
                     {item.ownedText && (
-                      <span className="text-[11px] font-black bg-slate-200 text-slate-700 px-2.5 py-1 rounded-full">
+                      <span className="text-xs font-black bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl border border-slate-300">
                         {item.ownedText}
                       </span>
                     )}
                     {item.id === 'doubleXp' && inventory.doubleXp && (
-                      <span className="text-[11px] font-black bg-sky-200 text-sky-800 px-2.5 py-1 rounded-full animate-pulse">
-                        Activat
+                      <span className="text-xs font-black bg-sky-100 text-sky-700 border border-sky-200 px-3 py-1.5 rounded-xl animate-pulse">
+                        ¡Actiu!
                       </span>
                     )}
                   </div>
-                  <h3 className="font-display font-black text-slate-800 text-base">{item.title}</h3>
-                  <p className="text-xs text-slate-500 font-medium leading-relaxed">{item.desc}</p>
+                  <h3 className="font-display font-black text-slate-800 text-xl">{item.title}</h3>
+                  <p className="text-sm text-slate-500 font-bold leading-relaxed">{item.desc}</p>
                 </div>
 
                 <button
                   disabled={item.disabled}
                   onClick={() => { playSound('pop'); item.onBuy(); }}
-                  className={`w-full font-display font-black text-sm py-2.5 rounded-xl transition-transform active:translate-y-1 flex items-center justify-center gap-2 ${
+                  className={`w-full font-display font-black text-base py-4 rounded-[20px] transition-transform duo-pressable border-b-[6px] border-x-2 border-t-2 flex items-center justify-center gap-2 ${
                     item.disabled 
-                      ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none border-0' 
-                      : `${item.btnColor} text-white`
+                      ? 'bg-slate-100 text-slate-400 border-slate-200 shadow-none' 
+                      : `${item.btnColor} border-black/10`
                   }`}
                 >
                   {item.disabled ? (
@@ -690,8 +726,8 @@
                     <span>{item.disabledText}</span>
                   ) : (
                     <>
-                      <span>Comprar per {item.price}</span>
-                      <i className="fa-solid fa-gem text-amber-200"></i>
+                      <span>{item.price}</span>
+                      <i className="fa-solid fa-gem text-amber-200 text-lg"></i>
                     </>
                   )}
                 </button>
@@ -701,6 +737,25 @@
         </div>
       );
     }
+
+    // --- GAME HEADER: BARRA SUPERIOR DE LECCIÓ (ESTIL DUOLINGO) ---
+    const GameHeader = ({ setCurrentView, currentProgress = 50 }) => (
+      <div className="flex items-center gap-4 mb-8">
+        <button 
+          onClick={() => setCurrentView('path')} 
+          className="text-slate-400 hover:text-slate-600 text-2xl font-black transition-transform hover:scale-110 active:scale-95"
+        >
+          <i className="fa-solid fa-xmark"></i>
+        </button>
+        <div className="flex-1 bg-slate-200 h-4 rounded-full overflow-hidden border-2 border-slate-300">
+          <div 
+            className="bg-duoGreen h-full transition-all duration-500 rounded-full"
+            style={{ width: `${currentProgress}%` }}
+          ></div>
+        </div>
+      </div>
+    );
+
 
     // --- GAME 1: LÍNIA DEL TEMPS ---
     function GameTimeline({ chapter, setCurrentView, onSuccess, onError, onFinish }) {
@@ -733,7 +788,7 @@
         }
 
         if (isCorrect) {
-          onSuccess("¡LÍNIA TEMPORAL CORRECTA!", "Has ordenat tots els esdeveniments en l'ordre cronològic exacte.", "Molt bé! La seqüència temporal és fonamental per comprendre la història.", 30, () => {
+          onSuccess("¡ORDRE PERFECTE!", "Has col·locat els esdeveniments cronològicament com un expert.", "Molt bé! La seqüència temporal és fonamental per comprendre la història.", 30, () => {
             onFinish(3);
             setCurrentView('path');
           });
@@ -743,56 +798,49 @@
       };
 
       return (
-        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
-          <div className="flex items-center justify-between">
-            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
-              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
-            </button>
-            <span className="bg-duoGreen text-white text-xs font-black uppercase px-3 py-1 rounded-full">
-              Línia del Temps
-            </span>
-          </div>
+        <div className="max-w-2xl mx-auto space-y-6 pt-4">
+          <GameHeader setCurrentView={setCurrentView} currentProgress={20} />
 
-          <div className="space-y-1">
-            <h2 className="text-2xl font-display font-black text-slate-800">
-              Ordena la Seqüència Històrica
+          <div className="space-y-2 text-center pb-4">
+            <h2 className="text-3xl font-display font-black text-slate-800">
+              Ordena la Línia del Temps
             </h2>
-            <p className="text-slate-500 text-sm font-semibold">
-              Utilitza les fletxes per ordenar els esdeveniments des del més antic (dalt) fins al més recent (baix).
+            <p className="text-slate-500 text-base font-bold">
+              Des del més antic (adalt) al més recent (abaix)
             </p>
           </div>
 
           <AdBanner728 />
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             {items.map((item, idx) => (
               <motion.div 
                 key={item.id}
                 layout
-                className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex items-center justify-between gap-3 shadow-sm hover:border-duoGreen transition-colors"
+                className="bg-white border-[3px] border-slate-200 border-b-[6px] rounded-[24px] p-5 flex items-center justify-between gap-4 shadow-sm hover:border-duoGreen transition-colors"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-duoGreen/10 text-duoGreen flex items-center justify-center text-lg font-black shrink-0">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-[20px] bg-emerald-100 text-duoGreen border-2 border-emerald-200 flex items-center justify-center text-2xl font-black shrink-0">
                     <i className={`fa-solid ${item.icon}`}></i>
                   </div>
                   <div>
-                    <h4 className="font-display font-bold text-slate-800 text-sm sm:text-base">{item.text}</h4>
-                    <span className="text-xs font-black text-duoGreen bg-green-100 px-2 py-0.5 rounded-md">{item.year}</span>
+                    <h4 className="font-display font-black text-slate-800 text-lg">{item.text}</h4>
+                    <span className="text-sm font-black text-duoGreen bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-xl mt-1 inline-block">{item.year}</span>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-2">
                   <button 
                     disabled={idx === 0}
                     onClick={() => moveItem(idx, idx - 1)}
-                    className="w-8 h-8 rounded-lg bg-slate-200 hover:bg-duoGreen hover:text-white disabled:opacity-30 flex items-center justify-center font-bold text-xs"
+                    className="w-10 h-10 rounded-[14px] bg-slate-100 border-2 border-slate-200 hover:bg-duoGreen hover:text-white hover:border-duoGreenDark disabled:opacity-30 flex items-center justify-center font-bold text-lg transition-colors active:scale-95"
                   >
                     <i className="fa-solid fa-chevron-up"></i>
                   </button>
                   <button 
                     disabled={idx === items.length - 1}
                     onClick={() => moveItem(idx, idx + 1)}
-                    className="w-8 h-8 rounded-lg bg-slate-200 hover:bg-duoGreen hover:text-white disabled:opacity-30 flex items-center justify-center font-bold text-xs"
+                    className="w-10 h-10 rounded-[14px] bg-slate-100 border-2 border-slate-200 hover:bg-duoGreen hover:text-white hover:border-duoGreenDark disabled:opacity-30 flex items-center justify-center font-bold text-lg transition-colors active:scale-95"
                   >
                     <i className="fa-solid fa-chevron-down"></i>
                   </button>
@@ -801,12 +849,14 @@
             ))}
           </div>
 
-          <button
-            onClick={checkOrder}
-            className="w-full bg-duoGreen hover:bg-duoGreenDark text-white font-display font-black text-lg py-3.5 rounded-2xl shadow-btn-green transition-transform active:translate-y-1"
-          >
-            COMPROVAR LÍNIA TEMPORAL
-          </button>
+          <div className="pt-6">
+            <button
+              onClick={checkOrder}
+              className="w-full bg-duoGreen border-x-2 border-t-2 border-b-[6px] border-black/10 text-white font-display font-black text-xl py-4 rounded-[24px] shadow-btn-green duo-pressable uppercase tracking-wider"
+            >
+              Comprovar
+            </button>
+          </div>
         </div>
       );
     }
@@ -831,6 +881,7 @@
       if (questions.length === 0) return null;
 
       const q = questions[currentIndex];
+      const progress = ((currentIndex) / questions.length) * 100;
 
       const handleClassicAnswer = (option) => {
         if (option.correct) {
@@ -875,17 +926,10 @@
       };
 
       return (
-        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
-          <div className="flex items-center justify-between">
-            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
-              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
-            </button>
-            <span className="bg-duoOrange text-white text-xs font-black uppercase px-3 py-1 rounded-full">
-              Pregunta {currentIndex + 1} de {questions.length}
-            </span>
-          </div>
+        <div className="max-w-2xl mx-auto space-y-6 pt-4">
+          <GameHeader setCurrentView={setCurrentView} currentProgress={progress || 10} />
 
-          <h2 className="text-xl sm:text-2xl font-display font-black text-slate-800">
+          <h2 className="text-2xl sm:text-3xl font-display font-black text-slate-800 leading-tight">
             {q.question}
           </h2>
 
@@ -893,7 +937,7 @@
 
           {/* OPCIÓ TIPUS 1: CLÀSSIC */}
           {q.type === 'classic' && (
-            <div className="space-y-3">
+            <div className="space-y-4 pt-4">
               {inventory && inventory.fiftyFifty > 0 && disabledOptions.length === 0 && (
                 <div className="flex justify-end">
                   <button
@@ -907,29 +951,31 @@
                       setDisabledOptions(toDisable);
                       setInventory(prev => ({ ...prev, fiftyFifty: prev.fiftyFifty - 1 }));
                     }}
-                    className="bg-amber-400 hover:bg-amber-500 text-slate-900 font-display font-black text-xs px-3 py-1.5 rounded-xl border-b-2 border-amber-600 flex items-center gap-1.5 shadow-sm"
+                    className="bg-amber-400 text-amber-900 font-display font-black text-sm px-4 py-2 rounded-xl border-b-4 border-amber-500 flex items-center gap-2 active:translate-y-1 active:border-b-0 transition-transform shadow-sm hover:bg-amber-300"
                   >
                     <i className="fa-solid fa-wand-magic-sparkles"></i>
-                    Usar Comodí 50/50 ({inventory.fiftyFifty} disponibles)
+                    Usar 50/50 ({inventory.fiftyFifty})
                   </button>
                 </div>
               )}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-4">
                 {q.options.map((opt, i) => {
                   const isDisabled = disabledOptions.includes(i);
                   if (isDisabled) {
                     return (
-                      <div key={i} className="p-4 rounded-2xl font-display font-bold text-slate-300 bg-slate-100 border-2 border-slate-200 line-through opacity-50 flex items-center justify-between">
+                      <div key={i} className="p-5 rounded-[20px] font-display font-bold text-slate-300 bg-slate-50 border-[3px] border-slate-200 line-through flex items-center justify-between">
                         <span>{opt.text}</span>
-                        <span className="text-xs bg-slate-200 text-slate-500 px-2 py-0.5 rounded-full font-black">Descartat 50/50</span>
+                        <span className="text-xs bg-slate-200 text-slate-500 px-3 py-1 rounded-full font-black border border-slate-300">Descartat</span>
                       </div>
                     );
                   }
+                  
+                  // Generamos estilos base tipo botón Duolingo blanco
                   return (
                     <button
                       key={i}
                       onClick={() => handleClassicAnswer(opt)}
-                      className={`${opt.color} p-4 rounded-2xl font-display font-black text-left text-base shadow-sm hover:scale-[1.02] active:translate-y-1 transition-transform border-b-4`}
+                      className={`p-5 rounded-[20px] font-display font-black text-left text-lg bg-white border-2 border-b-[6px] border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 duo-pressable active:bg-slate-100 transition-all`}
                     >
                       {opt.text}
                     </button>
@@ -941,8 +987,8 @@
 
           {/* OPCIÓ TIPUS 2: SLIDER ANY */}
           {q.type === 'slider' && (
-            <div className="space-y-6 text-center py-4">
-              <div className="text-5xl font-display font-black text-duoOrange">
+            <div className="space-y-8 text-center py-8">
+              <div className="text-6xl font-display font-black text-duoOrange drop-shadow-md">
                 {sliderVal}
               </div>
               <input 
@@ -951,21 +997,21 @@
                 max={q.maxYear} 
                 value={sliderVal} 
                 onChange={(e) => setSliderVal(parseInt(e.target.value))}
-                className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-duoOrange"
+                className="w-full h-4 bg-slate-200 rounded-full appearance-none cursor-pointer accent-duoOrange border-2 border-slate-300"
               />
               <button
                 onClick={handleSliderSubmit}
-                className="w-full bg-duoOrange hover:bg-duoOrangeDark text-white font-display font-black text-lg py-3 rounded-2xl shadow-btn-orange"
+                className="w-full bg-duoOrange text-white font-display font-black text-xl py-4 rounded-[24px] border-x-2 border-t-2 border-b-[6px] border-black/10 shadow-btn-orange duo-pressable mt-8"
               >
-                VALIDAR ANY HISTÒRIC
+                Comprovar Any
               </button>
             </div>
           )}
 
           {/* OPCIÓ TIPUS 3: MULTI-SELECCIÓ */}
           {q.type === 'multi' && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-6 pt-4">
+              <div className="grid grid-cols-1 gap-4">
                 {q.options.map((opt) => {
                   const isSel = multiSelected.includes(opt.id);
                   return (
@@ -975,21 +1021,21 @@
                         playSound('pop');
                         setMultiSelected(prev => isSel ? prev.filter(x => x !== opt.id) : [...prev, opt.id]);
                       }}
-                      className={`p-4 rounded-2xl font-display font-bold text-left text-sm border-2 transition-all flex items-center justify-between ${
-                        isSel ? 'bg-duoOrange/10 border-duoOrange text-duoOrange font-black' : 'bg-slate-50 border-slate-200 text-slate-700'
+                      className={`p-5 rounded-[20px] font-display font-black text-left text-lg border-2 border-b-[6px] transition-all flex items-center justify-between active:translate-y-1 active:border-b-2 ${
+                        isSel ? 'bg-orange-50 border-duoOrange text-duoOrange' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
                       }`}
                     >
                       <span>{opt.text}</span>
-                      <i className={`fa-solid ${isSel ? 'fa-square-check text-duoOrange' : 'fa-square text-slate-300'}`}></i>
+                      <i className={`fa-solid text-2xl ${isSel ? 'fa-square-check text-duoOrange' : 'fa-square text-slate-300'}`}></i>
                     </button>
                   );
                 })}
               </div>
               <button
                 onClick={handleMultiSubmit}
-                className="w-full bg-duoOrange hover:bg-duoOrangeDark text-white font-display font-black text-lg py-3 rounded-2xl shadow-btn-orange"
+                className="w-full bg-duoOrange text-white font-display font-black text-xl py-4 rounded-[24px] shadow-btn-orange border-x-2 border-t-2 border-b-[6px] border-black/10 duo-pressable"
               >
-                CONFIRMAR SELECCIÓ
+                Confirmar
               </button>
             </div>
           )}
@@ -1017,6 +1063,7 @@
       if (questions.length === 0) return null;
 
       const q = questions[currentIndex];
+      const progress = ((currentIndex) / questions.length) * 100;
 
       const handleClassicAnswer = (option) => {
         if (option.correct) {
@@ -1061,34 +1108,23 @@
       };
 
       return (
-        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
-          <div className="flex items-center justify-between">
-            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
-              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
-            </button>
-            <span className="bg-gradient-to-r from-amber-500 to-duoOrange text-white text-xs font-black uppercase px-3.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
-              <i className="fa-solid fa-crown text-amber-200"></i>
-              Repàs Extra: {currentIndex + 1} de {questions.length}
-            </span>
+        <div className="max-w-2xl mx-auto space-y-6 pt-4">
+          <GameHeader setCurrentView={setCurrentView} currentProgress={progress || 5} />
+          
+          <div className="flex items-center gap-2 bg-gradient-to-r from-amber-400 to-duoOrange text-white text-xs font-black uppercase px-4 py-1.5 rounded-full shadow-md w-max border-2 border-white/20">
+             <i className="fa-solid fa-crown text-amber-100"></i>
+             Repàs Extra
           </div>
 
-          <AdBanner728 />
-
-          {/* Barra de Progrés */}
-          <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden border border-slate-200">
-            <div 
-              className="bg-gradient-to-r from-amber-400 to-duoOrange h-full transition-all duration-300"
-              style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
-            ></div>
-          </div>
-
-          <h2 className="text-xl sm:text-2xl font-display font-black text-slate-800">
+          <h2 className="text-2xl sm:text-3xl font-display font-black text-slate-800 leading-tight">
             {q.question}
           </h2>
 
+          <AdBanner728 />
+
           {/* OPCIÓ TIPUS 1: CLÀSSIC */}
           {q.type === 'classic' && (
-            <div className="space-y-3">
+            <div className="space-y-4 pt-4">
               {inventory && inventory.fiftyFifty > 0 && disabledOptions.length === 0 && (
                 <div className="flex justify-end">
                   <button
@@ -1102,21 +1138,21 @@
                       setDisabledOptions(toDisable);
                       setInventory(prev => ({ ...prev, fiftyFifty: prev.fiftyFifty - 1 }));
                     }}
-                    className="bg-amber-400 hover:bg-amber-500 text-slate-900 font-display font-black text-xs px-3 py-1.5 rounded-xl border-b-2 border-amber-600 flex items-center gap-1.5 shadow-sm"
+                    className="bg-amber-400 text-amber-900 font-display font-black text-sm px-4 py-2 rounded-xl border-b-4 border-amber-500 flex items-center gap-2 active:translate-y-1 active:border-b-0 transition-transform shadow-sm hover:bg-amber-300"
                   >
                     <i className="fa-solid fa-wand-magic-sparkles"></i>
-                    Usar Comodí 50/50 ({inventory.fiftyFifty} disponibles)
+                    Usar 50/50 ({inventory.fiftyFifty})
                   </button>
                 </div>
               )}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-4">
                 {q.options.map((opt, i) => {
                   const isDisabled = disabledOptions.includes(i);
                   if (isDisabled) {
                     return (
-                      <div key={i} className="p-4 rounded-2xl font-display font-bold text-slate-300 bg-slate-100 border-2 border-slate-200 line-through opacity-50 flex items-center justify-between">
+                      <div key={i} className="p-5 rounded-[20px] font-display font-bold text-slate-300 bg-slate-50 border-[3px] border-slate-200 line-through flex items-center justify-between">
                         <span>{opt.text}</span>
-                        <span className="text-xs bg-slate-200 text-slate-500 px-2 py-0.5 rounded-full font-black">Descartat 50/50</span>
+                        <span className="text-xs bg-slate-200 text-slate-500 px-3 py-1 rounded-full font-black border border-slate-300">Descartat</span>
                       </div>
                     );
                   }
@@ -1124,7 +1160,7 @@
                     <button
                       key={i}
                       onClick={() => handleClassicAnswer(opt)}
-                      className={`${opt.color} p-4 rounded-2xl font-display font-black text-left text-base shadow-sm hover:scale-[1.02] active:translate-y-1 transition-transform border-b-4`}
+                      className={`p-5 rounded-[20px] font-display font-black text-left text-lg bg-white border-2 border-b-[6px] border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 duo-pressable active:bg-slate-100 transition-all`}
                     >
                       {opt.text}
                     </button>
@@ -1136,8 +1172,8 @@
 
           {/* OPCIÓ TIPUS 2: SLIDER ANY */}
           {q.type === 'slider' && (
-            <div className="space-y-6 text-center py-4">
-              <div className="text-5xl font-display font-black text-duoOrange">
+            <div className="space-y-8 text-center py-8">
+              <div className="text-6xl font-display font-black text-duoOrange drop-shadow-md">
                 {sliderVal}
               </div>
               <input 
@@ -1146,21 +1182,21 @@
                 max={q.maxYear} 
                 value={sliderVal} 
                 onChange={(e) => setSliderVal(parseInt(e.target.value))}
-                className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-duoOrange"
+                className="w-full h-4 bg-slate-200 rounded-full appearance-none cursor-pointer accent-duoOrange border-2 border-slate-300"
               />
               <button
                 onClick={handleSliderSubmit}
-                className="w-full bg-duoOrange hover:bg-duoOrangeDark text-white font-display font-black text-lg py-3 rounded-2xl shadow-btn-orange"
+                className="w-full bg-duoOrange text-white font-display font-black text-xl py-4 rounded-[24px] border-x-2 border-t-2 border-b-[6px] border-black/10 shadow-btn-orange duo-pressable mt-8"
               >
-                VALIDAR ANY HISTÒRIC
+                Comprovar Any
               </button>
             </div>
           )}
 
           {/* OPCIÓ TIPUS 3: MULTI-SELECCIÓ */}
           {q.type === 'multi' && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-6 pt-4">
+              <div className="grid grid-cols-1 gap-4">
                 {q.options.map((opt) => {
                   const isSel = multiSelected.includes(opt.id);
                   return (
@@ -1170,21 +1206,21 @@
                         playSound('pop');
                         setMultiSelected(prev => isSel ? prev.filter(x => x !== opt.id) : [...prev, opt.id]);
                       }}
-                      className={`p-4 rounded-2xl font-display font-bold text-left text-sm border-2 transition-all flex items-center justify-between ${
-                        isSel ? 'bg-duoOrange/10 border-duoOrange text-duoOrange font-black' : 'bg-slate-50 border-slate-200 text-slate-700'
+                      className={`p-5 rounded-[20px] font-display font-black text-left text-lg border-2 border-b-[6px] transition-all flex items-center justify-between active:translate-y-1 active:border-b-2 ${
+                        isSel ? 'bg-orange-50 border-duoOrange text-duoOrange' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
                       }`}
                     >
                       <span>{opt.text}</span>
-                      <i className={`fa-solid ${isSel ? 'fa-square-check text-duoOrange' : 'fa-square text-slate-300'}`}></i>
+                      <i className={`fa-solid text-2xl ${isSel ? 'fa-square-check text-duoOrange' : 'fa-square text-slate-300'}`}></i>
                     </button>
                   );
                 })}
               </div>
               <button
                 onClick={handleMultiSubmit}
-                className="w-full bg-duoOrange hover:bg-duoOrangeDark text-white font-display font-black text-lg py-3 rounded-2xl shadow-btn-orange"
+                className="w-full bg-duoOrange text-white font-display font-black text-xl py-4 rounded-[24px] shadow-btn-orange border-x-2 border-t-2 border-b-[6px] border-black/10 duo-pressable"
               >
-                CONFIRMAR SELECCIÓ
+                Confirmar
               </button>
             </div>
           )}
@@ -1228,45 +1264,40 @@
       };
 
       return (
-        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
-          <div className="flex items-center justify-between">
-            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
-              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
-            </button>
-            <span className="bg-duoBlue text-white text-xs font-black uppercase px-3 py-1 rounded-full">
-              Xafarderia de Cort
-            </span>
-          </div>
+        <div className="max-w-2xl mx-auto space-y-6 pt-4">
+          <GameHeader setCurrentView={setCurrentView} currentProgress={35} />
 
           <AdBanner728 />
 
-          <div className="text-center space-y-2">
-            <span className={`inline-block px-4 py-1.5 rounded-2xl text-white font-display font-black text-xs uppercase ${data.color}`}>
+          <div className="text-center space-y-4">
+            <span className={`inline-block px-5 py-2 rounded-full text-white font-display font-black text-sm uppercase tracking-widest border-2 border-black/10 shadow-sm ${data.color}`}>
               {data.centerRole}
             </span>
-            <h2 className="text-2xl font-display font-black text-slate-800">
+            <h2 className="text-3xl font-display font-black text-slate-800 drop-shadow-sm">
               {data.title}
             </h2>
-            <p className="text-slate-500 text-xs sm:text-sm font-semibold max-w-md mx-auto">
+            <p className="text-slate-500 text-base font-bold max-w-md mx-auto">
               {data.desc}
             </p>
           </div>
 
           {/* Slots a omplir */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4">
             {data.slots.map(slot => (
-              <div key={slot.id} className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 space-y-2">
-                <div className="flex items-center gap-2 text-duoBlue font-display font-black text-xs">
-                  <i className={`fa-solid ${slot.icon}`}></i>
+              <div key={slot.id} className="bg-white border-[3px] border-b-[6px] border-slate-200 rounded-[24px] p-5 space-y-3 hover:border-slate-300 transition-colors">
+                <div className="flex items-center gap-3 text-duoBlue font-display font-black text-sm uppercase tracking-wider">
+                  <div className="w-10 h-10 bg-sky-100 rounded-full flex items-center justify-center text-xl border-2 border-sky-200">
+                    <i className={`fa-solid ${slot.icon}`}></i>
+                  </div>
                   <span>{slot.label}</span>
                 </div>
-                <p className="text-xs text-slate-500 font-medium">{slot.relation}</p>
+                <p className="text-sm text-slate-500 font-bold">{slot.relation}</p>
                 <select
                   value={assigned[slot.id] || ""}
                   onChange={(e) => handleAssign(slot.id, e.target.value)}
-                  className="w-full bg-white border-2 border-slate-200 rounded-xl p-2 font-display font-bold text-sm text-slate-800 focus:border-duoBlue outline-none"
+                  className="w-full bg-slate-50 border-2 border-slate-300 rounded-[16px] p-3 font-display font-black text-base text-slate-800 focus:border-duoBlue focus:bg-white outline-none cursor-pointer appearance-none"
                 >
-                  <option value="">-- Selecciona Personatge --</option>
+                  <option value="">-- Tria l'Historiador --</option>
                   {data.chars.map((c, i) => (
                     <option key={i} value={c.name}>{c.name} ({c.role})</option>
                   ))}
@@ -1275,12 +1306,14 @@
             ))}
           </div>
 
-          <button
-            onClick={validate}
-            className="w-full bg-duoBlue hover:bg-duoBlueDark text-white font-display font-black text-lg py-3.5 rounded-2xl shadow-btn-blue"
-          >
-            RESOLDRE ORGANIGRAMA DE CORT
-          </button>
+          <div className="pt-6">
+            <button
+              onClick={validate}
+              className="w-full bg-duoBlue hover:bg-duoBlueDark text-white font-display font-black text-xl py-4 rounded-[24px] border-x-2 border-t-2 border-b-[6px] border-black/10 shadow-btn-blue duo-pressable"
+            >
+              Comprovar Relacions
+            </button>
+          </div>
         </div>
       );
     }
@@ -1297,6 +1330,7 @@
 
       if (docs.length === 0) return null;
       const currentDoc = docs[idx];
+      const progress = ((idx) / docs.length) * 100 || 5;
 
       const handleChoice = (type) => {
         if (type === currentDoc.type) {
@@ -1314,50 +1348,43 @@
       };
 
       return (
-        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
-          <div className="flex items-center justify-between">
-            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
-              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
-            </button>
-            <span className="bg-duoPurple text-white text-xs font-black uppercase px-3 py-1 rounded-full">
-              Text Oficial BOE ({idx + 1}/{docs.length})
-            </span>
-          </div>
+        <div className="max-w-2xl mx-auto space-y-6 pt-4">
+          <GameHeader setCurrentView={setCurrentView} currentProgress={progress} />
 
           <AdBanner728 />
 
-          <div className="bg-amber-50 border-2 border-amber-200 rounded-3xl p-6 relative space-y-3">
-            <i className="fa-solid fa-quote-left text-amber-300 text-3xl"></i>
-            <p className="font-serif italic text-base sm:text-lg text-slate-800 leading-relaxed">
+          <div className="bg-[#fff9e6] border-[4px] border-amber-200 rounded-[32px] p-8 relative space-y-4 shadow-sm">
+            <i className="fa-solid fa-quote-left text-amber-300 text-5xl opacity-50 absolute top-6 left-6"></i>
+            <p className="font-serif italic text-xl text-slate-800 leading-relaxed relative z-10 font-medium pl-6">
               {currentDoc.text}
             </p>
-            <div className="text-right text-xs font-black text-amber-700 uppercase">
+            <div className="text-right text-sm font-black text-amber-700 uppercase tracking-widest mt-4">
               — {currentDoc.sub}
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h4 className="font-display font-black text-slate-700 text-sm text-center">
-              A quin corrent ideològic correspon aquest text?
+          <div className="space-y-4 pt-4">
+            <h4 className="font-display font-black text-slate-800 text-xl text-center">
+              A quin corrent ideològic correspon?
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <button
                 onClick={() => handleChoice('absolutisme')}
-                className="bg-duoRed hover:bg-red-600 text-white font-display font-black p-3.5 rounded-2xl shadow-btn-red text-sm"
+                className="bg-duoRed text-white font-display font-black p-4 rounded-[20px] shadow-btn-red text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoRedDark duo-pressable"
               >
                 Absolutisme
               </button>
               <button
                 onClick={() => handleChoice('moderat')}
-                className="bg-duoBlue hover:bg-blue-600 text-white font-display font-black p-3.5 rounded-2xl shadow-btn-blue text-sm"
+                className="bg-duoBlue text-white font-display font-black p-4 rounded-[20px] shadow-btn-blue text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoBlueDark duo-pressable"
               >
                 Liberal Moderat
               </button>
               <button
                 onClick={() => handleChoice('progressista')}
-                className="bg-duoGreen hover:bg-green-600 text-white font-display font-black p-3.5 rounded-2xl shadow-btn-green text-sm"
+                className="bg-duoGreen text-white font-display font-black p-4 rounded-[20px] shadow-btn-green text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoGreenDark duo-pressable"
               >
-                Liberal Progressista
+                Liberal Prog.
               </button>
             </div>
           </div>
@@ -1381,6 +1408,8 @@
         setSelectedLeft(null);
         setMatched([]);
       }, [chapter.id]);
+
+      const progress = pairs.length > 0 ? (matched.length / pairs.length) * 100 : 0;
 
       const handleLeftClick = (item) => {
         playSound('pop');
@@ -1409,21 +1438,18 @@
       };
 
       return (
-        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
-          <div className="flex items-center justify-between">
-            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
-              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
-            </button>
-            <span className="bg-duoRed text-white text-xs font-black uppercase px-3 py-1 rounded-full">
-              Conecta Parelles
-            </span>
+        <div className="max-w-3xl mx-auto space-y-6 pt-4">
+          <GameHeader setCurrentView={setCurrentView} currentProgress={progress || 5} />
+
+          <div className="text-center pb-2">
+            <h2 className="text-3xl font-display font-black text-slate-800">Toca les parelles</h2>
           </div>
 
           <AdBanner728 />
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6">
             {/* Columna Esquerra */}
-            <div className="space-y-3">
+            <div className="space-y-4">
               {lefts.map(item => {
                 const isMatched = matched.includes(item.id);
                 const isSelected = selectedLeft?.id === item.id;
@@ -1432,10 +1458,10 @@
                     key={item.id}
                     disabled={isMatched}
                     onClick={() => handleLeftClick(item)}
-                    className={`w-full p-4 rounded-2xl font-display font-black text-xs sm:text-sm text-left border-2 transition-all ${
-                      isMatched ? 'bg-emerald-100 border-emerald-400 text-emerald-800 opacity-50' :
-                      isSelected ? 'bg-duoRed text-white border-duoRedDark scale-105' :
-                      'bg-slate-50 border-slate-200 hover:border-duoRed text-slate-800'
+                    className={`w-full p-4 rounded-[20px] font-display font-black text-sm sm:text-lg text-center border-2 border-b-[6px] transition-all active:translate-y-1 active:border-b-2 ${
+                      isMatched ? 'bg-slate-100 border-slate-200 text-slate-300 opacity-50 cursor-default' :
+                      isSelected ? 'bg-blue-50 text-duoBlue border-duoBlue' :
+                      'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300'
                     }`}
                   >
                     {item.left}
@@ -1445,7 +1471,7 @@
             </div>
 
             {/* Columna Dreta */}
-            <div className="space-y-3">
+            <div className="space-y-4">
               {rights.map(item => {
                 const isMatched = matched.includes(item.id);
                 return (
@@ -1453,9 +1479,9 @@
                     key={item.id}
                     disabled={isMatched}
                     onClick={() => handleRightClick(item)}
-                    className={`w-full p-4 rounded-2xl font-display font-medium text-xs sm:text-sm text-left border-2 transition-all ${
-                      isMatched ? 'bg-emerald-100 border-emerald-400 text-emerald-800 opacity-50' :
-                      'bg-slate-50 border-slate-200 hover:border-duoRed text-slate-800'
+                    className={`w-full p-4 rounded-[20px] font-display font-bold text-sm sm:text-base text-center border-2 border-b-[6px] transition-all active:translate-y-1 active:border-b-2 ${
+                      isMatched ? 'bg-slate-100 border-slate-200 text-slate-300 opacity-50 cursor-default' :
+                      'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300'
                     }`}
                   >
                     {item.right}
@@ -1480,6 +1506,7 @@
 
       if (items.length === 0) return null;
       const current = items[idx];
+      const progress = ((idx) / items.length) * 100 || 10;
 
       const handleAnswer = (userBool) => {
         if (userBool === current.isTrue) {
@@ -1497,37 +1524,32 @@
       };
 
       return (
-        <div className="max-w-xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6 text-center">
-          <div className="flex items-center justify-between">
-            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
-              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
-            </button>
-            <span className="bg-duoYellow text-slate-900 text-xs font-black uppercase px-3 py-1 rounded-full">
-              Targeta {idx + 1}/{items.length}
-            </span>
-          </div>
+        <div className="max-w-xl mx-auto space-y-6 pt-4 text-center">
+          <GameHeader setCurrentView={setCurrentView} currentProgress={progress} />
 
           <AdBanner728 />
 
-          <div className="bg-amber-50 border-2 border-amber-200 rounded-3xl p-8 space-y-4">
-            <i className="fa-solid fa-lightbulb text-4xl text-duoYellow"></i>
-            <h3 className="text-xl sm:text-2xl font-display font-black text-slate-800 leading-snug">
+          <div className="bg-white border-[4px] border-b-[8px] border-slate-200 rounded-[32px] p-10 space-y-6 shadow-sm">
+            <div className="w-20 h-20 bg-yellow-100 text-duoYellow rounded-full flex items-center justify-center text-4xl mx-auto border-4 border-yellow-200 animate-float-duo">
+              <i className="fa-solid fa-lightbulb"></i>
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-display font-black text-slate-800 leading-snug">
               «{current.statement}»
             </h3>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 pt-4">
             <button
               onClick={() => handleAnswer(true)}
-              className="bg-duoGreen hover:bg-duoGreenDark text-white font-display font-black text-lg py-4 rounded-2xl shadow-btn-green"
+              className="bg-duoGreen text-white font-display font-black text-xl py-5 rounded-[24px] border-x-2 border-t-2 border-b-[6px] border-black/10 shadow-btn-green duo-pressable"
             >
-              <i className="fa-solid fa-check mr-2"></i> VERITAT
+              <i className="fa-solid fa-check text-2xl mb-1 block"></i> VERITAT
             </button>
             <button
               onClick={() => handleAnswer(false)}
-              className="bg-duoRed hover:bg-duoRedDark text-white font-display font-black text-lg py-4 rounded-2xl shadow-btn-red"
+              className="bg-duoRed text-white font-display font-black text-xl py-5 rounded-[24px] border-x-2 border-t-2 border-b-[6px] border-black/10 shadow-btn-red duo-pressable"
             >
-              <i className="fa-solid fa-xmark mr-2"></i> MENTIDA
+              <i className="fa-solid fa-xmark text-2xl mb-1 block"></i> MENTIDA
             </button>
           </div>
         </div>
@@ -1545,6 +1567,8 @@
       }, [chapter.id]);
 
       if (!data) return null;
+
+      const progress = Object.keys(answers).length > 0 ? (Object.keys(answers).length / data.blanks.length) * 100 : 5;
 
       const handleSelect = (blankId, val) => {
         playSound('pop');
@@ -1568,37 +1592,30 @@
       };
 
       return (
-        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-duo-3d border-2 border-slate-200 space-y-6">
-          <div className="flex items-center justify-between">
-            <button onClick={() => setCurrentView('path')} className="text-slate-400 hover:text-slate-600 font-bold text-sm">
-              <i className="fa-solid fa-arrow-left mr-2"></i> Tornar
-            </button>
-            <span className="bg-duoEmerald text-white text-xs font-black uppercase px-3 py-1 rounded-full">
-              El Mot Perdut
-            </span>
-          </div>
+        <div className="max-w-2xl mx-auto space-y-6 pt-4">
+          <GameHeader setCurrentView={setCurrentView} currentProgress={progress} />
 
           <AdBanner728 />
 
-          <h2 className="text-2xl font-display font-black text-slate-800">
-            {data.title}
+          <h2 className="text-3xl font-display font-black text-slate-800 text-center pb-2">
+            Completa l'història
           </h2>
 
-          <div className="bg-slate-50 border-2 border-slate-200 rounded-3xl p-6 text-base sm:text-lg font-medium text-slate-700 leading-relaxed">
+          <div className="bg-white border-[3px] border-b-[6px] border-slate-200 rounded-[32px] p-8 text-lg sm:text-xl font-bold text-slate-700 leading-relaxed shadow-sm">
             {data.text}
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 pt-2">
             {data.blanks.map((b, i) => (
-              <div key={b.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-emerald-50/50 p-4 rounded-2xl border border-emerald-200">
-                <span className="font-display font-black text-emerald-800 text-sm">Forat {i + 1}:</span>
-                <div className="flex gap-2">
+              <div key={b.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-5 rounded-[24px] border-[3px] border-slate-200">
+                <span className="font-display font-black text-slate-500 text-base">Espai {i + 1}:</span>
+                <div className="flex flex-wrap gap-2">
                   {b.options.map((opt, j) => (
                     <button
                       key={j}
                       onClick={() => handleSelect(b.id, opt)}
-                      className={`px-3 py-1.5 rounded-xl font-display font-bold text-xs sm:text-sm border-2 transition-all ${
-                        answers[b.id] === opt ? 'bg-duoEmerald text-white border-duoEmeraldDark scale-105' : 'bg-white border-slate-200 text-slate-700'
+                      className={`px-5 py-3 rounded-[16px] font-display font-black text-sm sm:text-base border-2 border-b-4 transition-all active:translate-y-1 active:border-b-2 ${
+                        answers[b.id] === opt ? 'bg-duoBlue text-white border-duoBlueDark' : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-100'
                       }`}
                     >
                       {opt}
@@ -1609,12 +1626,14 @@
             ))}
           </div>
 
-          <button
-            onClick={validate}
-            className="w-full bg-duoEmerald hover:bg-duoEmeraldDark text-white font-display font-black text-lg py-3.5 rounded-2xl shadow-btn-emerald"
-          >
-            VALIDAR TEXT HISTÒRIC
-          </button>
+          <div className="pt-6">
+            <button
+              onClick={validate}
+              className="w-full bg-duoEmerald text-white font-display font-black text-xl py-4 rounded-[24px] border-x-2 border-t-2 border-b-[6px] border-black/10 shadow-btn-emerald duo-pressable"
+            >
+              Comprovar Resultat
+            </button>
+          </div>
         </div>
       );
     }
@@ -1874,93 +1893,89 @@
       };
 
       return (
-        <div className={`min-h-screen bg-[#F4F6F8] text-slate-800 flex flex-col font-sans transition-all duration-300 ${screenEffect}`}>
+        <div className={`min-h-screen text-slate-800 flex flex-col font-sans transition-all duration-300 ${screenEffect}`}>
           
-          {/* HEADER FIX DUOLINGO STYLE */}
-          <header className="sticky top-0 z-40 bg-white border-b-2 border-slate-200 shadow-sm px-4 py-3">
-            <div className="max-w-4xl mx-auto flex items-center justify-between">
-              
-              <div 
-                onClick={() => { playSound('pop'); setCurrentView('path'); }}
-                className="flex items-center gap-2.5 cursor-pointer group"
-              >
-                <div className="w-10 h-10 rounded-2xl bg-duoGreen flex items-center justify-center text-white text-xl font-black shadow-btn-green group-hover:scale-105 transition-transform">
-                  <i className="fa-solid fa-graduation-cap"></i>
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h1 className="text-xl font-display font-black tracking-tight text-slate-800 leading-none">
-                      Història<span className="text-duoGreen">Lab</span>
-                    </h1>
-                    {isPro && (
-                      <span className="bg-amber-400 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">
-                        PRO
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
-                    Senda del Temps
-                  </span>
-                </div>
-              </div>
-
-              {/* Indicadors Gamificats amb GEMES i BOTIGA */}
-              <div className="flex items-center gap-2 sm:gap-4 font-display font-black text-sm">
+          {/* HEADER FIX DUOLINGO STYLE - Només visible a la pantalla de path */}
+          {currentView === 'path' && (
+            <header className="sticky top-0 z-40 bg-white border-b-[3px] border-slate-200 shadow-sm px-4 py-3">
+              <div className="max-w-4xl mx-auto flex items-center justify-between">
                 
-                {/* BOTIGA */}
-                <button 
-                  onClick={() => { playSound('pop'); setCurrentView('shop'); }}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-2xl border-2 font-display font-black text-sm shadow-sm transition-transform hover:scale-105 active:translate-y-0.5 ${
-                    currentView === 'shop' 
-                      ? 'bg-emerald-500 text-white border-emerald-600' 
-                      : 'bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100'
-                  }`}
+                <div 
+                  onClick={() => { playSound('pop'); setCurrentView('path'); }}
+                  className="flex items-center gap-3 cursor-pointer group"
                 >
-                  <i className="fa-solid fa-store text-base"></i>
-                  <span className="hidden sm:inline">Botiga</span>
-                </button>
-
-                {/* VIDES */}
-                <div className="flex items-center gap-1.5 bg-red-50 text-duoRed border-2 border-red-200 px-3 py-1 rounded-2xl shadow-sm relative">
-                  <i className="fa-solid fa-heart text-base animate-pulse"></i>
-                  <span>{hearts}/5</span>
-
-                  <AnimatePresence>
-                    {extraLifeToast && (
-                      <motion.div 
-                        initial={{ opacity: 0, y: 10, scale: 0.8 }}
-                        animate={{ opacity: 1, y: -25, scale: 1 }}
-                        exit={{ opacity: 0, y: -35 }}
-                        className="absolute whitespace-nowrap bg-duoRed text-white text-xs px-2 py-0.5 rounded-full shadow-md font-black"
-                      >
-                        +1 ❤️ VIDA!
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div className="w-12 h-12 rounded-[18px] bg-duoGreen flex items-center justify-center text-white text-2xl font-black shadow-btn-green group-hover:scale-105 transition-transform border-2 border-black/10">
+                    <i className="fa-solid fa-graduation-cap"></i>
+                  </div>
+                  <div className="hidden sm:block">
+                    <div className="flex items-center gap-2">
+                      <h1 className="text-2xl font-display font-black tracking-tight text-slate-800 leading-none">
+                        Història<span className="text-duoGreen">Lab</span>
+                      </h1>
+                      {isPro && (
+                        <span className="bg-amber-400 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm border border-amber-500">
+                          PRO
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
-                {/* GEMES */}
-                <div className="flex items-center gap-1.5 bg-emerald-50 text-duoEmerald border-2 border-emerald-200 px-3 py-1 rounded-2xl shadow-sm">
-                  <i className="fa-solid fa-gem text-base"></i>
-                  <span>{gems}</span>
-                </div>
+                {/* Indicadors Gamificats (Vides, Gemes, Ratxa) estètica limpia Duolingo */}
+                <div className="flex items-center gap-3 sm:gap-5 font-display font-black text-base">
+                  
+                  {/* BOTIGA ICON */}
+                  <button 
+                    onClick={() => { playSound('pop'); setCurrentView('shop'); }}
+                    className="text-slate-400 hover:text-slate-600 transition-colors text-2xl sm:hidden"
+                  >
+                    <i className="fa-solid fa-store"></i>
+                  </button>
 
-                {/* RATXA */}
-                <div className="flex items-center gap-1.5 bg-amber-50 text-duoOrange border-2 border-amber-200 px-3 py-1 rounded-2xl shadow-sm">
-                  <i className="fa-solid fa-fire text-base"></i>
-                  <span>{streak} d.</span>
-                </div>
+                  <button 
+                    onClick={() => { playSound('pop'); setCurrentView('shop'); }}
+                    className="hidden sm:flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors uppercase text-xs tracking-wider"
+                  >
+                    <i className="fa-solid fa-store text-xl"></i>
+                    <span>Botiga</span>
+                  </button>
 
-                {/* XP */}
-                <div className="flex items-center gap-1.5 bg-sky-50 text-duoBlue border-2 border-sky-200 px-3 py-1 rounded-2xl shadow-sm">
-                  <i className="fa-solid fa-bolt text-base"></i>
-                  <span>{xp} XP</span>
+                  {/* RATXA */}
+                  <div className="flex items-center gap-2 text-duoOrange">
+                    <i className="fa-solid fa-fire text-xl sm:text-2xl"></i>
+                    <span>{streak}</span>
+                  </div>
+
+                  {/* GEMES */}
+                  <div className="flex items-center gap-2 text-duoBlue">
+                    <i className="fa-solid fa-gem text-xl sm:text-2xl"></i>
+                    <span>{gems}</span>
+                  </div>
+
+                  {/* VIDES */}
+                  <div className="flex items-center gap-2 text-duoRed relative">
+                    <i className={`fa-solid fa-heart text-xl sm:text-2xl ${hearts === 0 ? 'text-slate-300' : ''}`}></i>
+                    <span>{hearts}</span>
+
+                    <AnimatePresence>
+                      {extraLifeToast && (
+                        <motion.div 
+                          initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                          animate={{ opacity: 1, y: -25, scale: 1 }}
+                          exit={{ opacity: 0, y: -35 }}
+                          className="absolute whitespace-nowrap bg-duoRed text-white text-xs px-2 py-0.5 rounded-full shadow-md font-black"
+                        >
+                          +1 ❤️
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
                 </div>
 
               </div>
-
-            </div>
-          </header>
+            </header>
+          )}
 
           {/* CONTINGUT PRINCIPAL */}
           <main className="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 my-2">
@@ -2025,23 +2040,23 @@
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 text-white"
+                className="fixed inset-0 z-[100] bg-slate-900/95 backdrop-blur-md flex flex-col items-center justify-center p-4 text-white"
               >
-                <div className="absolute top-4 right-4 text-sm font-bold text-gray-400 z-10">
+                <div className="absolute top-6 right-6 text-sm font-bold text-slate-400 z-10 bg-slate-800/50 px-4 py-2 rounded-full">
                   {adCountdown > 0 ? (
                     `Recompensa en ${adCountdown}s`
                   ) : (
-                    <button onClick={closeAd} className="bg-gray-800 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-700">
-                      <i className="fa-solid fa-xmark"></i>
+                    <button onClick={closeAd} className="bg-slate-700 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-slate-600 transition-colors">
+                      <i className="fa-solid fa-xmark text-xl"></i>
                     </button>
                   )}
                 </div>
                 
-                <div className="mb-4 text-gray-400 text-xs uppercase tracking-widest z-10">
+                <div className="mb-6 text-slate-400 text-xs uppercase tracking-widest z-10 font-bold">
                   Patrocinat — {currentAdData ? currentAdData.brand : 'Anunci'}
                 </div>
                 
-                <div className="z-10">
+                <div className="z-10 w-full flex justify-center">
                   <AdBanner300 overrideAd={currentAdData} />
                 </div>
 
@@ -2050,17 +2065,17 @@
                     if (playSound) playSound('pop');
                     window.open(currentAdData?.url || 'https://www.google.com', '_blank');
                   }}
-                  className="mt-6 text-center px-4 max-w-sm cursor-pointer hover:opacity-80 transition-opacity z-10"
+                  className="mt-8 text-center px-4 max-w-sm cursor-pointer hover:opacity-80 transition-opacity z-10"
                 >
-                  <h3 className="text-xl font-display font-bold">
+                  <h3 className="text-2xl font-display font-black">
                     {currentAdData ? currentAdData.title : 'Espera per obtenir la teva recompensa'}
                   </h3>
-                  <p className="text-gray-400 text-sm mt-2">
+                  <p className="text-slate-400 text-sm mt-3 font-bold">
                     {currentAdData ? currentAdData.desc : 'En donar suport als nostres patrocinadors, ens ajudes a mantenir la plataforma gratuïta.'}
                   </p>
                 </div>
 
-                <div className="w-full max-w-xs bg-gray-800 h-2 rounded-full overflow-hidden mt-6 z-10">
+                <div className="w-full max-w-xs bg-slate-800 h-3 rounded-full overflow-hidden mt-8 z-10 border border-slate-700">
                   <div 
                     className="bg-duoGreen h-full transition-all duration-1000 linear"
                     style={{ width: `${((20 - adCountdown) / 20) * 100}%` }}
@@ -2077,32 +2092,32 @@
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 text-white text-center"
+                className="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 text-white text-center"
               >
-                <div className="max-w-md w-full bg-slate-800 border-4 border-duoRed rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
-                  <div className="space-y-2">
-                    <span className="bg-duoRed text-white text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full">
+                <div className="max-w-md w-full bg-slate-800 border-[6px] border-duoRed rounded-[32px] p-8 sm:p-10 space-y-8 shadow-2xl relative overflow-hidden">
+                  <div className="space-y-3">
+                    <span className="bg-duoRed text-white text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-red-400">
                       ¡ALERTA DE CORATGE!
                     </span>
-                    <h2 className="text-2xl sm:text-3xl font-display font-black">
-                      REANIMACIÓ CARDÍACA (CPR)
+                    <h2 className="text-3xl sm:text-4xl font-display font-black leading-tight">
+                      REANIMACIÓ CARDÍACA
                     </h2>
-                    <p className="text-xs text-slate-300 font-semibold">
-                      Has perdut totes les vides! Prem el cor 10 vegades per reanimar el teu progrés!
+                    <p className="text-sm text-slate-300 font-bold">
+                      Has perdut totes les vides! Toca el cor 10 vegades ràpidament per reanimar-te!
                     </p>
                   </div>
 
-                  <div className="py-4">
+                  <div className="py-6">
                     <button
                       onClick={handleCprClick}
-                      className="w-32 h-32 bg-duoRed text-white rounded-full mx-auto flex flex-col items-center justify-center shadow-btn-red hover:scale-105 active:scale-95 transition-transform animate-pulse-heart border-4 border-white/20"
+                      className="w-40 h-40 bg-duoRed text-white rounded-full mx-auto flex flex-col items-center justify-center shadow-btn-red active:translate-y-2 active:shadow-none transition-all animate-pulse-heart border-[6px] border-white/20"
                     >
-                      <i className="fa-solid fa-heart-pulse text-5xl"></i>
-                      <span className="text-xs font-black mt-1">{cprClicks}/10</span>
+                      <i className="fa-solid fa-heart-pulse text-6xl"></i>
+                      <span className="text-xl font-black mt-2">{cprClicks}/10</span>
                     </button>
                   </div>
 
-                  <div className="w-full bg-slate-700 h-3 rounded-full overflow-hidden">
+                  <div className="w-full bg-slate-700 h-4 rounded-full overflow-hidden border-2 border-slate-600">
                     <div 
                       className="bg-duoRed h-full transition-all duration-200"
                       style={{ width: `${(cprClicks / 10) * 100}%` }}
@@ -2120,31 +2135,31 @@
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 text-white text-center"
+                className="fixed inset-0 z-[100] bg-slate-900/95 backdrop-blur-md flex items-center justify-center p-4 text-white text-center"
               >
-                <div className="max-w-md w-full bg-slate-800 border-4 border-duoRed rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
-                  <div className="w-20 h-20 bg-red-500/20 text-duoRed rounded-full flex items-center justify-center text-3xl mx-auto border-4 border-duoRed/30">
+                <div className="max-w-md w-full bg-slate-800 border-[6px] border-duoRed rounded-[32px] p-8 sm:p-10 space-y-8 shadow-2xl relative overflow-hidden">
+                  <div className="w-24 h-24 bg-red-500/20 text-duoRed rounded-[24px] flex items-center justify-center text-5xl mx-auto border-4 border-duoRed/30 animate-float-duo">
                     <i className="fa-solid fa-heart-crack animate-pulse"></i>
                   </div>
-                  <div className="space-y-2">
-                    <span className="bg-duoRed text-white text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full">
+                  <div className="space-y-3">
+                    <span className="bg-duoRed text-white text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-red-400">
                       ¡SENSE VIDES!
                     </span>
-                    <h2 className="text-2xl sm:text-3xl font-display font-black">
-                      NO TENS MÉS VIDES
+                    <h2 className="text-3xl sm:text-4xl font-display font-black">
+                      ESTÀS ESGOTAT
                     </h2>
-                    <p className="text-xs text-slate-300 font-semibold leading-relaxed">
-                      Has esgotat totes les teves vides. Pots recuperar vides amb un anunci, comprant a la botiga o esperant.
+                    <p className="text-sm text-slate-300 font-bold leading-relaxed">
+                      No et queden vides. Recupera-les mirant un anunci ràpid o visitant la botiga.
                     </p>
                   </div>
 
-                  <div className="space-y-3 pt-2">
+                  <div className="space-y-4 pt-4">
                     <button
                       onClick={handleRecoverLifeWithAd}
-                      className="w-full bg-duoPurple hover:bg-duoPurpleDark text-white font-display font-black py-3.5 rounded-2xl shadow-btn-purple transition-transform active:translate-y-1 flex items-center justify-center gap-2 text-base"
+                      className="w-full bg-duoPurple text-white font-display font-black py-4 rounded-[20px] shadow-btn-purple border-x-2 border-t-2 border-b-[6px] border-black/10 duo-pressable flex items-center justify-center gap-3 text-lg"
                     >
-                      <i className="fa-solid fa-play"></i>
-                      Recuperar 1 vida amb un anunci
+                      <i className="fa-solid fa-play text-xl"></i>
+                      Rebre 1 vida (Anunci)
                     </button>
                     
                     <button
@@ -2152,10 +2167,10 @@
                         setShowNoLivesModal(false);
                         setCurrentView('shop');
                       }}
-                      className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-display font-black py-3.5 rounded-2xl shadow-btn-emerald transition-transform active:translate-y-1 flex items-center justify-center gap-2 text-base"
+                      className="w-full bg-white text-duoEmeraldDark font-display font-black py-4 rounded-[20px] shadow-sm border-[3px] border-slate-200 border-b-[6px] duo-pressable flex items-center justify-center gap-3 text-lg hover:bg-slate-50"
                     >
-                      <i className="fa-solid fa-store"></i>
-                      Comprar Vides a la Botiga
+                      <i className="fa-solid fa-store text-xl"></i>
+                      Obrir la Botiga
                     </button>
                   </div>
                 </div>
@@ -2163,51 +2178,57 @@
             )}
           </AnimatePresence>
 
-          {/* BOTTOM SHEET FEEDBACK MODAL */}
+          {/* BOTTOM SHEET FEEDBACK MODAL (TOTALMENT DUOLINGO) */}
           <AnimatePresence>
             {sheet.isOpen && (
               <motion.div 
-                initial={{ opacity: 0, y: 100 }}
+                initial={{ opacity: 0, y: 200 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 100 }}
-                className={`fixed bottom-0 left-0 right-0 z-50 p-6 rounded-t-3xl border-t-4 shadow-2xl ${
-                  sheet.type === 'success' ? 'bg-emerald-50 border-duoGreen text-emerald-950' : 'bg-red-50 border-duoRed text-red-950'
+                exit={{ opacity: 0, y: 200 }}
+                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                className={`fixed bottom-0 left-0 right-0 z-[150] p-6 sm:p-10 rounded-t-[32px] sm:rounded-t-[40px] border-t-2 shadow-[0_-20px_60px_rgba(0,0,0,0.15)] flex justify-center ${
+                  sheet.type === 'success' ? 'bg-duoBgSuccess text-duoTextSuccess border-[#b2ec7e]' : 'bg-duoBgError text-duoTextError border-[#ffb3b8]'
                 }`}
               >
-                <div className="max-w-xl mx-auto space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-xl font-black text-white ${
+                <div className="w-full max-w-4xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  
+                  <div className="flex flex-col gap-3 flex-1">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-14 h-14 rounded-[20px] flex items-center justify-center text-3xl font-black text-white shadow-sm border border-white/30 ${
                         sheet.type === 'success' ? 'bg-duoGreen' : 'bg-duoRed'
                       }`}>
                         <i className={`fa-solid ${sheet.type === 'success' ? 'fa-check' : 'fa-xmark'}`}></i>
                       </div>
-                      <h3 className="text-xl font-display font-black">{sheet.title}</h3>
+                      <div>
+                        <h3 className="text-2xl sm:text-3xl font-display font-black tracking-wide drop-shadow-sm">{sheet.title}</h3>
+                        {sheet.xpEarned > 0 && (
+                          <span className="inline-block mt-1 bg-white/40 text-current font-display font-black text-xs px-3 py-1 rounded-full border border-current/20">
+                            +{sheet.xpEarned} XP
+                          </span>
+                        )}
+                      </div>
                     </div>
-
-                    {sheet.xpEarned > 0 && (
-                      <span className="bg-amber-400 text-slate-900 font-display font-black text-xs px-3 py-1 rounded-full shadow-sm">
-                        +{sheet.xpEarned} XP
-                      </span>
+                    
+                    <p className="font-bold text-base sm:text-lg opacity-90">{sheet.message}</p>
+                    
+                    {sheet.explanation && (
+                      <div className={`p-4 rounded-[16px] font-bold text-sm bg-white/40 border border-current/20`}>
+                        {sheet.explanation}
+                      </div>
                     )}
                   </div>
 
-                  <p className="font-bold text-sm">{sheet.message}</p>
-                  
-                  {sheet.explanation && (
-                    <div className="bg-white/80 p-3 rounded-xl border text-xs font-medium text-slate-700">
-                      <strong>Explicació Històrica:</strong> {sheet.explanation}
-                    </div>
-                  )}
+                  <div className="w-full md:w-auto md:min-w-[250px] shrink-0 mt-2 md:mt-0">
+                    <button
+                      onClick={sheet.onContinue}
+                      className={`w-full font-display font-black text-xl py-4 rounded-[20px] text-white transition-all duo-pressable border-x-2 border-t-2 border-b-[6px] border-black/10 ${
+                        sheet.type === 'success' ? 'bg-duoGreen hover:bg-duoGreenDark shadow-btn-green' : 'bg-duoRed hover:bg-duoRedDark shadow-btn-red'
+                      }`}
+                    >
+                      CONTINUAR
+                    </button>
+                  </div>
 
-                  <button
-                    onClick={sheet.onContinue}
-                    className={`w-full font-display font-black text-lg py-3 rounded-2xl text-white shadow-md transition-transform active:translate-y-1 ${
-                      sheet.type === 'success' ? 'bg-duoGreen hover:bg-duoGreenDark shadow-btn-green' : 'bg-duoRed hover:bg-duoRedDark shadow-btn-red'
-                    }`}
-                  >
-                    CONTINUAR
-                  </button>
                 </div>
               </motion.div>
             )}
