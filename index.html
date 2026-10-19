@@ -3,6 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- PWA Meta Tags (Base per fer-la instal·lable) -->
+  <meta name="theme-color" content="#ffffff">
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
   <title>HistòriaLab - Ruta del Temps</title>
   
   <!-- Fonts: Fredoka & Outfit -->
@@ -16,6 +23,9 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
+  <!-- Chart.js per a Estadístiques Visuals -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <!-- React & React DOM UMD -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -83,7 +93,7 @@
   <style>
     body {
       font-family: 'Outfit', sans-serif;
-      background-color: #ffffff; /* Fons més net, estil Duolingo */
+      background-color: #ffffff;
       color: #1E293B;
       user-select: none;
       overflow-x: hidden;
@@ -91,7 +101,6 @@
       background-size: 24px 24px;
     }
 
-    /* Utilitat per botons gruixuts que es pressionen */
     .duo-pressable:active {
       transform: translateY(6px) !important;
       box-shadow: none !important;
@@ -102,7 +111,6 @@
       box-shadow: none !important;
     }
 
-    /* Animacions de feedback visual */
     @keyframes shake {
       0%, 100% { transform: translate(0, 0) rotate(0deg); }
       15% { transform: translate(-12px, 8px) rotate(-1deg); }
@@ -150,7 +158,6 @@
       animation: floatDuo 3s ease-in-out infinite;
     }
 
-    /* Custom scrollbar clara */
     ::-webkit-scrollbar {
       width: 10px;
     }
@@ -169,7 +176,6 @@
 <body class="min-h-screen selection:bg-duoGreen selection:text-white flex flex-col justify-between">
   <div id="root" class="flex-1 flex flex-col"></div>
 
-  <!-- Footer requerit -->
   <footer class="w-full text-center text-xs font-bold text-slate-400 py-6 border-t-2 border-slate-200 bg-white">
     Aquesta plataforma pot cometre errors. Inspirat en la gamificació.
   </footer>
@@ -198,7 +204,7 @@
       }
     }
 
-    // --- COMPONENTS DE BANNER (Sense anuncis per a PRO, tots enllaçats al 100%) ---
+    // --- COMPONENTS DE BANNER ---
     const AdBanner728 = () => {
       const isPro = localStorage.getItem('hl_is_pro') === 'true' || (new URLSearchParams(window.location.search)).get('pro') === 'true';
       if (isPro) return null;
@@ -319,10 +325,10 @@
           osc.stop(now + 0.05);
         } else if (type === 'success') {
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(523.25, now); // C5
-          osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
-          osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
-          osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.08);
+          osc.frequency.setValueAtTime(783.99, now + 0.16);
+          osc.frequency.setValueAtTime(1046.50, now + 0.24);
           gain.gain.setValueAtTime(0.25, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
           osc.start(now);
@@ -362,16 +368,16 @@
           osc.stop(now + 0.5);
         } else if (type === 'lifeGain') {
           osc.type = 'sine';
-          osc.frequency.setValueAtTime(587.33, now); // D5
-          osc.frequency.setValueAtTime(880.00, now + 0.1); // A5
+          osc.frequency.setValueAtTime(587.33, now);
+          osc.frequency.setValueAtTime(880.00, now + 0.1);
           gain.gain.setValueAtTime(0.3, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
           osc.start(now);
           osc.stop(now + 0.35);
         } else if (type === 'gemGain') {
           osc.type = 'sine';
-          osc.frequency.setValueAtTime(783.99, now); // G5
-          osc.frequency.setValueAtTime(1174.66, now + 0.08); // D6
+          osc.frequency.setValueAtTime(783.99, now);
+          osc.frequency.setValueAtTime(1174.66, now + 0.08);
           gain.gain.setValueAtTime(0.25, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
           osc.start(now);
@@ -391,7 +397,6 @@
       }
     };
 
-    // --- CONFETTI ---
     const triggerConfetti = () => {
       if (window.confetti) {
         window.confetti({
@@ -402,6 +407,265 @@
         });
       }
     };
+
+    // --- PANTALLA DE RESULTATS ---
+    function ResultsView({ resultData, setCurrentView, xp, gems }) {
+      const { stars, moduleName, xpEarned, chapterId } = resultData;
+
+      useEffect(() => {
+        playSound('fanfare');
+        setTimeout(() => triggerConfetti(), 300);
+      }, []);
+
+      return (
+        <div className="max-w-2xl mx-auto flex flex-col items-center justify-center space-y-8 py-12 text-center">
+          <h2 className="text-4xl sm:text-5xl font-display font-black text-duoYellow drop-shadow-md">
+            Lliçó Completada!
+          </h2>
+          <p className="text-xl font-bold text-slate-600">
+            Has dominat el mòdul: <span className="text-slate-800">{moduleName}</span>
+          </p>
+
+          <div className="flex gap-4 items-center justify-center my-6">
+            <div className="bg-amber-100 border-[3px] border-amber-300 rounded-[24px] p-6 w-32 flex flex-col items-center">
+              <i className="fa-solid fa-star text-4xl text-amber-500 mb-2"></i>
+              <span className="text-2xl font-black text-amber-700">+{stars}</span>
+            </div>
+            <div className="bg-blue-100 border-[3px] border-blue-300 rounded-[24px] p-6 w-32 flex flex-col items-center">
+              <i className="fa-solid fa-bolt text-4xl text-blue-500 mb-2"></i>
+              <span className="text-2xl font-black text-blue-700">+{xpEarned}</span>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setCurrentView('path')}
+            className="w-full max-w-md bg-duoGreen border-x-2 border-t-2 border-b-[6px] border-black/10 text-white font-display font-black text-xl py-4 rounded-[24px] shadow-btn-green duo-pressable uppercase tracking-wider mt-8"
+          >
+            Continuar
+          </button>
+        </div>
+      );
+    }
+
+    // --- NOVA VISTA DE PERFIL, ESTADÍSTIQUES I IMPORTAR/EXPORTAR ---
+    function ProfileView({ xp, gems, streak, hearts, nodeProgress, setCurrentView }) {
+      const fileInputRef = useRef(null);
+
+      // Descarregar Progrés - 100% Encriptat i llegible
+      const handleExport = () => {
+        playSound('pop');
+        const data = {
+          hl_hearts: localStorage.getItem('hl_hearts'),
+          hl_xp: localStorage.getItem('hl_xp'),
+          hl_gems: localStorage.getItem('hl_gems'),
+          hl_streak: localStorage.getItem('hl_streak'),
+          hl_unlockedChapters: localStorage.getItem('hl_unlockedChapters'),
+          hl_inventory: localStorage.getItem('hl_inventory'),
+          hl_nodeProgress: localStorage.getItem('hl_nodeProgress')
+        };
+        const str = JSON.stringify(data);
+        const enc = btoa(unescape(encodeURIComponent(str))).split('').reverse().join('');
+        const blob = new Blob([enc], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'historialab_progress.txt';
+        a.click();
+      };
+
+      // Importar Progrés
+      const handleImport = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const content = event.target.result;
+            let data;
+            try {
+               const dec = decodeURIComponent(escape(atob(content.split('').reverse().join(''))));
+               data = JSON.parse(dec);
+            } catch(e) {
+               data = JSON.parse(content);
+            }
+
+            if (data.hl_xp !== undefined) {
+               Object.keys(data).forEach(key => {
+                 if(data[key] !== null && data[key] !== undefined) {
+                    localStorage.setItem(key, data[key]);
+                 }
+               });
+               playSound('success');
+               alert("El teu progrés s'ha restaurat correctament! La plataforma es recarregarà ara mateix.");
+               window.location.reload();
+            } else {
+               alert("El fitxer no té un format vàlid per HistòriaLab.");
+            }
+          } catch(err) {
+            alert("Error llegint el fitxer de progrés.");
+          }
+        };
+        reader.readAsText(file);
+      };
+
+      // Renderització del gràfic de Chart.js
+      useEffect(() => {
+        let completed = 0;
+        const total = Object.keys(nodeProgress).length || 32; 
+        Object.values(nodeProgress).forEach(val => { if (val > 0) completed++; });
+        let pending = total - completed;
+
+        const ctx = document.getElementById('statsChart');
+        let chartInstance = null;
+
+        if (ctx) {
+           chartInstance = new Chart(ctx, {
+             type: 'doughnut',
+             data: {
+               labels: ['Lliçons Completades', 'Lliçons Pendents'],
+               datasets: [{
+                 data: [completed, pending],
+                 backgroundColor: ['#58cc02', '#e2e8f0'],
+                 borderWidth: 3,
+                 hoverOffset: 4
+               }]
+             },
+             options: { 
+               responsive: true, 
+               maintainAspectRatio: false,
+               plugins: {
+                 legend: { position: 'bottom', labels: { font: { family: 'Outfit', weight: 'bold' } } }
+               }
+             }
+           });
+        }
+        return () => {
+          if (chartInstance) chartInstance.destroy();
+        };
+      }, [nodeProgress]);
+
+      // Lligues
+      const leagues = [
+        { id: 1, name: "Lliga Bronze", min: 0, max: 500, color: "text-amber-700", border: "border-amber-400", bg: "bg-amber-100", icon: "fa-shield-halved" },
+        { id: 2, name: "Lliga Plata", min: 500, max: 1500, color: "text-slate-600", border: "border-slate-400", bg: "bg-slate-200", icon: "fa-medal" },
+        { id: 3, name: "Lliga Or", min: 1500, max: 3000, color: "text-yellow-600", border: "border-yellow-400", bg: "bg-yellow-100", icon: "fa-trophy" },
+        { id: 4, name: "Lliga Diamant", min: 3000, max: Infinity, color: "text-cyan-600", border: "border-cyan-400", bg: "bg-cyan-100", icon: "fa-gem" }
+      ];
+
+      let currentLeagueIndex = leagues.findIndex(l => xp >= l.min && xp < l.max);
+      if (currentLeagueIndex === -1) currentLeagueIndex = leagues.length - 1;
+      const currentLeague = leagues[currentLeagueIndex];
+      const nextLeague = leagues[currentLeagueIndex + 1];
+      const progressPerc = nextLeague ? Math.min(100, Math.max(0, ((xp - currentLeague.min) / (nextLeague.min - currentLeague.min)) * 100)) : 100;
+
+      return (
+        <div className="max-w-4xl mx-auto space-y-8 pb-10">
+          
+          <div className="flex items-center justify-between">
+            <button onClick={() => setCurrentView('path')} className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full font-bold text-2xl transition-colors">
+              <i className="fa-solid fa-arrow-left"></i>
+            </button>
+            <h2 className="text-3xl font-display font-black text-slate-800">El Meu Perfil</h2>
+            <div className="w-12"></div>
+          </div>
+
+          <AdBanner728 />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Targeta Resum */}
+            <div className="bg-white rounded-[32px] p-6 sm:p-8 shadow-duo-card border-[3px] border-slate-200 space-y-6">
+              <div className="flex items-center gap-4 border-b-2 border-slate-100 pb-6">
+                <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center text-4xl text-slate-300 border-4 border-slate-200">
+                  <i className="fa-solid fa-user-astronaut"></i>
+                </div>
+                <div>
+                  <h3 className="font-display font-black text-2xl text-slate-800">Historiador</h3>
+                  <p className="text-slate-500 font-bold text-sm mt-1">Estudiant Nivell 1</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-slate-50 p-4 rounded-[20px] border-2 border-slate-200 flex flex-col">
+                  <i className="fa-solid fa-fire text-duoOrange text-2xl mb-2"></i>
+                  <span className="font-display font-black text-xl">{streak} Dies</span>
+                  <span className="text-xs text-slate-400 font-bold">Ratxa d'estudi</span>
+                </div>
+                <div className="bg-slate-50 p-4 rounded-[20px] border-2 border-slate-200 flex flex-col">
+                  <i className="fa-solid fa-bolt text-duoBlue text-2xl mb-2"></i>
+                  <span className="font-display font-black text-xl">{xp} XP</span>
+                  <span className="text-xs text-slate-400 font-bold">Experiència total</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Targeta Gràfic */}
+            <div className="bg-white rounded-[32px] p-6 sm:p-8 shadow-duo-card border-[3px] border-slate-200 space-y-4">
+              <h3 className="font-display font-black text-xl text-slate-800 border-b-2 border-slate-100 pb-4">Progrés Curricular</h3>
+              <div className="relative w-full h-[200px]">
+                <canvas id="statsChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          {/* Secció Lligues */}
+          <div className="bg-gradient-to-b from-white to-blue-50 rounded-[32px] p-6 sm:p-8 shadow-duo-card border-[3px] border-blue-200 space-y-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b-2 border-blue-100 pb-4 gap-4">
+              <h3 className="font-display font-black text-2xl text-blue-900 flex items-center gap-3">
+                <i className="fa-solid fa-trophy text-blue-500 text-3xl"></i>
+                Lligues de Classificació
+              </h3>
+              <div className="text-xs bg-blue-100 text-blue-800 font-bold px-3 py-1.5 rounded-full border border-blue-200">
+                Supera els teus límits!
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-6">
+              <div className={`w-24 h-24 rounded-full flex items-center justify-center text-4xl shadow-sm border-4 shrink-0 ${currentLeague.bg} ${currentLeague.color} ${currentLeague.border}`}>
+                <i className={`fa-solid ${currentLeague.icon}`}></i>
+              </div>
+              <div className="flex-1 w-full space-y-2">
+                <h4 className="font-display font-black text-slate-800 text-2xl">{currentLeague.name}</h4>
+                {nextLeague ? (
+                  <>
+                    <p className="text-sm font-bold text-slate-500">
+                      {xp} XP / {nextLeague.min} XP per a {nextLeague.name}
+                    </p>
+                    <div className="w-full bg-slate-200 h-4 rounded-full overflow-hidden border-2 border-slate-300">
+                      <div className="bg-duoBlue h-full transition-all duration-500 rounded-full" style={{ width: `${progressPerc}%` }}></div>
+                    </div>
+                  </>
+                ) : (
+                   <p className="text-sm font-bold text-cyan-600">Has assolit la lliga màxima! Ets una llegenda de la història.</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Zona de Gestió de Dades (Offline/PWA) */}
+          <div className="bg-slate-50 rounded-[32px] p-6 sm:p-8 border-2 border-slate-200 space-y-4">
+            <div className="text-center pb-2">
+              <h3 className="font-display font-black text-lg text-slate-800">Còpia de Seguretat i Dades</h3>
+              <p className="text-sm text-slate-500 font-bold mt-1">Guarda el teu progrés per no perdre'l si esborres l'historial o canvies de navegador.</p>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
+              <button onClick={handleExport} className="bg-white text-duoBlueDark font-display font-black py-4 px-6 rounded-[20px] shadow-sm border-[3px] border-slate-200 border-b-[6px] duo-pressable flex items-center justify-center gap-3 hover:bg-slate-50">
+                <i className="fa-solid fa-download"></i>
+                Descarregar Progrés
+              </button>
+              
+              <input type="file" accept=".txt,.json" ref={fileInputRef} onChange={handleImport} className="hidden" />
+              <button onClick={() => fileInputRef.current.click()} className="bg-white text-duoEmeraldDark font-display font-black py-4 px-6 rounded-[20px] shadow-sm border-[3px] border-slate-200 border-b-[6px] duo-pressable flex items-center justify-center gap-3 hover:bg-slate-50">
+                <i className="fa-solid fa-upload"></i>
+                Importar Progrés
+              </button>
+            </div>
+          </div>
+
+        </div>
+      );
+    }
+
 
     // --- MAPA RUTA DEL TEMPS ---
     function PathMap({ selectedChapter, setSelectedChapter, nodeProgress, setCurrentView, isPro, unlockedChapters, handleUnlockChapter }) {
@@ -611,7 +875,7 @@
         {
           id: 'doubleXp',
           title: 'Multiplicador 2x XP',
-          desc: 'Duplica tota la experiència (XP) que aconsegueixis en la pròxima resposta correcta.',
+          desc: 'Duplica tota l\'experiència (XP) que aconsegueixis en la pròxima resposta correcta.',
           price: 35,
           icon: 'fa-bolt-lightning',
           color: 'bg-duoBlue text-white',
@@ -788,9 +1052,8 @@
         }
 
         if (isCorrect) {
-          onSuccess("¡ORDRE PERFECTE!", "Has col·locat els esdeveniments cronològicament com un expert.", "Molt bé! La seqüència temporal és fonamental per comprendre la història.", 30, () => {
-            onFinish(3);
-            setCurrentView('path');
+          onSuccess("ORDRE PERFECTE!", "Has col·locat els esdeveniments cronològicament com un expert.", "Molt bé! La seqüència temporal és fonamental per comprendre la història.", 30, (totalXp) => {
+            onFinish(3, totalXp, 'Línea del Temps');
           });
         } else {
           onError("L'ORDRE NO ÉS CORRECTE", "Revisa les dates de cada esdeveniment i torna a intentar-ho.", "L'ordre dels esdeveniments altera la relació de causa i efecte.");
@@ -806,7 +1069,7 @@
               Ordena la Línia del Temps
             </h2>
             <p className="text-slate-500 text-base font-bold">
-              Des del més antic (adalt) al més recent (abaix)
+              Des del més antic (a dalt) al més recent (a baix)
             </p>
           </div>
 
@@ -868,11 +1131,13 @@
       const [sliderVal, setSliderVal] = useState(1800);
       const [multiSelected, setMultiSelected] = useState([]);
       const [disabledOptions, setDisabledOptions] = useState([]);
+      const [accumulatedXp, setAccumulatedXp] = useState(0);
 
       useEffect(() => {
         const qList = window.QuestionBank.getKahoot(chapter.id, 3);
         setQuestions(qList);
         setDisabledOptions([]);
+        setAccumulatedXp(0);
         if (qList.length > 0 && qList[0].type === 'slider') {
           setSliderVal(qList[0].minYear || 1800);
         }
@@ -885,7 +1150,10 @@
 
       const handleClassicAnswer = (option) => {
         if (option.correct) {
-          onSuccess("¡RESPOSTA CORRECTA!", "Has escollit l'opció exacta.", q.exp, 20, nextQuestion);
+          onSuccess("RESPOSTA CORRECTA!", "Has escollit l'opció exacta.", q.exp, 20, (xpGained) => {
+            setAccumulatedXp(prev => prev + xpGained);
+            nextQuestion();
+          });
         } else {
           onError("RESPOSTA INCORRECTA", "Aquesta opció no és la vàlida.", q.exp);
         }
@@ -893,7 +1161,10 @@
 
       const handleSliderSubmit = () => {
         if (sliderVal === q.targetYear) {
-          onSuccess("¡ANY EXACTE!", `En efecte, va succeir l'any ${q.targetYear}.`, q.exp, 25, nextQuestion);
+          onSuccess("ANY EXACTE!", `En efecte, va succeir l'any ${q.targetYear}.`, q.exp, 25, (xpGained) => {
+            setAccumulatedXp(prev => prev + xpGained);
+            nextQuestion();
+          });
         } else {
           onError("ANY INCORRECTE", `T'has desviat. L'any exacte era ${q.targetYear}.`, q.exp);
         }
@@ -904,7 +1175,10 @@
         const isExact = correctIds.length === multiSelected.length && correctIds.every(id => multiSelected.includes(id));
 
         if (isExact) {
-          onSuccess("¡SELECCIÓ PERFECTA!", "Has identificat totes les característiques correctes.", q.exp, 30, nextQuestion);
+          onSuccess("SELECCIÓ PERFECTA!", "Has identificat totes les característiques correctes.", q.exp, 30, (xpGained) => {
+             setAccumulatedXp(prev => prev + xpGained);
+             nextQuestion();
+          });
         } else {
           onError("SELECCIÓ INCOMPLETA O INCORRECTA", "No has marcat exactament les opcions que pertanyen.", q.exp);
         }
@@ -920,8 +1194,7 @@
             setSliderVal(nextQ.minYear || 1800);
           }
         } else {
-          onFinish(3);
-          setCurrentView('path');
+          onFinish(3, accumulatedXp, 'Preguntes Flaix');
         }
       };
 
@@ -970,7 +1243,6 @@
                     );
                   }
                   
-                  // Generamos estilos base tipo botón Duolingo blanco
                   return (
                     <button
                       key={i}
@@ -1050,11 +1322,13 @@
       const [sliderVal, setSliderVal] = useState(1800);
       const [multiSelected, setMultiSelected] = useState([]);
       const [disabledOptions, setDisabledOptions] = useState([]);
+      const [accumulatedXp, setAccumulatedXp] = useState(0);
 
       useEffect(() => {
         const qList = window.QuestionBank.getKahoot(chapter.id, 999);
         setQuestions(qList);
         setDisabledOptions([]);
+        setAccumulatedXp(0);
         if (qList.length > 0 && qList[0].type === 'slider') {
           setSliderVal(qList[0].minYear || 1800);
         }
@@ -1067,7 +1341,10 @@
 
       const handleClassicAnswer = (option) => {
         if (option.correct) {
-          onSuccess("¡RESPOSTA CORRECTA!", "Has encertat la pregunta en el Repàs Extra.", q.exp, 25, nextQuestion);
+          onSuccess("RESPOSTA CORRECTA!", "Has encertat la pregunta en el Repàs Extra.", q.exp, 25, (xpGained) => {
+            setAccumulatedXp(prev => prev + xpGained);
+            nextQuestion();
+          });
         } else {
           onError("RESPOSTA INCORRECTA", "Aquesta opció no és la vàlida.", q.exp);
         }
@@ -1075,7 +1352,10 @@
 
       const handleSliderSubmit = () => {
         if (sliderVal === q.targetYear) {
-          onSuccess("¡ANY EXACTE!", `En efecte, va succeir l'any ${q.targetYear}.`, q.exp, 25, nextQuestion);
+          onSuccess("ANY EXACTE!", `En efecte, va succeir l'any ${q.targetYear}.`, q.exp, 25, (xpGained) => {
+            setAccumulatedXp(prev => prev + xpGained);
+            nextQuestion();
+          });
         } else {
           onError("ANY INCORRECTE", `T'has desviat. L'any exacte era ${q.targetYear}.`, q.exp);
         }
@@ -1086,7 +1366,10 @@
         const isExact = correctIds.length === multiSelected.length && correctIds.every(id => multiSelected.includes(id));
 
         if (isExact) {
-          onSuccess("¡SELECCIÓ PERFECTA!", "Has identificat totes les característiques correctes.", q.exp, 30, nextQuestion);
+          onSuccess("SELECCIÓ PERFECTA!", "Has identificat totes les característiques correctes.", q.exp, 30, (xpGained) => {
+            setAccumulatedXp(prev => prev + xpGained);
+            nextQuestion();
+          });
         } else {
           onError("SELECCIÓ INCOMPLETA O INCORRECTA", "No has marcat exactament les opcions que pertanyen.", q.exp);
         }
@@ -1102,8 +1385,7 @@
             setSliderVal(nextQ.minYear || 1800);
           }
         } else {
-          onFinish(3);
-          setCurrentView('path');
+          onFinish(3, accumulatedXp, 'Examen Final');
         }
       };
 
@@ -1254,9 +1536,8 @@
         });
 
         if (allCorrect && Object.keys(assigned).length === data.slots.length) {
-          onSuccess("¡ORGANIGRAMA PERFECTE!", "Has col·locat cada personatge en la seva relació històrica exacta.", "Coneixer les relacions de poder és clau per entendre les decisions d'Estat.", 35, () => {
-            onFinish(3);
-            setCurrentView('path');
+          onSuccess("ORGANIGRAMA PERFECTE!", "Has col·locat cada personatge en la seva relació històrica exacta.", "Coneixer les relacions de poder és clau per entendre les decisions d'Estat.", 35, (totalXp) => {
+            onFinish(3, totalXp, 'Xafarderia de Cort');
           });
         } else {
           onError("S'HAN DETECTAT ERRORS", "Revisa les posicions i les relacions de la Cort.", "Alguns personatges no estan assignats al seu rol corresponent.");
@@ -1322,10 +1603,12 @@
     function GameBOE({ chapter, setCurrentView, onSuccess, onError, onFinish }) {
       const [docs, setDocs] = useState([]);
       const [idx, setIdx] = useState(0);
+      const [accumulatedXp, setAccumulatedXp] = useState(0);
 
       useEffect(() => {
         setDocs(window.QuestionBank.getBOE(chapter.id, 2));
         setIdx(0);
+        setAccumulatedXp(0);
       }, [chapter.id]);
 
       if (docs.length === 0) return null;
@@ -1334,12 +1617,13 @@
 
       const handleChoice = (type) => {
         if (type === currentDoc.type) {
-          onSuccess("¡DECRET CLASSIFICAT!", "Has identificat el corrent ideològic del text.", currentDoc.exp, 25, () => {
+          onSuccess("DECRET CLASSIFICAT!", "Has identificat el corrent ideològic del text.", currentDoc.exp, 25, (xpGained) => {
+            const total = accumulatedXp + xpGained;
+            setAccumulatedXp(total);
             if (idx + 1 < docs.length) {
               setIdx(i => i + 1);
             } else {
-              onFinish(3);
-              setCurrentView('path');
+              onFinish(3, total, 'Decrets del BOE');
             }
           });
         } else {
@@ -1426,9 +1710,8 @@
           setSelectedLeft(null);
 
           if (newMatched.length === pairs.length) {
-            onSuccess("¡TOTS ELS CONCEPTES CONECTATS!", "Has aparellat tots els conceptes correctament.", "Molt bé! La relació de termes reforça el coneixement sintètic.", 30, () => {
-              onFinish(3);
-              setCurrentView('path');
+            onSuccess("TOTS ELS CONCEPTES CONECTATS!", "Has aparellat tots els conceptes correctament.", "Molt bé! La relació de termes reforça el coneixement sintètic.", 30, (totalXp) => {
+              onFinish(3, totalXp, 'Conecta Història');
             });
           }
         } else {
@@ -1498,10 +1781,12 @@
     function GameVeritat({ chapter, setCurrentView, onSuccess, onError, onFinish }) {
       const [items, setItems] = useState([]);
       const [idx, setIdx] = useState(0);
+      const [accumulatedXp, setAccumulatedXp] = useState(0);
 
       useEffect(() => {
         setItems(window.QuestionBank.getVeritat(chapter.id, 3));
         setIdx(0);
+        setAccumulatedXp(0);
       }, [chapter.id]);
 
       if (items.length === 0) return null;
@@ -1510,12 +1795,13 @@
 
       const handleAnswer = (userBool) => {
         if (userBool === current.isTrue) {
-          onSuccess("¡VERDICTE ENCERTAT!", userBool ? "És completament cert." : "Efectivament és fals.", current.exp, 20, () => {
+          onSuccess("VERDICTE ENCERTAT!", userBool ? "És completament cert." : "Efectivament és fals.", current.exp, 20, (xpGained) => {
+            const total = accumulatedXp + xpGained;
+            setAccumulatedXp(total);
             if (idx + 1 < items.length) {
               setIdx(i => i + 1);
             } else {
-              onFinish(3);
-              setCurrentView('path');
+              onFinish(3, total, 'Veritat o Mentida');
             }
           });
         } else {
@@ -1582,9 +1868,8 @@
         });
 
         if (allOk && Object.keys(answers).length === data.blanks.length) {
-          onSuccess("¡TEXT COMPLETAT!", "Has omplert tots els mots perduts correctament.", data.exp, 30, () => {
-            onFinish(3);
-            setCurrentView('path');
+          onSuccess("TEXT COMPLETAT!", "Has omplert tots els mots perduts correctament.", data.exp, 30, (totalXp) => {
+            onFinish(3, totalXp, 'El Mot Perdut');
           });
         } else {
           onError("TEXT INCORRECTE", "Alguns mots no encaixen en el context històric.", data.exp);
@@ -1598,7 +1883,7 @@
           <AdBanner728 />
 
           <h2 className="text-3xl font-display font-black text-slate-800 text-center pb-2">
-            Completa l'història
+            Completa la història
           </h2>
 
           <div className="bg-white border-[3px] border-b-[6px] border-slate-200 rounded-[32px] p-8 text-lg sm:text-xl font-bold text-slate-700 leading-relaxed shadow-sm">
@@ -1649,14 +1934,6 @@
         }
         return localStorage.getItem('hl_is_pro') === 'true';
       });
-
-      // Redirigir automàticament a PRO si ja ho va ser abans (o via url)
-      useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('pro') !== 'true' && localStorage.getItem('hl_is_pro') === 'true') {
-          // Si ja era pro prèviament guardat, assegurar url o estat
-        }
-      }, []);
 
       // CARGA DE PROGRESS PERMANENT LOCALSTORAGE
       const [hearts, setHearts] = useState(() => {
@@ -1714,6 +1991,7 @@
       const [showNoLivesModal, setShowNoLivesModal] = useState(false);
       const [cprClicks, setCprClicks] = useState(0);
       const [extraLifeToast, setExtraLifeToast] = useState(false);
+      const [lastResultData, setLastResultData] = useState(null);
       
       // Estado Modal Publicidad
       const [showAdModal, setShowAdModal] = useState(false);
@@ -1732,6 +2010,7 @@
         localStorage.setItem('hl_inventory', JSON.stringify(inventory));
         localStorage.setItem('hl_nodeProgress', JSON.stringify(nodeProgress));
       }, [hearts, xp, gems, streak, selectedChapter, unlockedChapters, inventory, nodeProgress]);
+
 
       // Lógica de cuenta regresiva del anuncio
       useEffect(() => {
@@ -1803,7 +2082,7 @@
         setSheet({
           isOpen: true,
           type: 'error',
-          title: wasShielded ? "¡ESCUT ACTIVAT!" : (title || "¡ERROR HISTÒRIC!"),
+          title: wasShielded ? "ESCUT ACTIVAT!" : (title || "ERROR HISTÒRIC!"),
           message: wasShielded ? "L'escut protector t'ha salvat de perdre una vida." : (message || "Aquesta opció no és correcta."),
           explanation: exp || "Revisa els conceptes de la lliçó.",
           xpEarned: 0,
@@ -1813,7 +2092,6 @@
 
       const triggerSuccess = (title, message, exp, points = 20, callback = null) => {
         playSound('success');
-        triggerConfetti();
 
         let earnedXp = points;
         if (inventory.doubleXp) {
@@ -1838,13 +2116,13 @@
         setSheet({
           isOpen: true,
           type: 'success',
-          title: title || "¡MOLT BÉ!",
+          title: title || "MOLT BÉ!",
           message: message || "Has respost exactament com un historiador.",
-          explanation: (inventory.doubleXp ? "⚡ ¡2x XP Aplicat! " : "") + (exp || ""),
+          explanation: (inventory.doubleXp ? "⚡ 2x XP Aplicat! " : "") + (exp || ""),
           xpEarned: earnedXp,
           onContinue: () => {
             setSheet(s => ({ ...s, isOpen: false }));
-            if (callback) callback();
+            if (callback) callback(earnedXp);
           }
         });
       };
@@ -1882,6 +2160,12 @@
           setExtraLifeToast(true);
           setTimeout(() => setExtraLifeToast(false), 2500);
         });
+      };
+
+      const handleGameFinish = (nodeKey, stars, xpEarned, moduleName) => {
+        completeNode(nodeKey, stars);
+        setLastResultData({ stars, xpEarned, moduleName, chapterId: selectedChapter });
+        setCurrentView('results');
       };
 
       const completeNode = (nodeKey, stars) => {
@@ -1923,11 +2207,11 @@
 
                 {/* Indicadors Gamificats (Vides, Gemes, Ratxa) estètica limpia Duolingo */}
                 <div className="flex items-center gap-3 sm:gap-5 font-display font-black text-base">
-                  
+
                   {/* BOTIGA ICON */}
                   <button 
                     onClick={() => { playSound('pop'); setCurrentView('shop'); }}
-                    className="text-slate-400 hover:text-slate-600 transition-colors text-2xl sm:hidden"
+                    className="text-slate-400 hover:text-slate-600 transition-colors text-2xl sm:hidden ml-2"
                   >
                     <i className="fa-solid fa-store"></i>
                   </button>
@@ -1938,6 +2222,22 @@
                   >
                     <i className="fa-solid fa-store text-xl"></i>
                     <span>Botiga</span>
+                  </button>
+
+                  {/* PERFIL / ESTATS ICON */}
+                  <button 
+                    onClick={() => { playSound('pop'); setCurrentView('profile'); }}
+                    className="text-slate-400 hover:text-slate-600 transition-colors text-2xl sm:hidden ml-2"
+                  >
+                    <i className="fa-solid fa-user"></i>
+                  </button>
+
+                  <button 
+                    onClick={() => { playSound('pop'); setCurrentView('profile'); }}
+                    className="hidden sm:flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors uppercase text-xs tracking-wider ml-4"
+                  >
+                    <i className="fa-solid fa-user text-xl"></i>
+                    <span>Perfil</span>
                   </button>
 
                   {/* RATXA */}
@@ -2006,29 +2306,49 @@
                   startAd={startAd}
                 />
               )}
+              {currentView === 'profile' && (
+                <ProfileView 
+                  key="profile"
+                  xp={xp}
+                  gems={gems}
+                  streak={streak}
+                  hearts={hearts}
+                  nodeProgress={nodeProgress}
+                  setCurrentView={setCurrentView}
+                />
+              )}
+              {currentView === 'results' && lastResultData && (
+                <ResultsView
+                  key="results"
+                  resultData={lastResultData}
+                  setCurrentView={setCurrentView}
+                  xp={xp}
+                  gems={gems}
+                />
+              )}
               {currentView === 'timeline' && (
-                <GameTimeline chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_timeline`, s)} />
+                <GameTimeline chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_timeline`, s, xp, name)} />
               )}
               {currentView === 'kahoot' && (
-                <GameKahoot chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_kahoot`, s)} inventory={inventory} setInventory={setInventory} />
+                <GameKahoot chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_kahoot`, s, xp, name)} inventory={inventory} setInventory={setInventory} />
               )}
               {currentView === 'extraKahoot' && (
-                <GameExtraKahoot chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_extraKahoot`, s)} inventory={inventory} setInventory={setInventory} />
+                <GameExtraKahoot chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_extraKahoot`, s, xp, name)} inventory={inventory} setInventory={setInventory} />
               )}
               {currentView === 'xafarderia' && (
-                <GameXafarderia chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_xafarderia`, s)} />
+                <GameXafarderia chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_xafarderia`, s, xp, name)} />
               )}
               {currentView === 'boe' && (
-                <GameBOE chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_boe`, s)} />
+                <GameBOE chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_boe`, s, xp, name)} />
               )}
               {currentView === 'conecta' && (
-                <GameConecta chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_conecta`, s)} />
+                <GameConecta chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_conecta`, s, xp, name)} />
               )}
               {currentView === 'veritat' && (
-                <GameVeritat chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_veritat`, s)} />
+                <GameVeritat chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_veritat`, s, xp, name)} />
               )}
               {currentView === 'motPerdut' && (
-                <GameMotPerdut chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s) => completeNode(`c${selectedChapter}_motPerdut`, s)} />
+                <GameMotPerdut chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_motPerdut`, s, xp, name)} />
               )}
             </AnimatePresence>
           </main>
@@ -2089,88 +2409,66 @@
           <AnimatePresence>
             {showCprModal && isPro && (
               <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 text-white text-center"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="fixed inset-0 z-50 bg-slate-900/90 flex flex-col items-center justify-center p-6 text-white"
               >
-                <div className="max-w-md w-full bg-slate-800 border-[6px] border-duoRed rounded-[32px] p-8 sm:p-10 space-y-8 shadow-2xl relative overflow-hidden">
-                  <div className="space-y-3">
-                    <span className="bg-duoRed text-white text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-red-400">
-                      ¡ALERTA DE CORATGE!
-                    </span>
-                    <h2 className="text-3xl sm:text-4xl font-display font-black leading-tight">
-                      REANIMACIÓ CARDÍACA
-                    </h2>
-                    <p className="text-sm text-slate-300 font-bold">
-                      Has perdut totes les vides! Toca el cor 10 vegades ràpidament per reanimar-te!
-                    </p>
-                  </div>
-
-                  <div className="py-6">
-                    <button
+                <div className="text-center space-y-6 max-w-sm">
+                  <div className="w-32 h-32 mx-auto relative group">
+                    <div className="absolute inset-0 bg-duoRed rounded-full opacity-20 animate-ping"></div>
+                    <button 
                       onClick={handleCprClick}
-                      className="w-40 h-40 bg-duoRed text-white rounded-full mx-auto flex flex-col items-center justify-center shadow-btn-red active:translate-y-2 active:shadow-none transition-all animate-pulse-heart border-[6px] border-white/20"
+                      className="relative z-10 w-full h-full bg-duoRed rounded-full shadow-btn-red flex items-center justify-center text-6xl active:translate-y-2 active:shadow-none transition-all hover:scale-105"
                     >
-                      <i className="fa-solid fa-heart-pulse text-6xl"></i>
-                      <span className="text-xl font-black mt-2">{cprClicks}/10</span>
+                      ❤️
                     </button>
                   </div>
-
-                  <div className="w-full bg-slate-700 h-4 rounded-full overflow-hidden border-2 border-slate-600">
+                  <div>
+                    <h2 className="text-3xl font-display font-black mb-2">Reanimació!</h2>
+                    <p className="text-slate-300 font-bold">Fes clic ràpid per salvar la teva vida. (Usuari PRO)</p>
+                  </div>
+                  <div className="w-full bg-slate-800 h-6 rounded-full overflow-hidden border-2 border-slate-700 relative">
                     <div 
-                      className="bg-duoRed h-full transition-all duration-200"
+                      className="bg-gradient-to-r from-duoRed to-duoYellow h-full transition-all duration-300 rounded-full"
                       style={{ width: `${(cprClicks / 10) * 100}%` }}
                     ></div>
+                    <div className="absolute inset-0 flex items-center justify-center text-xs font-black text-white mix-blend-overlay">
+                      {cprClicks} / 10
+                    </div>
                   </div>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* MODAL SENSE VIDES (Usuaris No-PRO: Opció comprar, anuncio o esperar) */}
+          {/* PANTALLA NO VIDES (Gratis) */}
           <AnimatePresence>
             {showNoLivesModal && !isPro && (
               <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100] bg-slate-900/95 backdrop-blur-md flex items-center justify-center p-4 text-white text-center"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="fixed inset-0 z-50 bg-slate-900/90 flex flex-col items-center justify-center p-6"
               >
-                <div className="max-w-md w-full bg-slate-800 border-[6px] border-duoRed rounded-[32px] p-8 sm:p-10 space-y-8 shadow-2xl relative overflow-hidden">
-                  <div className="w-24 h-24 bg-red-500/20 text-duoRed rounded-[24px] flex items-center justify-center text-5xl mx-auto border-4 border-duoRed/30 animate-float-duo">
-                    <i className="fa-solid fa-heart-crack animate-pulse"></i>
-                  </div>
-                  <div className="space-y-3">
-                    <span className="bg-duoRed text-white text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-red-400">
-                      ¡SENSE VIDES!
-                    </span>
-                    <h2 className="text-3xl sm:text-4xl font-display font-black">
-                      ESTÀS ESGOTAT
-                    </h2>
-                    <p className="text-sm text-slate-300 font-bold leading-relaxed">
-                      No et queden vides. Recupera-les mirant un anunci ràpid o visitant la botiga.
-                    </p>
-                  </div>
-
-                  <div className="space-y-4 pt-4">
-                    <button
+                <div className="bg-white rounded-[32px] p-8 max-w-sm w-full text-center space-y-6 shadow-2xl border-4 border-slate-200 relative overflow-hidden">
+                  <div className="text-7xl mb-4 relative z-10 drop-shadow-md">💔</div>
+                  <h2 className="text-3xl font-display font-black text-slate-800 relative z-10">T'has quedat sense vides</h2>
+                  <p className="text-slate-500 font-bold text-lg relative z-10">
+                    Pots recuperar vides esperant o aconseguint-les ara mateix.
+                  </p>
+                  <div className="space-y-3 relative z-10">
+                    <button 
                       onClick={handleRecoverLifeWithAd}
-                      className="w-full bg-duoPurple text-white font-display font-black py-4 rounded-[20px] shadow-btn-purple border-x-2 border-t-2 border-b-[6px] border-black/10 duo-pressable flex items-center justify-center gap-3 text-lg"
+                      className="w-full bg-duoEmerald text-white font-display font-black text-xl py-4 rounded-[20px] shadow-btn-emerald active:translate-y-1 transition-transform border-x-2 border-t-2 border-b-[6px] border-black/10 flex items-center justify-center gap-2"
                     >
-                      <i className="fa-solid fa-play text-xl"></i>
-                      Rebre 1 vida (Anunci)
+                      <i className="fa-solid fa-play"></i> Veure Anunci (+1 ❤️)
                     </button>
-                    
-                    <button
-                      onClick={() => {
-                        setShowNoLivesModal(false);
-                        setCurrentView('shop');
-                      }}
-                      className="w-full bg-white text-duoEmeraldDark font-display font-black py-4 rounded-[20px] shadow-sm border-[3px] border-slate-200 border-b-[6px] duo-pressable flex items-center justify-center gap-3 text-lg hover:bg-slate-50"
+                    <button 
+                      onClick={() => { setShowNoLivesModal(false); setCurrentView('path'); }}
+                      className="w-full bg-slate-100 text-slate-500 font-display font-black text-xl py-4 rounded-[20px] active:translate-y-1 transition-transform border-x-2 border-t-2 border-b-[6px] border-slate-300"
                     >
-                      <i className="fa-solid fa-store text-xl"></i>
-                      Obrir la Botiga
+                      Sortir
                     </button>
                   </div>
                 </div>
@@ -2178,59 +2476,65 @@
             )}
           </AnimatePresence>
 
-          {/* BOTTOM SHEET FEEDBACK MODAL (TOTALMENT DUOLINGO) */}
+          {/* BOTTOM SHEET MODAL (DUOLINGO STYLE) */}
           <AnimatePresence>
             {sheet.isOpen && (
-              <motion.div 
-                initial={{ opacity: 0, y: 200 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 200 }}
-                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                className={`fixed bottom-0 left-0 right-0 z-[150] p-6 sm:p-10 rounded-t-[32px] sm:rounded-t-[40px] border-t-2 shadow-[0_-20px_60px_rgba(0,0,0,0.15)] flex justify-center ${
-                  sheet.type === 'success' ? 'bg-duoBgSuccess text-duoTextSuccess border-[#b2ec7e]' : 'bg-duoBgError text-duoTextError border-[#ffb3b8]'
-                }`}
-              >
-                <div className="w-full max-w-4xl flex flex-col md:flex-row md:items-center justify-between gap-6">
-                  
-                  <div className="flex flex-col gap-3 flex-1">
-                    <div className="flex items-center gap-4">
-                      <div className={`w-14 h-14 rounded-[20px] flex items-center justify-center text-3xl font-black text-white shadow-sm border border-white/30 ${
-                        sheet.type === 'success' ? 'bg-duoGreen' : 'bg-duoRed'
+              <>
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-slate-900/20 z-40"
+                  onClick={() => sheet.onContinue && sheet.onContinue()}
+                />
+                <motion.div 
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                  className={`fixed bottom-0 left-0 right-0 z-50 p-6 sm:p-8 rounded-t-[32px] border-t-2 ${
+                    sheet.type === 'success' ? 'bg-duoBgSuccess border-duoGreen' : 'bg-duoBgError border-duoRed'
+                  }`}
+                >
+                  <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                    <div className="flex items-start gap-4">
+                      <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-3xl shrink-0 bg-white shadow-sm border-2 ${
+                        sheet.type === 'success' ? 'text-duoGreen border-duoBgSuccess' : 'text-duoRed border-duoBgError'
                       }`}>
                         <i className={`fa-solid ${sheet.type === 'success' ? 'fa-check' : 'fa-xmark'}`}></i>
                       </div>
-                      <div>
-                        <h3 className="text-2xl sm:text-3xl font-display font-black tracking-wide drop-shadow-sm">{sheet.title}</h3>
-                        {sheet.xpEarned > 0 && (
-                          <span className="inline-block mt-1 bg-white/40 text-current font-display font-black text-xs px-3 py-1 rounded-full border border-current/20">
-                            +{sheet.xpEarned} XP
-                          </span>
-                        )}
+                      <div className="space-y-1 pt-1">
+                        <h3 className={`font-display font-black text-2xl ${
+                          sheet.type === 'success' ? 'text-duoTextSuccess' : 'text-duoTextError'
+                        }`}>
+                          {sheet.title}
+                        </h3>
+                        <p className={`text-base sm:text-lg font-bold ${
+                          sheet.type === 'success' ? 'text-duoTextSuccess' : 'text-duoTextError'
+                        } opacity-90`}>
+                          {sheet.message}
+                        </p>
+                        <p className={`text-sm font-bold ${
+                          sheet.type === 'success' ? 'text-duoTextSuccess' : 'text-duoTextError'
+                        } opacity-75 mt-1`}>
+                          {sheet.explanation}
+                        </p>
                       </div>
                     </div>
-                    
-                    <p className="font-bold text-base sm:text-lg opacity-90">{sheet.message}</p>
-                    
-                    {sheet.explanation && (
-                      <div className={`p-4 rounded-[16px] font-bold text-sm bg-white/40 border border-current/20`}>
-                        {sheet.explanation}
-                      </div>
-                    )}
-                  </div>
 
-                  <div className="w-full md:w-auto md:min-w-[250px] shrink-0 mt-2 md:mt-0">
-                    <button
+                    <button 
                       onClick={sheet.onContinue}
-                      className={`w-full font-display font-black text-xl py-4 rounded-[20px] text-white transition-all duo-pressable border-x-2 border-t-2 border-b-[6px] border-black/10 ${
-                        sheet.type === 'success' ? 'bg-duoGreen hover:bg-duoGreenDark shadow-btn-green' : 'bg-duoRed hover:bg-duoRedDark shadow-btn-red'
+                      className={`w-full sm:w-auto min-w-[200px] font-display font-black text-xl py-4 px-8 rounded-[24px] shadow-sm active:translate-y-1 transition-transform border-x-2 border-t-2 border-b-[6px] border-black/10 ${
+                        sheet.type === 'success' 
+                          ? 'bg-duoGreen text-white shadow-btn-green hover:bg-duoGreenDark' 
+                          : 'bg-duoRed text-white shadow-btn-red hover:bg-duoRedDark'
                       }`}
                     >
-                      CONTINUAR
+                      Continuar
                     </button>
                   </div>
-
-                </div>
-              </motion.div>
+                </motion.div>
+              </>
             )}
           </AnimatePresence>
 
@@ -2238,9 +2542,21 @@
       );
     }
 
-    // Renderitzat React inicial
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
+  </script>
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').then(registration => {
+          console.log('SW registered: ', registration);
+        }).catch(registrationError => {
+          console.log('SW registration failed: ', registrationError);
+        });
+      });
+    }
   </script>
 </body>
 </html>
