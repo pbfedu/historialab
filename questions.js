@@ -8,7 +8,7 @@ const CHAPTER_DATA = {
   id: 1,
   title: "Capítol 1: El segle XVIII – El segle de les Llums",
   desc: "Absolutisme borbònic, Decrets de Nova Planta, Despotisme Il·lustrat i la Il·lustració",
-  color: "bg-duoYellow",
+  color: "bg-yellow-500",
   available: true,
   timeline: [
     { id: "t0_1", text: "Guerra de Successió Espanyola", year: "???", icon: "fa-shield-halved", exp: "Conflicte internacional i civil després de la mort de Carles II sense descendència [1, 2]." },
@@ -552,6 +552,564 @@ const CHAPTER_DATA = {
       { id: "m3_2", answer: "ferroviària", options: ["ferroviària", "agrària", "colonial"] }
     ],
     exp: "La desamortització civil de Madoz (1855) va privatitzar terrenys comunals per finançar la construcció del ferrocarril a Espanya."
+  }
+},
+4: {
+  id: 4,
+  title: "Capítol 4: El sistema polític de la Restauració Borbònica (1875-1898)",
+  desc: "Sistema Canovista, Constitució de 1876, Bipartidisme, Turnisme, Caciquisme i Forces d'Oposició",
+  color: "bg-amber-600",
+  available: true,
+  timeline: [
+    { id: "t4_1", text: "Manifest de Sandhurst i cop de Martínez Campos", year: "1874", icon: "fa-scroll", exp: "Alfons XII promet una monarquia constitucional i d'ordre; el pronunciament de Sagunt restaura la dinastia borbònica." },
+    { id: "t4_2", text: "Constitució de 1876 i fi de la 3a Guerra Carlina", year: "1876", icon: "fa-building-columns", exp: "Text doctrinari de Cánovas amb sobirania compartida; paral·lelament es derrota militarment el carlisme." },
+    { id: "t4_3", text: "Llei Electoral censatària i Concerts Econòmics bascos", year: "1878", icon: "fa-file-signature", exp: "Aprovació del sufragi restrictiu i concessió d'autonomia fiscal al País Basc després de l'abolició foral." },
+    { id: "t4_4", text: "Fundació del PSOE per Pablo Iglesias", year: "1879", icon: "fa-users", exp: "Naixement del Partit Socialista Obrer Espanyol a Madrid com a organització de classe." },
+    { id: "t4_5", text: "Mort d'Alfons XII i Pacte del Pardo", year: "1885", icon: "fa-crown", exp: "Acord entre Cánovas i Sagasta per consolidar el torn pacífic i protegir la regència de Maria Cristina." },
+    { id: "t4_6", text: "Llei d'Associacions i legalització de la UGT", year: "1887-1888", icon: "fa-handshake", exp: "Permet la legalització dels sindicats i partits obrers; escissió integrista del carlisme (Partido Católico Nacional)." },
+    { id: "t4_7", text: "Aprovació del Sufragi Universal Masculí", year: "1890", icon: "fa-check-to-slot", exp: "El govern liberal de Sagasta aprova el dret a vot masculí, tot i que el caciquisme en neutralitza l'eficàcia." },
+    { id: "t4_8", text: "Fundació de la Unió Republicana", year: "1893", icon: "fa-landmark", exp: "Coalició de les forces republicanes encapçalada per Nicolás Salmerón que aconsegueix representació parlamentària." }
+  ],
+  kahoot: [
+    {
+      type: 'classic',
+      question: "Qui va ser el principal dissenyador i arquitecte del sistema polític de la Restauració Borbònica?",
+      options: [
+        { text: "Antonio Cánovas del Castillo", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Práxedes Mateo Sagasta", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Emilio Castelar", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Manuel Ruiz Zorrilla", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "Cánovas del Castillo va dissenyar la Constitució de 1876 i el sistema de bipartidisme basat en el model britànic."
+    },
+    {
+      type: 'slider',
+      question: "En quin any es va promulgar la Constitució doctrinària que va establir la sobirania compartida entre el Rei i les Corts?",
+      minYear: 1865, maxYear: 1890, targetYear: 1876,
+      exp: "La Constitució de 1876 va establir les bases legals del règim canovista, mantenint-se en vigor fins al 1923."
+    },
+    {
+      type: 'multi',
+      question: "Quines eren característiques doctrinals de la Constitució de 1876?",
+      options: [
+        { id: 'k4_1', text: "Sobirania compartida entre el Rei i les Corts", correct: true },
+        { id: 'k4_2', text: "Confessionalitat catòlica de l'Estat amb tolerància privada", correct: true },
+        { id: 'k4_3', text: "Corts bicamerals (Congrés i Senat)", correct: true },
+        { id: 'k4_4', text: "Sufragi universal femení", correct: false }
+      ],
+      exp: "La Constitució de 1876 negava la sobirania nacional pura, atorgava ampli poder al Rei i establia un Estat confessional catòlic."
+    },
+    {
+      type: 'classic',
+      question: "Com s'anomenava el procés mitjançant el qual el Ministeri de Governació assignava prèviament les llistes de candidats que havien de guanyar les eleccions?",
+      options: [
+        { text: "Encasellat", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Caciquisme", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Tupinada / Pucherazo", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Civilisme", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "L'encasellat consistia a 'encaixar' els candidats afins al govern que havia de guanyar les eleccions des de Madrid."
+    },
+    {
+      type: 'slider',
+      question: "En quin any van acordar Cánovas i Sagasta el Pacte del Pardo per protegir la regència de Maria Cristina d'Habsburg?",
+      minYear: 1875, maxYear: 1895, targetYear: 1885,
+      exp: "A la mort d'Alfons XII el 1885, el Pacte del Pardo va garantir la continuïtat del règim i el traspàs pacífic del poder al Partit Liberal."
+    },
+    {
+      type: 'classic',
+      question: "Quin líder del Partit Liberal-Fusionista va aprovar el restabliment del Sufragi Universal masculí l'any 1890?",
+      options: [
+        { text: "Práxedes Mateo Sagasta", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Antonio Cánovas del Castillo", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Francisco Silvela", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Emilio Castelar", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "Sagasta va introduir el sufragi universal masculí el 1890, tot i que el caciquisme en va limitar la capacitat de canvi real."
+    },
+    {
+      type: 'multi',
+      question: "Quines pràctiques eren habituals en la tupinada o 'pucherazo' per adulterar els resultats electorals?",
+      options: [
+        { id: 'k4_5', text: "Falsificació del cens incloent electors difunts", correct: true },
+        { id: 'k4_6', text: "Coacció, amenaces i compra de vots als districtes rurals", correct: true },
+        { id: 'k4_7', text: "Manipulació i canvi d'urnes o actes electorals", correct: true },
+        { id: 'k4_8', text: "Control per observadors internacionals", correct: false }
+      ],
+      exp: "La tupinada o pucherazo abastava les trampes utilitzades pels cacics i governadors civils per assegurar l'elecció del candidat establert."
+    },
+    {
+      type: 'classic',
+      question: "Quina organització política socialista va ser fundada a Madrid l'any 1879 per Pablo Iglesias?",
+      options: [
+        { text: "PSOE (Partit Socialista Obrer Espanyol)", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "UGT (Unió General de Treballadors)", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "FTRE (Federació de Treballadors de la Regió Espanyola)", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Partit Republicà Federal", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "El PSOE es va fundar clandestinament el 1879 com a partit d'orientació marxista en defensa de la classe treballadora."
+    },
+    {
+      type: 'slider',
+      question: "En quin any es va aprovar la Llei d'Associacions que va permetre la legalització dels sindicats i partits obrers?",
+      minYear: 1880, maxYear: 1895, targetYear: 1887,
+      exp: "La Llei d'Associacions de 1887 aprovada pels liberals va permetre l'activitat legal d'organitzacions com la UGT (1888)."
+    },
+    {
+      type: 'classic',
+      question: "Com es coneixia el mecanisme polític d'alternança pacífica en el govern entre el Partit Conservador i el Partit Liberal?",
+      options: [
+        { text: "Torn pacífic", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Pacte Federal", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Bipartidisme obert", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Regeneració parlamentària", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "El torn pacífic evitava la necessitat de pronunciaments militars fent alternar conservadors i liberals en el poder."
+    },
+    {
+      type: 'multi',
+      question: "Quines forces polítiques es trobaven marginades o excloses del sistema dinàstic de la Restauració?",
+      options: [
+        { id: 'k4_9', text: "Republicans (federals, unitaris, radicals)", correct: true },
+        { id: 'k4_10', text: "Carlins i integristes", correct: true },
+        { id: 'k4_11', text: "Socialistes i anarquistes", correct: true },
+        { id: 'k4_12', text: "Partido Liberal-Conservador", correct: false }
+      ],
+      exp: "Tots els grups fora dels dos partits dinàstics (conservadors i liberals) quedaven marginats del poder."
+    },
+    {
+      type: 'classic',
+      question: "Quin dirigent del Partit Republicà Possibilista va acceptar participar en les institucions del règim de la Restauració?",
+      options: [
+        { text: "Emilio Castelar", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Francesc Pi i Margall", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Nicolás Salmerón", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Manuel Ruiz Zorrilla", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "Emilio Castelar va liderar els possibilistes, defensant l'entrada a les institucions de la monarquia borbònica."
+    }
+  ],
+  xafarderia: {
+    id: "restauracio",
+    title: "L'Oligarquia i el Turnisme de la Restauració",
+    desc: "Organitza els actors del sistema polític dissenyat per Cánovas del Castillo i el poder local.",
+    center: "Alfons XII", centerRole: "Rei 'El Pacificador' (1875-1885)", icon: "fa-crown", color: "bg-amber-600 text-white",
+    slots: [
+      { id: "s1", label: "LÍDER CONSERVADOR", relation: "Arquitecte del sistema, el civilisme i la Constitució de 1876", correct: "Cánovas del Castillo", icon: "fa-shield" },
+      { id: "s2", label: "LÍDER LIBERAL", relation: "Pacta el torn pacífic i aprova el Sufragi Universal el 1890", correct: "Mateo Sagasta", icon: "fa-handshake" },
+      { id: "s3", label: "REINA REGENT", relation: "Assumeix la regència a la mort del rei (1885-1902)", correct: "Maria Cristina d'Habsburg", icon: "fa-gem" },
+      { id: "s4", label: "PODER LOCAL RURAL", relation: "Controla i coacciona el vot als districtes agraris", correct: "El Cacique", icon: "fa-user-tie" }
+    ],
+    chars: [
+      { name: "Cánovas del Castillo", role: "Partido Conservador" },
+      { name: "Mateo Sagasta", role: "Partido Liberal" },
+      { name: "Maria Cristina d'Habsburg", role: "Reina Regent" },
+      { name: "El Cacique", role: "Poder Local Rural" }
+    ]
+  },
+  boe: [
+    { id: "b4_1", text: "«En virtut de l'espontània i solemne abdicació de la meva augusta mare... jo sóc l'únic representant del dret monàrquic a Espanya. Només el restabliment de la monarquia constitucional pot posar fi a l'opressió i incertesa.»", type: "moderat", sub: "Manifest de Sandhurst (Alfons de Borbó, 1874)", exp: "Manifest on Alfons XII es presenta com un monarca liberal, constitucional i d'ordre." },
+    { id: "b4_2", text: "«La potestat de fer les lleis resideix en les Corts amb el Rei. Les Corts es componen de dos Cossos Colegisladors: el Senat i el Congrés dels Diputats. La religió Catòlica és la de l'Estat.»", type: "moderat", sub: "Constitució de 1876", exp: "Text fonamental del liberalisme doctrinari basat en la sobirania compartida." },
+    { id: "b4_3", text: "«Vengo en admitir la dimisión de D. Antonio Cánovas del Castillo... y vengo en nombrar Presidente de mi Consejo de Ministros a D. Práxedes Mateo Sagasta.»", type: "moderat", sub: "Gaceta de Madrid - Pacte del Pardo (1885)", exp: "Decret oficial que exemplifica el funcionament del torn pacífic entre conservadors i liberals." },
+    { id: "b4_4", text: "«Entre nosaltres regna la farsa en tota la seva nuesa... Només hi ha un sol elector: el ministre de Governació. Ell prepara, executa i consuma les eleccions... per mitjà de la resurrecció dels morts.»", type: "progressista", sub: "La Campana de Gràcia (Crítica al frau electoral)", exp: "Denúncia de les pràctiques d'adulteració electoral, l'encasellat i el pucherazo." },
+    { id: "b4_5", text: "«Defensa del catolicisme, del furisme i de l'autoritat del pretendent carlí, acceptant el nou ordre social però oposant-se a la democràcia liberal.»", type: "absolutisme", sub: "Acta de Loredan - Reorganització carlina (1886)", exp: "Programa redactat per Vázquez de Mella per adaptar el carlisme com a partit d'oposició." }
+  ],
+  conecta: [
+    { id: "c4_1", left: "Encasellat", right: "Assignació prèvia dels candidats a diputat des del Ministeri de Governació", exp: "Llistes de candidats afins al govern confeccionades abans de la votació." },
+    { id: "c4_2", left: "Tupinada / Pucherazo", right: "Conjunt de trampes electorals per adulterar el resultat a les urnes", exp: "Incloïa la manipulació d'urnes, la coacció i l'ús de vots de persones mortes." },
+    { id: "c4_3", left: "Concerts Econòmics (1878)", right: "Autonomia fiscal atorgada a les províncies basques després de l'abolició foral", exp: "Sistema de pagament anual fix a l'administració central mantingut després de 1876." },
+    { id: "c4_4", left: "Pacte del Pardo (1885)", right: "Acord d'alternança pactada entre Cánovas i Sagasta a la mort d'Alfons XII", exp: "Va protegir la regència de Maria Cristina i la continuïtat del règim." }
+  ],
+  veritat: [
+    { id: "v4_1", statement: "La Constitució de 1876 establia la sobirania nacional absoluta i la separació estricta entre Església i Estat.", isTrue: false, exp: "Fals! Establia la sobirania compartida (Rei/Corts) i la confessionalitat catòlica de l'Estat." },
+    { id: "v4_2", statement: "En el sistema del turnisme, el rei cridava l'oposició a formar govern i posteriorment es convocaven eleccions per assegurar-ne la majoria.", isTrue: true, exp: "Veritat! El govern fabricava la seva pròpia majoria parlamentària mitjançant l'encasellat i el frau electoral." },
+    { id: "v4_3", statement: "El sufragi universal masculí es va restablir l'any 1890 sota el govern liberal de Sagasta.", isTrue: true, exp: "Veritat! Aprovat el 1890, tot i que el caciquisme en limità l'eficàcia democratitzadora." },
+    { id: "v4_4", statement: "Després de la derrota de 1876, el carlisme va desaparèixer completament de la vida política espanyola.", isTrue: false, exp: "Fals! Es va reorganitzar com a partit d'oposició (Partit Tradicionalista) i va patir escissions com la del Partido Católico Nacional de Nocedal." },
+    { id: "v4_5", statement: "El Partit Socialista Obrer Espanyol (PSOE) va ser fundat per Pablo Iglesias l'any 1879 a Madrid.", isTrue: true, exp: "Veritat! Fundat el 1879 com a partit de classe d'orientació marxista." },
+    { id: "v4_6", statement: "El caciquisme exercia la seva principal influència en els grans nuclis urbans industrialitzats.", isTrue: false, exp: "Fals! S'exercia principalment en els districtes rurals i agraris, molt més fàcils de manipular." },
+    { id: "v4_7", statement: "La Llei d'Associacions de 1887 va permetre la legalització de sindicats i organitzacions obreres com la UGT.", isTrue: true, exp: "Veritat! Va permetre el desenvolupament legal del moviment obrer." },
+    { id: "v4_8", statement: "Cánovas del Castillo buscava evitar l'intervencionisme militar (pronunciaments) establint la supremacia del poder civil.", isTrue: true, exp: "Veritat! El civilisme era un dels pilars fonamentals del disseny canovista." }
+  ],
+  motPerdut: {
+    title: "El Bipartidisme i l'Alternança Pacífica",
+    text: "El sistema canovista es basava en el torn pacífic entre el Partit Conservador i el Partit ___, garantit mitjançant l'___ des del Ministeri de Governació.",
+    blanks: [
+      { id: "m4_1", answer: "Liberal", options: ["Liberal", "Carlista", "Republicà"] },
+      { id: "m4_2", answer: "encasellat", options: ["encasellat", "sufragi lliure", "pronunciament"] }
+    ],
+    exp: "L'encasellat i el pucherazo o tupinada garantien l'alternança establerta entre els dos partits dinàstics."
+  }
+},
+5: {
+  id: 5,
+  title: "Capítol 5: La Guerra d'Ultramar (1868-1898)",
+  desc: "Insurreccions a Cuba i Filipines, la resposta espanyola, les quintes, la intervenció dels EUA i el conflicte bélic",
+  color: "bg-blue-800",
+  available: true,
+  timeline: [
+    { id: "t5_1", text: "Guerra dels Deu Anys i Pau de Zanjón", year: "1868-1878", icon: "fa-shield-halved", exp: "Primer gran conflicte independentista a Cuba; es tanca amb la promesa no complerta d'autonomia i amnistia." },
+    { id: "t5_2", text: "La Guerra Chiquita", year: "1879", icon: "fa-fire", exp: "Nou intent d'insurrecció cubana frustrat ràpidament per la manca d'armament i suport." },
+    { id: "t5_3", text: "Abolició definitiva de l'esclavitud a Cuba", year: "1886", icon: "fa-handshake-angle", exp: "El govern liberal de Sagasta decreta la fi de l'esclavitud a l'illa, mesura retardada per la pressió dels latifundistes." },
+    { id: "t5_4", text: "Aranzel Cánovas i creixement de la tensió amb els EUA", year: "1891", icon: "fa-coins", exp: "L'increment de tarifes aranzelàries als productes no peninsulars perjudica el comerç entre Cuba i els EUA." },
+    { id: "t5_5", text: "Fundació de la Liga Filipina i del Partido Revolucionario Cubano", year: "1892-1893", icon: "fa-users", exp: "José Rizal organitza el moviment reformista filipí i José Martí encapçala l'independentisme cubà." },
+    { id: "t5_6", text: "Inici del 'Grito de Baire' i aixecament del Katipunan", year: "1895-1896", icon: "fa-burst", exp: "Comença la darrera Guerra d'Independència a Cuba i la rebel·lió a Filipines; execució de José Rizal el 1896." },
+    { id: "t5_7", text: "Politica de 'Reconcentració' de Weyler i Autonomia de 1897", year: "1896-1897", icon: "fa-tent-arrow-down-to-line", exp: "Dura repressió de Weyler aïllant camperols; el 1897 el general Blanco decreta tardanament l'autonomia de Cuba." },
+    { id: "t5_8", text: "Explosió de l'USS Maine i derrotes de Cavite i Santiago", year: "1898", icon: "fa-ship", exp: "L'explosió del cuirassat americà a l'Havana actua de pretext per a la intervenció dels EUA i la desfeta militar espanyola." }
+  ],
+  kahoot: [
+    {
+      type: 'classic',
+      question: "Quin tractat signat el 1878 va posar fi a la Guerra dels Deu Anys a Cuba prometent amnistia, representació a les Corts i reformes polítiques?",
+      options: [
+        { text: "Pau de Zanjón", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Tractat de París", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Conveni de Bergara", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Pau de Basilea", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "La Pau de Zanjón (1878) va incloure la promesa d'autonomia i la fi de l'esclavitud, tot i que l'incompliment d'aquestes reformes va mantenir el descontentament."
+    },
+    {
+      type: 'slider',
+      question: "En quin any va fundar José Martí el 'Partido Revolucionario Cubano' per organitzar la lluita per la independència?",
+      minYear: 1885, maxYear: 1898, targetYear: 1893,
+      exp: "José Martí va fundar el Partido Revolucionario Cubano el 1893 per unificar els diferents cabdills i aconseguir el reconeixement exterior."
+    },
+    {
+      type: 'multi',
+      question: "Quines eren les principals reivindicacions del 'Partido Autonomista' crioll a Cuba després de 1878?",
+      options: [
+        { id: 'k5_1', text: "Autonomia política i administrativa per a l'illa", correct: true },
+        { id: 'k5_2', text: "Llibertat de comerç i reformes econòmiques", correct: true },
+        { id: 'k5_3', text: "Representació parlamentària a les Corts espanyoles", correct: true },
+        { id: 'k5_4', text: "Manteniment estricte de l'esclavitud i del proteccionisme", correct: false }
+      ],
+      exp: "El Partido Autonomista (format per criolls) demanava autonomia i llibertat comercial, enfront de la Unión Constitucional (peninsulars latifundistes)."
+    },
+    {
+      type: 'classic',
+      question: "Quina mesura econòmica aprovada pel govern espanyol el 1891 va agreujar el conflicte en perjudicar les exportacions de sucre cubà als EUA?",
+      options: [
+        { text: "Aranzel Cánovas (pujada de tarifes aranzelàries)", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Llei de Desamortització de Madoz", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Supressió del Concordat", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Impost del Tancament de Caixes", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "L'aranzel de 1891 impedia la lliure entrada de productes nord-americans a Cuba, provocation la protesta del president McKinley i l'amenaça de tancar el mercat al sucre cubà."
+    },
+    {
+      type: 'slider',
+      question: "En quin any va tenir lloc el 'Grito de Baire', l'aixecament generalitzat que va donar inici a la darrera Guerra d'Independència cubana?",
+      minYear: 1888, maxYear: 1898, targetYear: 1895,
+      exp: "El 'Grito de Baire' (febrer de 1895) va iniciar la insurrecció armada organitzada per José Martí."
+    },
+    {
+      type: 'classic',
+      question: "Quin general espanyol va aplicar a Cuba la polèmica tàctica de la 'reconcentració' de camperols, provocant una altíssima mortalitat civil?",
+      options: [
+        { text: "Valeriano Weyler", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Arsenio Martínez Campos", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Ramón Blanco", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Camilo Polavieja", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "El general Weyler va obligar la població rural a recloure's en poblacions tancades per aïllar els rebels, causant fam i epidèmies."
+    },
+    {
+      type: 'multi',
+      question: "Quines causes explicaven l'altíssima mortalitat entre els soldats espanyols enviats a combatre a la Guerra d'Ultramar?",
+      options: [
+        { id: 'k5_5', text: "Impacte de malalties tropicals com la febre groga i la malària", correct: true },
+        { id: 'k5_6', text: "Mal aprovisionament, galetes fets a malbé i manca de pertrets", correct: true },
+        { id: 'k5_7', text: "Llevat de nois joves sense entrenament ni preparació militar", correct: true },
+        { id: 'k5_8', text: "Ús massiu d'aviació de combat per part dels insurgents", correct: false }
+      ],
+      exp: "La majoria de les baixes espanyoles no van ser per combat directe, sinó per les penoses condicions d'higiene, alimentació i les malalties tropicals."
+    },
+    {
+      type: 'classic',
+      question: "Com es podia evitar el servei militar obligatori (les quintes) en l'exèrcit espanyol a finals del segle XIX?",
+      options: [
+        { text: "Pagant la redempció en metàl·lic (1.500 pessetes)", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Demostrant coneixements d'anglès", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Inscrivint-se al Partit Conservador", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Acreditant la condició de propietari d'indianes", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "La redempció en metàl·lic (1.500 pessetes) permetia a les famílies riques lliurar els seus fills de la guerra, provocant la indignació de les classes populars."
+    },
+    {
+      type: 'slider',
+      question: "En quin any es va produir la insurrecció a les Filipines encapçalada per l'organització radical Katipunan i l'execució de José Rizal?",
+      minYear: 1890, maxYear: 1900, targetYear: 1896,
+      exp: "El 1896 la rebel·lió es va estendre per la província de Manila i el govern espanyol va condemnar a mort el reformista José Rizal."
+    },
+    {
+      type: 'classic',
+      question: "Quin esdeveniment febrer de 1898 al port de l'Havana va servir de pretext directe als EUA per declarar la guerra a Espanya?",
+      options: [
+        { text: "Explosió del cuirassat USS Maine", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Hundiment del creuer Vizcaya", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Batalla naval de Cavite", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Aixecament del Katipunan", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "L'explosió de l'USS Maine (260 morts) va ser utilitzada per la premsa nord-americana ('periodisme groc') per culpar Espanya i exigir la intervenció."
+    },
+    {
+      type: 'multi',
+      question: "Quina va ser l'actitud dels diferents sectors socials i polítics a Catalunya davant la Guerra de Cuba?",
+      options: [
+        { id: 'k5_9', text: "El Foment del Treball i les elits econòmiques van defensar l'espanyolitat per protegir el mercat colonial", correct: true },
+        { id: 'k5_10', text: "Les classes populars es van oposar a la guerra pel xoc social del sistema de quintes", correct: true },
+        { id: 'k5_11', text: "Republicans federals (Pi i Margall) i socialistes (Pablo Iglesias) es van oposar al conflicte", correct: true },
+        { id: 'k5_12', text: "Tots els partits catalans van donar suport incondicional a la reconcentració de Weyler", correct: false }
+      ],
+      exp: "Mentre les elits burgeses defensaven els seus interessos comercials, les classes populars i l'esquerra denunciaven el sacrifici injust dels soldats."
+    },
+    {
+      type: 'classic',
+      question: "Quines dues grans derrotes navals d'Espanya el 1898 van decidir el resultat de la Guerra Hispano-Nord-americana?",
+      options: [
+        { text: "Cavite (Filipines) i Santiago de Cuba", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Trafalgar i Bailèn", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Alcolea i Sagunt", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Luchana i Manila", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "La destrucció de l'esquadra espanyola a Cavite (maig 1898) i a Santiago de Cuba (juliol 1898) va obligar Espanya a demanar l'armistici."
+    }
+  ],
+  xafarderia: {
+    id: "ultramar",
+    title: "Els Protagonistes de la Guerra d'Ultramar",
+    desc: "Identifica els líders militars, polítics i independentistes del conflicte a Cuba, Filipines i els EUA.",
+    center: "José Martí", centerRole: "Líder de la Independència Cubana (1853-1895)", icon: "fa-flag", color: "bg-red-700 text-white",
+    slots: [
+      { id: "s1", label: "GENERAL DE LA RECONCENTRACIÓ", relation: "Aplica la tàctica de recloure camperols en poblacions aïllades", correct: "Valeriano Weyler", icon: "fa-skull" },
+      { id: "s2", label: "GENERAL DE L'AUTONOMIA", relation: "Decreta el 1897 el sufragi universal i l'autogovern cubà", correct: "Ramón Blanco", icon: "fa-scroll" },
+      { id: "s3", label: "REFORMISTA FILIPÍ", relation: "Fundador de la Liga Filipina executat per les autoritats el 1896", correct: "José Rizal", icon: "fa-book" },
+      { id: "s4", label: "PRESIDENT NORD-AMERICÀ", relation: "Envia l'ultimàtum i aprova la intervenció militar dels EUA", correct: "William McKinley", icon: "fa-building-flag" }
+    ],
+    chars: [
+      { name: "Valeriano Weyler", role: "General Espanyol" },
+      { name: "Ramón Blanco", role: "General Conciliador" },
+      { name: "José Rizal", role: "Intel·lectual Filipí" },
+      { name: "William McKinley", role: "President dels EUA" }
+    ]
+  },
+  boe: [
+    { id: "b5_1", text: "«Queda concedida una àmplia amnistia als insurgents, l'abolició progressiva de l'esclavitud i la promès d'atorgar a Cuba la mateixa representació a les Corts i autonomia que a Puerto Rico.»", type: "moderat", sub: "Pau de Zanjón (1878)", exp: "Acord d'armistici negociat pel general Martínez Campos per posar fi a la Guerra dels Deu Anys." },
+    { id: "b5_2", text: "«Tots els habitants del camp hauran de reconcentrar-se en els pobles ocupats per les tropes en el terme de vuit dies. Passat el termini, tot individu que es trobi al camp serà considerat rebel.»", type: "absolutisme", sub: "Bando de Reconcentració del General Weyler (1896)", exp: "Mesura de guerra dràstica per tallar els subministraments i el suport rural als mambisos independentistes." },
+    { id: "b5_3", text: "«Da tristeza comprobar en qué estado llegan las expediciones españolas. Son chavales de quince y dieciséis años que nunca han empuñado un fusil... El reclutamiento es forzoso, no han podido pagar las mil quinientas pesetas de la redención.»", type: "progressista", sub: "Manuel Leguineche / Testimoni de les Quintes", exp: "Denúncia de la desigualtat social del sistema de lleves que enviava només els joves de les classes populars a la guerra." },
+    { id: "b5_4", text: "«El mal estado de la tropa se debe en parte a la dieta: galletas mohosas, cuerpos podridos... El insecto claviger, portador de la malaria, mortificaba a los soldados en la manigua. Santiago Ramón y Cajal levantaba acta de los peligros que acechaban.»", type: "progressista", sub: "Santiago Ramón y Cajal (Doctor Militar a Cuba)", exp: "Relat d'un metge militar sobre el deliri, la malària i les condicions insalubres que van delmar l'exèrcit espanyol." },
+    { id: "b5_5", text: "«Se decreta l'Autonomia de la Illa de Cuba: s'estableix la igualtat de drets polítics entre insulars i peninsulars, l'autonomia aranzelària i el sufragi universal masculí.»", type: "progressista", sub: "Reial Decret d'Autonomia (General Ramón Blanco, 1897)", exp: "Intents desesperats de reforma del govern liberal de Sagasta per frenar la intervenció imminent dels EUA." }
+  ],
+  conecta: [
+    { id: "c5_1", left: "Reconcentració de Weyler", right: "Aïllament forçós de camperols en poblacions tancades", exp: "Tàctica militar repressiva que va causar milers de morts per fam i epidèmies." },
+    { id: "c5_2", left: "Katipunan", right: "Organització clandestina radical que va iniciar la insurrecció armada a Filipines", exp: "Grup independentista filipí que es va oposar al domini espanyol el 1896." },
+    { id: "c5_3", left: "Sistema de Quintes", right: "Reclutament forçós obligatori del qual només s'eximien les classes altes pagant 1.500 pessetes", exp: "Generà un profund sentiment antimilitarista entre la població treballadora." },
+    { id: "c5_4", left: "Cuirassat USS Maine", right: "Va explotar al port de l'Havana el febrer de 1898 servint de pretext als EUA per declarar la guerra", exp: "L'esdeveniment va ser utilitzat per la premsa groga nord-americana per justificar la intervenció." }
+  ],
+  veritat: [
+    { id: "v5_1", statement: "La Pau de Zanjón (1878) va posar fi a la Guerra dels Deu Anys prometent l'abolició de l'esclavitud i reformes autònomes.", isTrue: true, exp: "Veritat! Signat per Martínez Campos, tot i que moltes promeses no es van complir." },
+    { id: "v5_2", statement: "La Guerra Chiquita (1879) va aconseguir la independència immediata de Cuba gràcies al suport dels EUA.", isTrue: false, exp: "Fals! Va ser una insurrecció ràpidament derrotada per la falta d'armament i suport." },
+    { id: "v5_3", statement: "L'aranzel de 1891 imposat per Espanya dificultava el comerç entre Cuba i els EUA, principal comprador del sucre cubà.", isTrue: true, exp: "Veritat! Aquesta mesura proteccionista va provocar la protesta formal del president McKinley." },
+    { id: "v5_4", statement: "El general Valeriano Weyler va pacificar Cuba el 1896 decretant l'autonomia immediata i el lliure comerç.", isTrue: false, exp: "Fals! Weyler va aplicar la dura tàctica de la reconcentració; l'autonomia la va decretar el general Ramón Blanco el 1897." },
+    { id: "v5_5", statement: "Les classes populars peninsulars s'oposaven a la guerra a causa de la injustícia de les quintes i l'altíssima mortalitat per malalties.", isTrue: true, exp: "Veritat! Els joves pobres no podien pagar la redempció de 1.500 pessetes i morien massivament de febre groga i malària." },
+    { id: "v5_6", statement: "José Rizal va liderar el grup armat extremista Katipunan des de l'inici de la rebel·lió a Filipines.", isTrue: false, exp: "Fals! Rizal va fundar la Liga Filipina (de caràcter reformista i pacífic); el Katipunan era l'organització radical insurreccional." },
+    { id: "v5_7", statement: "L'explosió del cuirassat USS Maine al port de l'Havana el febrer de 1898 va servir de pretext directe als EUA per a la intervenció militar.", isTrue: true, exp: "Veritat! La premsa nord-americana va acusar Espanya i el president McKinley va enviar l'ultimàtum." },
+    { id: "v5_8", statement: "La burgesia industrial catalana es va oposar a la Guerra de Cuba des del primer moment per solidaritat amb els rebels.", isTrue: false, exp: "Fals! Al començament entitats com Foment del Treball defensaven l'espanyolitat de l'illa per mantenir el mercat reservat als seus teixits." }
+  ],
+  motPerdut: {
+    title: "La Insurrecció i la Intervenció dels EUA",
+    text: "L'any 1895 el 'Grito de Baire' va iniciar la guerra a Cuba organitzada per José Martí. La dura repressió del general ___ i la posterior explosió del cuirassat ___ van accelerar la intervenció militar dels Estats Units.",
+    blanks: [
+      { id: "m5_1", answer: "Weyler", options: ["Weyler", "Martínez Campos", "Espartero"] },
+      { id: "m5_2", answer: "Maine", options: ["Maine", "Cavite", "Vizcaya"] }
+    ],
+    exp: "La reconcentració de Weyler i l'enigmàtica explosió de l'USS Maine a l'Havana el 1898 van desencadenar la intervenció directa dels EUA."
+  }
+},
+6: {
+  id: 6,
+  title: "Capítol 6: El Desastre del 98 i el Regeneracionisme (1898-1902)",
+  desc: "Conseqüències morals, econòmiques i polítiques de la pèrdua de les colònies, el Regeneracionisme i la Generació del 98",
+  color: "bg-stone-700",
+  available: true,
+  timeline: [
+    { id: "t6_1", text: "Tractat de París i impacte del 'Desastre'", year: "1898", icon: "fa-dumpster-fire", exp: "Espanya assumeix la pèrdua de Cuba, Puerto Rico i Filipines, desencadenant una profunda crisi moral i ideològica." },
+    { id: "t6_2", text: "Publicació de l'Oda a Espanya de Joan Maragall", year: "1898", icon: "fa-scroll", exp: "El poeta català expressa el dolor pel sacrifici inútil dels joves i el distanciament respecte a la política centralista." },
+    { id: "t6_3", text: "Manifest Regeneracionista del General Polavieja", year: "1898-1899", icon: "fa-pen-to-square", exp: "Intent de reforma de l'administració pública i descentralització des del govern conservador de Silvela." },
+    { id: "t6_4", text: "Reforma fiscal de Villaverde i Tancament de Caixes", year: "1899", icon: "fa-store-slash", exp: "Vaga de tributs dels comerciants de Barcelona, encapçalada per l'alcalde Bartomeu Robert, contra els impostos de la guerra." },
+    { id: "t6_5", text: "Venda de les darreres illes del Pacífic a Alemanya", year: "1899", icon: "fa-earth-oceania", exp: "Espanya ven les illes Marianes, Carolines i Palau a l'Imperi Alemany, posant fi definitivament a l'imperi colonial." },
+    { id: "t6_6", text: "Repatriació de capitals i reconversió econòmica", year: "1900", icon: "fa-vault", exp: "El retorn dels capitals colonials finança la creació de nous bancs i la modernització industrial a la Península." },
+    { id: "t6_7", text: "Publicació d'Oligarquía y Caciquismo de Joaquín Costa", year: "1901", icon: "fa-book-open", exp: "Obra cabdal del Regeneracionisme que proposa la reforma educativa i agrària sota el lema 'Escola i Rebost'." },
+    { id: "t6_8", text: "Consolidació de la Generació del 98 i del catalanisme polític", year: "1901-1902", icon: "fa-brain", exp: "Intel·lectuals (Unamuno, Baroja, Machado) i forces com la Lliga Regionalista emergeixen com a alternativa al buit del 98." }
+  ],
+  kahoot: [
+    {
+      type: 'classic',
+      question: "Quina va ser la naturalesa principal de la crisi generada a Espanya arran de la pèrdua de les darreres colònies l'any 1898?",
+      options: [
+        { text: "Una crisi moral, ideològica i de prestigi internacional", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Un col·lapse econòmic permanent i fallida immediata de l'Estat", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Una revolució social immediata que va destronar la monarquia", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Una invasió militar immediata per part de les potències europees", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "El Desastre del 98 va ser fonamentalment una crisi moral i de destrucció del mite de l'imperi, presentant Espanya com una 'nació moribunda'."
+    },
+    {
+      type: 'slider',
+      question: "En quin any es va produir el 'Tancament de Caixes', la vaga de tributs dels comerciants de Barcelona contra la puja d'impostos de la postguerra?",
+      minYear: 1890, maxYear: 1905, targetYear: 1899,
+      exp: "El Tancament de Caixes va tenir lloc el 1899 com a protesta contra la Reforma Fiscal del ministre Fernández Villaverde."
+    },
+    {
+      type: 'multi',
+      question: "Quines van ser les principals conseqüències econòmiques immediates del Desastre del 98 a la Península?",
+      options: [
+        { id: 'k6_1', text: "Pèrdua dels mercats reservats per als teixits catalans i la farina castellana", correct: true },
+        { id: 'k6_2', text: "Devaluació de la peseta i fort deute de guerra", correct: true },
+        { id: 'k6_3', text: "Encariment dels productes importats", correct: true },
+        { id: 'k6_4', text: "Hiperinflació irrecuperable durant dècades", correct: false }
+      ],
+      exp: "La pèrdua dels mercats coloniar va afectar exportacions clau i va augmentar el deute, tot i que la Hisenda es va recuperar ràpidament a mitjà termini."
+    },
+    {
+      type: 'classic',
+      question: "Quin intel·lectual regeneracionista va encunyar el famós lema «Escola i Rebost» per defensar la modernització educativa i agrària?",
+      options: [
+        { text: "Joaquín Costa", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Miguel de Unamuno", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Francisco Giner de los Ríos", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Joan Maragall", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "Joaquín Costa va ser el màxim exponent del Regeneracionisme, reclamant alfabetització ('escola') i desenvolupament econòmic/agrari ('rebost')."
+    },
+    {
+      type: 'slider',
+      question: "En quin any va vendre el govern espanyol a l'Imperi Alemany les darreres possessions insulars del Pacífic (Carolines, Marianes i Palau)?",
+      minYear: 1895, maxYear: 1905, targetYear: 1899,
+      exp: "L'any 1899, incapacitada per defensar-les, Espanya va vendre els arxipèlags del Pacífic a Alemanya."
+    },
+    {
+      type: 'classic',
+      question: "Quin general i ministre de la Guerra del govern de Silvela va redactar un Manifest el 1898 proposant reformes regeneracionistes i certa descentralització?",
+      options: [
+        { text: "Camilo Polavieja", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Valeriano Weyler", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Arsenio Martínez Campos", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Fernando Primo de Rivera", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "El general Camilo Polavieja va impulsar un intent regeneracionista des del govern conservador, tot i que va fracassar al cap de pocs mesos."
+    },
+    {
+      type: 'multi',
+      question: "Quins grups polítics de l'oposició van intensificar les seves crítiques contra l'exèrcit i el sistema dinàstic arran del Desastre del 98?",
+      options: [
+        { id: 'k6_5', text: "Republicans", correct: true },
+        { id: 'k6_6', text: "Socialistes", correct: true },
+        { id: 'k6_7', text: "Nacionalistes i catalanistes", correct: true },
+        { id: 'k6_8', text: "Partit Liberal-Conservador", correct: false }
+      ],
+      exp: "Les forces de l'oposició van utilitzar la derrota colonial per denunciar la corrupció del tornisme i la ineficàcia de l'exèrcit."
+    },
+    {
+      type: 'classic',
+      question: "Quin nom rep el grup literari d'intel·lectuals (Baroja, Unamuno, Machado, Azorín) que va analitzar amb pessimitme el 'problema d'Espanya'?",
+      options: [
+        { text: "Generació del 98", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Generació del 27", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Noucentisme", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Krausistes de la Restauració", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "La Generació del 98 va reflexionar sobre l'endarreriment històric d'Espanya i la necessitat d'una regeneració cultural i moral."
+    },
+    {
+      type: 'slider',
+      question: "En quin any va escriure Joan Maragall el seu famós poema 'Oda a Espanya', denunciant la sang abocada inútilment a les guerres colonials?",
+      minYear: 1890, maxYear: 1905, targetYear: 1898,
+      exp: "Joan Maragall va escriure l'Oda a Espanya l'any 1898 com a reacció directa al Desastre i al retorn dels soldats indisposats."
+    },
+    {
+      type: 'classic',
+      question: "Quina institució pedagògica fundada per Francisco Giner de los Ríos el 1876 va ser el referent educatiu del moviment regeneracionista?",
+      options: [
+        { text: "Institución Libre de Enseñanza", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Residencia de Estudiantes", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Ateneu Barcelonès", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Escola del Treball", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "La Institución Libre de Enseñanza (basada en el krausisme) va defensar la modernització pedagògica i científica davant el dogmatisme."
+    },
+    {
+      type: 'multi',
+      question: "Quins efectes positius va tenir la repatriació de capitals colonials sobre l'economia peninsular a principis del segle XX?",
+      options: [
+        { id: 'k6_9', text: "Creació de nous bancs i entitats financeres", correct: true },
+        { id: 'k6_10', text: "Finançament de noves indústries i empreses", correct: true },
+        { id: 'k6_11', text: "Reducció del deute públic i moderació de la inflació", correct: true },
+        { id: 'k6_12', text: "Abolició de tots els impostos directes", correct: false }
+      ],
+      exp: "La repatriació de capitals repatriats pels 'indians' i empresaris va permetre una ràpida recuperació financera i la renovació del teixit productiu."
+    },
+    {
+      type: 'classic',
+      question: "Quina conseqüència política clau va derivar de la protesta del Tancament de Caixes a Catalunya l'any 1899?",
+      options: [
+        { text: "El viratge de la burgesia catalana cap al catalanisme polític organitzat", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "L'abrogació de la Constitució de 1876 a tot l'Estat", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "La proclamació immediata de la República Catalana", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "El retorn de les lleis de la Corona d'Aragó", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "El desengany amb els partits dinàstics va fer que la burgesia catalana apostés per noves opcions autonomistes com la Lliga Regionalista (1901)."
+    }
+  ],
+  xafarderia: {
+    id: "desastre98",
+    title: "La Reacció Intel·lectual i Política al Desastre del 98",
+    desc: "Identifica els actors que van analitzar i protestar davant la pèrdua de l'imperi colonial.",
+    center: "Joaquín Costa", centerRole: "Líder del Regeneracionisme", icon: "fa-lightbulb", color: "bg-stone-700 text-white",
+    slots: [
+      { id: "s1", label: "REFORMISTA MILITAR", relation: "Promou un manifest regeneracionista i descentralitzador el 1898", correct: "Camilo Polavieja", icon: "fa-pen-to-square" },
+      { id: "s2", label: "PEDAGOG KRAUSISTA", relation: "Fundador de la Institución Libre de Enseñanza per modernitzar la cultura", correct: "Giner de los Ríos", icon: "fa-graduation-cap" },
+      { id: "s3", label: "POETA CATALÀ", relation: "Denuncia el sacrifici inútil dels joves a l'Oda a Espanya", correct: "Joan Maragall", icon: "fa-feather" },
+      { id: "s4", label: "ALCALDE PROTESTATARI", relation: "Encapçala la vaga de tributs del Tancament de Caixes a Barcelona", correct: "Bartomeu Robert", icon: "fa-building-user" }
+    ],
+    chars: [
+      { name: "Camilo Polavieja", role: "General Reformista" },
+      { name: "Giner de los Ríos", role: "Pedagog de la ILE" },
+      { name: "Joan Maragall", role: "Poeta i Intel·lectual" },
+      { name: "Bartomeu Robert", role: "Alcalde de Barcelona" }
+    ]
+  },
+  boe: [
+    { id: "b6_1", text: "«Tres són els components d'aquest sistema ruïnós: els oligarques, els cacics i el governador civil. Cal desfer aquesta farsa, cal escola i despensa per regenerar la Nació.»", type: "progressista", sub: "Joaquín Costa - Oligarquía y Caciquismo (1901)", exp: "Anàlisi central del Regeneracionisme denunciant que el frau electoral impedeix la modernització d'Espanya." },
+    { id: "b6_2", text: "«Es fa necessària una regeneració política, la reforma de l'administració pública i una certa descentralització administrativa que retorni la vitalitat a les províncies.»", type: "moderat", sub: "General Camilo Polavieja - Manifest de 1898", exp: "Proposta de reforma des del sector conservador per evitar la fallida total del règim després de la derrota." },
+    { id: "b6_3", text: "«On són els barcos? On són els fills? Pregunta-ho al Ponent i a l'ona brava: tot ho perderes, no tens ningú. Espanya, Espanya, retorna en tu... Adeu, Espanya!»", type: "progressista", sub: "Joan Maragall - Oda a Espanya (1898)", exp: "Poema insígnia de la intel·lectualitat catalana denunciant el sacrifici inútil de les quintes i el tancament d'etapa." },
+    { id: "b6_4", text: "«Els militars van desenvolupar un fort sentiment corporatiu, atribuint la responsabilitat del Desastre als polítics i convencent-se que havien de tenir més protagonisme en la vida pública, mentre augmentava l'antimilitarisme popular.»", type: "progressista", sub: "Anàlisi de les conseqüències militars del 98", exp: "Explicació del naixement del sentiment corporatiu militar i la tensió amb la societat civil." },
+    { id: "b6_5", text: "«Davant la nova pujada d'impostos sobre les indústries i el comerç decretada per la Hisenda estatal, els gremis de Barcelona decideixen donar-se de baixa dels patens i tancar les caixes.»", type: "progressista", sub: "Actes de la protesta del Tancament de Caixes (1899)", exp: "Resolució de la burgesia i comerciants de Barcelona per negar-se a pagar el deute acumulat per la guerra." }
+  ],
+  conecta: [
+    { id: "c6_1", left: "Joaquín Costa", right: "Líder del Regeneracionisme que va encunyar 'Escola i Rebost'", exp: "Defensava reformes agràries i educatives urgents per superar la crisi." },
+    { id: "c6_2", left: "Tancament de Caixes (1899)", right: "Vaga de tributs a Barcelona contra els impostos de la guerra", exp: "Resposta fiscal organitzada pels gremis i l'alcalde Bartomeu Robert." },
+    { id: "c6_3", left: "Generació del 98", right: "Grup d'intel·lectuals que analitzaven el 'problema d'Espanya'", exp: "Autors com Unamuno, Baroja o Machado caracteritzats pel seu pessimisme i crítica." },
+    { id: "c6_4", left: "Institución Libre de Enseñanza", right: "Centre d'innovació pedagògica d'inspiració krausista", exp: "Fundada per Giner de los Ríos per formar elit cultural moderna i científica." }
+  ],
+  veritat: [
+    { id: "v6_1", statement: "El Desastre del 98 va provocar la col·lapse definitiva i immediata de l'economia peninsular sense possibilitat de recuperació.", isTrue: false, exp: "Fals! Hi va haver una ràpida recuperació financera gràcies a la repatriació de capitals colonials i la baixa inflació." },
+    { id: "v6_2", statement: "L'exèrcit espanyol va culpar la classe política civil de la derrota del 98, augmentant el seu sentiment corporatiu i intervenionista.", isTrue: true, exp: "Veritat! Els militars van acusar els polítics de manca de mitjans i van reaccionar enfront de les crítiques de l'antimilitarisme." },
+    { id: "v6_3", statement: "El moviment del Regeneracionisme proposava conquerir noves colònies a Àfrica com a principal solució als mals d'Espanya.", isTrue: false, exp: "Fals! Proposava la modernització interna, la reforma de l'ensenyament i el desenvolupament econòmic ('Escola i Rebost')." },
+    { id: "v6_4", statement: "L'any 1899 Espanya va vendre les illes Marianes, Carolines i Palau a l'Imperi Alemany.", isTrue: true, exp: "Veritat! Davant la impossibilitat de mantenir-les, es va signar la venda de les darreres illes del Pacífic." },
+    { id: "v6_5", statement: "El Tancament de Caixes de 1899 va ser un insurrecció armada organitzada pels camperols d'Andalusia.", isTrue: false, exp: "Fals! Va ser una protesta fiscal pacífica dels comerciants i gremis de Barcelona." },
+    { id: "v6_6", statement: "L'Oda a Espanya de Joan Maragall criticava el sacrifici inútil dels joves en les guerres colonials.", isTrue: true, exp: "Veritat! El poema reflectia el sentiment de la societat catalana enfront de la tragèdia de les quintes." },
+    { id: "v6_7", statement: "El general Polavieja va aconseguir transformar profundament les estructures de l'Estat canovista.", isTrue: false, exp: "Fals! El seu projecte va rebre l'oposició de la mateixa oligarquia i les seves reformes van ser mínimes." },
+    { id: "v6_8", statement: "El Desastre del 98 va impulsar el creixement del catalanisme polític davant la incapacitat de regeneració dels partits dinàstics.", isTrue: true, exp: "Veritat! El fracàs de la regeneració estatal va portar la burgesia catalana cap a opcions autonomistes com la Lliga Regionalista." }
+  ],
+  motPerdut: {
+    title: "El Desastre del 98 i el Regeneracionisme",
+    text: "La pèrdua de les colònies va generar una profunda crisi ___ i de prestigi. Per superar l'endarreriment del país, intel·lectuals com Joaquín Costa van impulsar el ___, demanant reformes educatives i agràries.",
+    blanks: [
+      { id: "m6_1", answer: "moral", options: ["moral", "financera", "militar"] },
+      { id: "m6_2", answer: "regeneracionisme", options: ["regeneracionisme", "carlisme", "absolutisme"] }
+    ],
+    exp: "El Desastre del 98 va fer palesa la feblesa del país i va afavorir el desenvolupament del moviment regeneracionista."
   }
 },
 };
