@@ -186,12 +186,138 @@
 
     // Capítol 4 (La Restauració Borbònica) afegit a QuestionBank
     if (window.QuestionBank && window.QuestionBank.CHAPTER_DATA) {
-      if (!window.QuestionBank.CHAPTER_DATA[4]) {
-        window.QuestionBank.CHAPTER_DATA[4] = {
-          id: 4,
-          title: "Capítol 4: La Restauració Borbònica",
+      if (!window.QuestionBank.CHAPTER_DATA[7]) {
+        window.QuestionBank.CHAPTER_DATA[7] = {
+          id: 7,
+          title: "Capítol 7: El Catalanisme Polític",
           desc: "Pròximament...",
-          color: "bg-amber-600",
+          color: "bg-orange-400",
+          available: false,
+          timeline: [],
+          kahoot: [],
+          xafarderia: {},
+          boe: [],
+          conecta: [],
+          veritat: [],
+          motPerdut: {}
+        };
+      }
+    }
+    if (window.QuestionBank && window.QuestionBank.CHAPTER_DATA) {
+      if (!window.QuestionBank.CHAPTER_DATA[8]) {
+        window.QuestionBank.CHAPTER_DATA[8] = {
+          id: 8,
+          title: "Capítol 8: Transformacions econòmiques i socials del s. XIX al primer terç del s. XX",
+          desc: "Pròximament...",
+          color: "bg-pink-400",
+          available: false,
+          timeline: [],
+          kahoot: [],
+          xafarderia: {},
+          boe: [],
+          conecta: [],
+          veritat: [],
+          motPerdut: {}
+        };
+      }
+    }
+     if (window.QuestionBank && window.QuestionBank.CHAPTER_DATA) {
+      if (!window.QuestionBank.CHAPTER_DATA[9]) {
+        window.QuestionBank.CHAPTER_DATA[9] = {
+          id: 9,
+          title: "Capítol 9: Crísi de la Restauració",
+          desc: "Pròximament...",
+          color: "bg-red-800",
+          available: false,
+          timeline: [],
+          kahoot: [],
+          xafarderia: {},
+          boe: [],
+          conecta: [],
+          veritat: [],
+          motPerdut: {}
+        };
+      }
+    }
+     if (window.QuestionBank && window.QuestionBank.CHAPTER_DATA) {
+      if (!window.QuestionBank.CHAPTER_DATA[10]) {
+        window.QuestionBank.CHAPTER_DATA[10] = {
+          id: 10,
+          title: "Capítol 10: La Segona República",
+          desc: "Pròximament...",
+          color: "bg-purple-700",
+          available: false,
+          timeline: [],
+          kahoot: [],
+          xafarderia: {},
+          boe: [],
+          conecta: [],
+          veritat: [],
+          motPerdut: {}
+        };
+      }
+    }
+     if (window.QuestionBank && window.QuestionBank.CHAPTER_DATA) {
+      if (!window.QuestionBank.CHAPTER_DATA[11]) {
+        window.QuestionBank.CHAPTER_DATA[11] = {
+          id: 11,
+          title: "Capítol 11: La Guerra Civil",
+          desc: "Pròximament...",
+          color: "bg-red-600",
+          available: false,
+          timeline: [],
+          kahoot: [],
+          xafarderia: {},
+          boe: [],
+          conecta: [],
+          veritat: [],
+          motPerdut: {}
+        };
+      }
+    }
+    if (window.QuestionBank && window.QuestionBank.CHAPTER_DATA) {
+      if (!window.QuestionBank.CHAPTER_DATA[12]) {
+        window.QuestionBank.CHAPTER_DATA[12] = {
+          id: 12,
+          title: "Capítol 12: La Dictadura Franquista",
+          desc: "Pròximament...",
+          color: "bg-gray-800",
+          available: false,
+          timeline: [],
+          kahoot: [],
+          xafarderia: {},
+          boe: [],
+          conecta: [],
+          veritat: [],
+          motPerdut: {}
+        };
+      }
+    }
+    if (window.QuestionBank && window.QuestionBank.CHAPTER_DATA) {
+      if (!window.QuestionBank.CHAPTER_DATA[13]) {
+        window.QuestionBank.CHAPTER_DATA[13] = {
+          id: 13,
+          title: "Capítol 13: Dictadura i Democràcia",
+          desc: "Pròximament...",
+          color: "bg-green-700",
+          available: false,
+          timeline: [],
+          kahoot: [],
+          xafarderia: {},
+          boe: [],
+          conecta: [],
+          veritat: [],
+          motPerdut: {}
+        };
+      }
+    }
+    if (window.QuestionBank && window.QuestionBank.CHAPTER_DATA) {
+      if (!window.QuestionBank.CHAPTER_DATA[14]) {
+        window.QuestionBank.CHAPTER_DATA[14] = {
+          id: 14,
+          title: "Capítol 14: Prepara les PAU",
+          desc: "Pròximament...",
+          color: "bg-blue-400",
           available: false,
           timeline: [],
           kahoot: [],
@@ -757,7 +883,7 @@
                 </h3>
                 <p className="text-slate-500 text-base font-bold">
                   {!chapter.available 
-                    ? "El Capítol 4 (La Restauració Borbònica) estarà llest aviat. Mentrestant, repassa els capítols anteriors!"
+                    ? "Aquest capítol estarà llest aviat. Mentrestant, repassa els capítols anteriors!"
                     : "Aquest capítol requereix una clau especial. Pots obrir-lo veient un missatge patrocinat o sent usuari PRO."}
                 </p>
                 {isLockedForNonPro && chapter.available && (
