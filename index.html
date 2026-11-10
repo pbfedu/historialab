@@ -183,26 +183,6 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
     const { motion, AnimatePresence } = window.Motion;
-
-    // Capítol 4 (La Restauració Borbònica) afegit a QuestionBank
-    if (window.QuestionBank && window.QuestionBank.CHAPTER_DATA) {
-      if (!window.QuestionBank.CHAPTER_DATA[7]) {
-        window.QuestionBank.CHAPTER_DATA[7] = {
-          id: 7,
-          title: "Capítol 7: El Catalanisme Polític",
-          desc: "Pròximament...",
-          color: "bg-orange-400",
-          available: false,
-          timeline: [],
-          kahoot: [],
-          xafarderia: {},
-          boe: [],
-          conecta: [],
-          veritat: [],
-          motPerdut: {}
-        };
-      }
-    }
     if (window.QuestionBank && window.QuestionBank.CHAPTER_DATA) {
       if (!window.QuestionBank.CHAPTER_DATA[8]) {
         window.QuestionBank.CHAPTER_DATA[8] = {
