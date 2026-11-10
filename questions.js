@@ -1112,6 +1112,245 @@ const CHAPTER_DATA = {
     exp: "El Desastre del 98 va fer palesa la feblesa del país i va afavorir el desenvolupament del moviment regeneracionista."
   }
 },
+7: {
+  id: 7,
+  title: "Capítol 7: El Catalanisme Polític i Cultural (1833-1901)",
+  desc: "Banc ampliat de preguntes sobre la Renaixença, el Federalisme, el Memorial de Greuges, les Bases de Manresa, el Tancament de Caixes i la Lliga Regionalista",
+  color: "bg-duoYellow",
+  available: true,
+
+  // 1. LÍNIA DEL TEMPS AMPLIADA (14 ESDEVENIMENTS)
+  timeline: [
+    { id: "t7_1", text: "Oda a la Pàtria (Aribau)", year: "1833", icon: "fa-feather", exp: "Inici simbòlic de la Renaixença literària i de la reivindicació de la llengua catalana." },
+    { id: "t7_2", text: "La Jamància i Bullangues", year: "1843", icon: "fa-fire", exp: "Revoltes populars i urbanes a Barcelona contra el centralisme i el sistema de quintes." },
+    { id: "t7_3", text: "Guerra dels Matiners", year: "1846-1849", icon: "fa-shield-halved", exp: "Segona Guerra Carlina a Catalunya amb participació de camperols i crisis agràries." },
+    { id: "t7_4", text: "Restauració dels Jocs Florals", year: "1859", icon: "fa-award", exp: "Consolidació del català com a llengua culta i de prestigi literari." },
+    { id: "t7_5", text: "Pacte Federal de Tortosa", year: "1869", icon: "fa-handshake", exp: "Acord dels republicans federals dels territoris de la Corona d'Aragó per un Estat federal des de baix." },
+    { id: "t7_6", text: "Fundació de La Jove Catalunya", year: "1870", icon: "fa-users", exp: "Primera associació cultural catalanista d'orientació reivindicativa." },
+    { id: "t7_7", text: "Fundació del Diari Català", year: "1879", icon: "fa-newspaper", exp: "Primer periòdic redactat íntegrament en català, creat per Valentí Almirall." },
+    { id: "t7_8", text: "1r Congrés Catalanista i Centre Català", year: "1880-1882", icon: "fa-landmark", exp: "Organització de la primera entitat política del catalanisme sota el lema 'Catalunya i avant'." },
+    { id: "t7_9", text: "Memorial de Greuges", year: "1885", icon: "fa-scroll", exp: "Primer manifest polític unitari lliurat al rei Alfons XII en defensa del dret civil i del proteccionisme." },
+    { id: "t7_10", text: "Publicació de 'Lo Catalanisme'", year: "1886", icon: "fa-book", exp: "Obra doctrinal fonamental de Valentí Almirall que defineix Catalunya com a Nació." },
+    { id: "t7_11", text: "Campanya del Dret Civil Català", year: "1889", icon: "fa-scale-balanced", exp: "Primera victòria política del catalanisme per preservar el dret civil autòcton davant el Codi Civil estatal." },
+    { id: "t7_12", text: "Aprovació de les Bases de Manresa", year: "1892", icon: "fa-file-contract", exp: "Projecte d'autogovern regional aprovat per la Unió Catalanista amb ponència d'Enric Prat de la Riba." },
+    { id: "t7_13", text: "El Tancament de Caixes", year: "1899", icon: "fa-store-slash", exp: "Vaga de tributs dels gremis de Barcelona dirigida pel batlle Bartomeu Robert contra els impostos de la guerra del 98." },
+    { id: "t7_14", text: "Victòria de la Lliga Regionalista", year: "1901", icon: "fa-check-to-slot", exp: "Fundació del partit i victòria electoral històrica a Barcelona amb la Candidatura dels Quatre Presidents." }
+  ],
+
+  // 2. BANCO KAHOOT AMPLIAT (12 PREGUNTES: CLÀSSIQUES, SLIDERS I MULTI-OPCIÓ)
+  kahoot: [
+    {
+      type: 'classic',
+      question: "Qui va ser el redactor principal del Memorial de Greuges (1885) i teòric de 'Lo Catalanisme' (1886)?",
+      options: [
+        { text: "Valentí Almirall", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Enric Prat de la Riba", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Josep Torras i Bages", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Francesc Cambó", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "Valentí Almirall va ser el precursor del catalanisme polític progressista i fundador del Centre Català."
+    },
+    {
+      type: 'slider',
+      question: "En quin any es van aprovar les Bases de Manresa per la Unió Catalanista?",
+      minYear: 1880, maxYear: 1905, targetYear: 1892,
+      exp: "Les Bases per a la Constitució Regional Catalana es van aprovar el març de 1892 a Manresa."
+    },
+    {
+      type: 'multi',
+      question: "Quines de les següents atribucions formaven part del Poder Regional a les Bases de Manresa (1892)?",
+      options: [
+        { id: 'k7_1', text: "Oficialitat única de la llengua catalana", correct: true },
+        { id: 'k7_2', text: "Control exclusiu de l'exèrcit de terra i mar", correct: false },
+        { id: 'k7_3', text: "Reserva dels càrrecs públics per als naturals de Catalunya", correct: true },
+        { id: 'k7_4', text: "Restabliment de les antigues Corts catalanes", correct: true }
+      ],
+      exp: "Les Bases de Manresa reservaven a l'Estat central les relacions exteriors i l'exèrcit, i al poder regional les Corts, la llengua i l'administració interior."
+    },
+    {
+      type: 'classic',
+      question: "Com es coneix la protesta fiscal de 1899 encapçalada per l'alcalde Bartomeu Robert contra els impostos del 98?",
+      options: [
+        { text: "El Tancament de Caixes", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "La Jamància", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "La Vicalvarada", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "El Motí d'Aranjuez", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "El Tancament de Caixes va ser la vaga de tributs dels comerciants de Barcelona per oposar-se als impostos del ministre Fernández Villaverde."
+    },
+    {
+      type: 'classic',
+      question: "Quin diari, fundat l'any 1899, es va convertir en l'òrgan de expressió oficial del catalanisme conservador?",
+      options: [
+        { text: "La Veu de Catalunya", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Diari Català", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "La Campana de Gràcia", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "L'Esquella de la Torratxa", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "La Veu de Catalunya, dirigida per Prat de la Riba, va ser el diari de referència del Centre Nacional Català i posteriorment de la Lliga Regionalista."
+    },
+    {
+      type: 'slider',
+      question: "En quin any es va publicar l'Oda a la Pàtria de Bonaventura Carles Aribau, marcant l'inici simbòlic de la Renaixença?",
+      minYear: 1820, maxYear: 1850, targetYear: 1833,
+      exp: "L'Oda a la Pàtria es va publicar a la revista El Vapor el 1833."
+    },
+    {
+      type: 'multi',
+      question: "Quins d'aquests autors pertanyen al corrent de la Renaixença Popular o teatre satíric català?",
+      options: [
+        { id: 'k7_5', text: "Frederic Soler 'Pitarra'", correct: true },
+        { id: 'k7_6', text: "Josep Anselm Clavé", correct: true },
+        { id: 'k7_7', text: "Jacint Verdaguer", correct: false },
+        { id: 'k7_8', text: "Abdó Terrades", correct: true }
+      ],
+      exp: "Clavé (corals), Pitarra (teatre) i Terrades defensaven el 'català que es parla', a diferència del llenguatge medievalitzant dels Jocs Florals."
+    },
+    {
+      type: 'classic',
+      question: "Quin pensador va publicar 'La tradició catalana' (1892) sota la màxima 'Catalunya serà cristiana o no serà'?",
+      options: [
+        { text: "Josep Torras i Bages", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Valentí Almirall", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Sabino Arana", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Pi i Margall", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "El bisbe Torras i Bages va ser el representant del Vigatanisme, el corrent catòlic i tradicionalista del catalanisme."
+    },
+    {
+      type: 'slider',
+      question: "En quin any va fundar Sabino Arana el Partit Nacionalista Basc (PNV)?",
+      minYear: 1885, maxYear: 1905, targetYear: 1895,
+      exp: "El PNV va ser fundat el 1895 a Bilbao en resposta a l'abolició dels furs bascos i a la industrialització."
+    },
+    {
+      type: 'multi',
+      question: "Quines forces van formar la Candidatura dels Quatre Presidents de la Lliga Regionalista el 1901?",
+      options: [
+        { id: 'k7_9', text: "Unió Regionalista (industrials del Tancament de Caixes)", correct: true },
+        { id: 'k7_10', text: "Centre Nacional Català (intel·lectuals joves)", correct: true },
+        { id: 'k7_11', text: "Partit Liberal Fusionista de Sagasta", correct: false },
+        { id: 'k7_12', text: "Comunió Tradicionalista Carlina", correct: false }
+      ],
+      exp: "La Lliga va néixer de la fusió entre els industrials descontents de l'Unió Regionalista i els joves del Centre Nacional Català."
+    },
+    {
+      type: 'classic',
+      question: "Quin escriptor va compondre la famosa 'Oda a Espanya' (1898) denunciant la sang abocada inútilment a les quintes?",
+      options: [
+        { text: "Joan Maragall", color: "bg-duoGreen hover:bg-green-600 border-duoGreenDark text-white", correct: true },
+        { text: "Santiago Rusiñol", color: "bg-duoBlue hover:bg-blue-600 border-duoBlueDark text-white", correct: false },
+        { text: "Àngel Guimerà", color: "bg-duoRed hover:bg-red-600 border-duoRedDark text-white", correct: false },
+        { text: "Joaquim Rubió i Ors", color: "bg-duoYellow hover:bg-amber-500 border-duoYellowDark text-slate-900", correct: false }
+      ],
+      exp: "Joan Maragall, figura del Modernisme, va escriure l'Oda a Espanya ('Adeu, Espanya!') reflectint el dolor pel desastre colonial del 98."
+    },
+    {
+      type: 'slider',
+      question: "En quin any es va redactar el Memorial de Greuges lliurat al rei Alfons XII?",
+      minYear: 1875, maxYear: 1895, targetYear: 1885,
+      exp: "El Memorial de Greuges es va presentar a Madrid a principis de 1885."
+    }
+  ],
+
+  // 3. XAFARDERIA / XARXA DE PERSONATGES (AMPLIADA)
+  xafarderia: {
+    id: "catalanisme_xarxa",
+    title: "La Xarxa de Protagonistes del Catalanisme (1833-1901)",
+    desc: "Relaciona cada figura clau amb el seu paper en la construcció del moviment nacional.",
+    center: "Valentí Almirall", centerRole: "Precursor del Catalanisme Polític (1841-1904)", icon: "fa-pen-nib", color: "bg-duoYellow text-slate-900",
+    slots: [
+      { id: "s1", label: "RENAIXENÇA LITERÀRIA", relation: "Autor de l'Oda a la Pàtria (1833)", correct: "B.C. Aribau", icon: "fa-book" },
+      { id: "s2", label: "VIGATANISME CATÒLIC", relation: "Autor de 'La tradició catalana' (1892)", correct: "Torras i Bages", icon: "fa-church" },
+      { id: "s3", label: "TEÒRIC CONSERVADOR", relation: "Ponent de les Bases de Manresa i ideòleg de la Lliga", correct: "Prat de la Riba", icon: "fa-landmark" },
+      { id: "s4", label: "BATLLE DE BARCELONA", relation: "Cap visible del Tancament de Caixes (1899)", correct: "Dr. Bartomeu Robert", icon: "fa-city" },
+      { id: "s5", label: "POETA MODERNISTA", relation: "Autor de l'Oda a Espanya (1898)", correct: "Joan Maragall", icon: "fa-feather" },
+      { id: "s6", label: "REPUBLICÀ FEDERAL", relation: "President de la I República i teòric del federalisme", correct: "Pi i Margall", icon: "fa-building-columns" }
+    ],
+    chars: [
+      { name: "B.C. Aribau", role: "Poeta de la Renaixença" },
+      { name: "Torras i Bages", role: "Bisbe de Vic" },
+      { name: "Prat de la Riba", role: "Ideòleg de la Lliga" },
+      { name: "Dr. Bartomeu Robert", role: "Metge i Alcalde" },
+      { name: "Joan Maragall", role: "Intel·lectual Modernista" },
+      { name: "Pi i Margall", role: "Líder Federalista" }
+    ]
+  },
+
+  // 4. FRAGMENTS DOCUMENTALS (BOE / TEXTOS HISTÒRICS AMPLIATS)
+  boe: [
+    { 
+      id: "b7_1", 
+      text: "«La llengua catalana serà l'única que, amb caràcter oficial, podrà usar-se a Catalunya i en les relacions d'aquesta regió amb lo Poder central.»", 
+      type: "conservador", 
+      sub: "Bases de Manresa (Base 3a, 1892)", 
+      exp: "La Unió Catalanista reclamava la plena oficialitat única del català a l'administració regional." 
+    },
+    { 
+      id: "b7_2", 
+      text: "«El sentiment catalanista ens diu que l'organització actual de l'Estat espanyol no permetrà mai a Catalunya recobrar el lloc a què el deure la crida.»", 
+      type: "progressista", 
+      sub: "Lo Catalanisme, Valentí Almirall (1886)", 
+      exp: "Almirall defensava la necessitat d'harmonitzar el particularisme català amb la regeneració de tot l'Estat." 
+    },
+    { 
+      id: "b7_3", 
+      text: "«Les tres antigues províncies d'Aragó, Catalunya i València, incloses les Illes Balears, estiguin unides i aliades sense pretendre separar-se de la resta d'Espanya.»", 
+      type: "progressista", 
+      sub: "Pacte Federal de Tortosa (1869)", 
+      exp: "Acord d'arrel federalista per construir una Espanya descentralitzada des de baix." 
+    },
+    { 
+      id: "b7_4", 
+      text: "«Catalunya serà cristiana o no serà. La tradició catalana és una tradició d'ordre, de família i de fe catòlica insubstituïble.»", 
+      type: "conservador", 
+      sub: "La tradició catalana, Josep Torras i Bages (1892)", 
+      exp: "Manifest del Vigatanisme que vinculava la identitat catalana al catolicisme i a la tradició." 
+    },
+    { 
+      id: "b7_5", 
+      text: "«On són els barcos? — On són els fills? / Pregunta-ho al Ponent i a l'ona brava: / tot ho perderes, — no tens ningú. / Espanya, Espanya, — retorna en tu, / arrenca el plor de mare! / ... Adeu, Espanya!»", 
+      type: "progressista", 
+      sub: "Oda a Espanya, Joan Maragall (1898)", 
+      exp: "Poema insígnia que expressa el distanciament de la intel·lectualitat catalana respecte a la política colonial espanyola." 
+    }
+  ],
+
+  // 5. PARELLES DE CONCEPTES (CONECTA AMPLIAT - 8 PARELLES)
+  conecta: [
+    { id: "c7_1", left: "Valentí Almirall", right: "Fundador del Diari Català i autor de 'Lo Catalanisme'", exp: "Líder del catalanisme progressista i promotor del Memorial de Greuges." },
+    { id: "c7_2", left: "Bases de Manresa", right: "Projecte d'autogovern regional aprovat per la Unió Catalanista el 1892", exp: "Fixaren l'estructura del catalanisme conservador i foralista." },
+    { id: "c7_3", left: "Tancament de Caixes", right: "Vaga de tributs de comerciants encapçalada pel batlle Robert (1899)", exp: "Protesta fiscal desencadenada per la pujada d'impostos de la guerra del 98." },
+    { id: "c7_4", left: "Lliga Regionalista", right: "Partit d'hegemonia catalanista conservadora fundat el 1901 per la burgesia", exp: "Va vèncer les eleccions amb la Candidatura dels Quatre Presidents." },
+    { id: "c7_5", left: "Jocs Florals (1859)", right: "Certamen literari per recuperar el català com a llengua culta", exp: "Lema històric: 'Patria, Fides, Amor'." },
+    { id: "c7_6", left: "Sabino Arana", right: "Fundador del Partit Nacionalista Basc (PNV) l'any 1895", exp: "Defensor del nacionalisme basc d'arrel foralista i religiosa." },
+    { id: "c7_7", left: "Rexurdimento", right: "Moviment de recuperació cultural i lingüística de Galícia", exp: "Liderat per Rosalía de Castro i Manuel Murguía." },
+    { id: "c7_8", left: "Modernisme", right: "Moviment cultural que va popularitzar el concepte de Nació enfront de Regió", exp: "Promogut per revistes com L'Avenç i intel·lectuals com Joan Maragall." }
+  ],
+
+  // 6. VERDADERR O FALS (VERITAT AMPLIAT - 8 DECLARACIONS)
+  veritat: [
+    { id: "v7_1", statement: "El Diari Català (1879) va ser el primer periòdic redactat íntegrament en llengua catalana.", isTrue: true, exp: "Exacte, creat per Valentí Almirall per estendre el debat polític en català." },
+    { id: "v7_2", statement: "Les Bases de Manresa de 1892 van ser redactades per instància del govern central de Madrid.", isTrue: false, exp: "Fals! Van ser aprovades per l'assemblea delegada de la Unió Catalanista." },
+    { id: "v7_3", statement: "La campanya en defensa del Dret Civil Català (1889) es considera la primera victòria política del catalanisme.", isTrue: true, exp: "Veritat! La pressió popular va aconseguir que el Codi Civil espanyol respectés el dret civil autòcton." },
+    { id: "v7_4", statement: "Valentí Almirall defensava un catalanisme d'estricta confessionalitat catòlica i tradicionalista.", isTrue: false, exp: "Fals! Almirall defensava un catalanisme progressista, laic, democràtic i federalista." },
+    { id: "v7_5", statement: "El Tancament de Caixes de 1899 va ser una protesta organitzada pels militars a favor de la guerra.", isTrue: false, exp: "Fals! Va ser una vaga de tributs dels comerciants i industrials de Barcelona contra els impostos del 98." },
+    { id: "v7_6", statement: "Sabino Arana va fundar el Partit Nacionalista Basc (PNV) l'any 1895.", isTrue: true, exp: "Veritat, estructurant el nacionalisme basc a Bilbao." },
+    { id: "v7_7", statement: "La Lliga Regionalista va guanyar les eleccions de 1901 a Barcelona derrotant els partits dinàstics.", isTrue: true, exp: "Veritat! La Candidatura dels Quatre Presidents va obtenir un triomf històric." },
+    { id: "v7_8", statement: "El Modernisme va rebutjar l'ús de la llengua catalana per considerar-la poc moderna.", isTrue: false, exp: "Fals! El Modernisme va normalitzar el català com a llengua de cultura europea i modernitzadora." }
+  ],
+
+  // 7. TEXT AMB PARAULA PERDUTA (MOT PERDUT AMPLIAT)
+  motPerdut: {
+    title: "El Memorial de Greuges (1885) i les Bases de Manresa (1892)",
+    text: "El Memorial de Greuges de 1885 defensava el dret ___ català i el proteccionisme econòmic. Més tard, les Bases de Manresa de 1892 establien que la llengua ___ seria l'única oficial a la regió i que el poder legislatiu recauria en les antigues ___.",
+    blanks: [
+      { id: "m7_1", answer: "civil", options: ["civil", "penal", "mercantil"] },
+      { id: "m7_2", answer: "catalana", options: ["catalana", "castellana", "francesa"] },
+      { id: "m7_3", answer: "Corts", options: ["Corts", "Diputacions", "Juntes"] }
+    ],
+    exp: "El dret civil, l'oficialitat de la llengua i les Corts pròpies eren els tres pilars bàsics de la reivindicació autonòmica."
+  },
 };
 
 // Funció d'extracció d'elements aleatoris
