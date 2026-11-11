@@ -1777,26 +1777,55 @@
             <h4 className="font-display font-black text-slate-800 text-xl text-center">
               A quin corrent ideològic correspon?
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <button
-                onClick={() => handleChoice('absolutisme')}
-                className="bg-duoRed text-white font-display font-black p-4 rounded-[20px] shadow-btn-red text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoRedDark duo-pressable"
-              >
-                Absolutisme
-              </button>
-              <button
-                onClick={() => handleChoice('moderat')}
-                className="bg-duoBlue text-white font-display font-black p-4 rounded-[20px] shadow-btn-blue text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoBlueDark duo-pressable"
-              >
-                Liberal Moderat
-              </button>
-              <button
-                onClick={() => handleChoice('progressista')}
-                className="bg-duoGreen text-white font-display font-black p-4 rounded-[20px] shadow-btn-green text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoGreenDark duo-pressable"
-              >
-                Liberal Prog.
-              </button>
-            </div>
+            {chapter.id <= 6 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <button
+                  onClick={() => handleChoice('absolutisme')}
+                  className="bg-duoRed text-white font-display font-black p-4 rounded-[20px] shadow-btn-red text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoRedDark duo-pressable"
+                >
+                  Absolutista
+                </button>
+                <button
+                  onClick={() => handleChoice('liberal_conservador')}
+                  className="bg-duoBlue text-white font-display font-black p-4 rounded-[20px] shadow-btn-blue text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoBlueDark duo-pressable"
+                >
+                  Liberal Conservador
+                </button>
+                <button
+                  onClick={() => handleChoice('liberal_progressista')}
+                  className="bg-duoGreen text-white font-display font-black p-4 rounded-[20px] shadow-btn-green text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoGreenDark duo-pressable"
+                >
+                  Liberal Progresista
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button
+                  onClick={() => handleChoice('federal_progressista')}
+                  className="bg-duoPurple text-white font-display font-black p-4 rounded-[20px] shadow-btn-purple text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoPurpleDark duo-pressable"
+                >
+                  Federal i Progressista
+                </button>
+                <button
+                  onClick={() => handleChoice('tradicionalista_catolic')}
+                  className="bg-duoOrange text-white font-display font-black p-4 rounded-[20px] shadow-btn-orange text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoOrangeDark duo-pressable"
+                >
+                  Tradicionalista i Catòlic
+                </button>
+                <button
+                  onClick={() => handleChoice('conservador_regionalista')}
+                  className="bg-duoBlue text-white font-display font-black p-4 rounded-[20px] shadow-btn-blue text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoBlueDark duo-pressable"
+                >
+                  Conservador Regionalista
+                </button>
+                <button
+                  onClick={() => handleChoice('esquerra_obrera')}
+                  className="bg-duoRed text-white font-display font-black p-4 rounded-[20px] shadow-btn-red text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoRedDark duo-pressable"
+                >
+                  Esquerra Obrera
+                </button>
+              </div>
+            )}
           </div>
         </div>
       );
@@ -2333,6 +2362,22 @@
 
                 {/* Indicadors Gamificats (Vides, Gemes, Ratxa) estètica limpia Duolingo */}
                 <div className="flex items-center gap-3 sm:gap-5 font-display font-black text-base">
+
+                  {/* APUNTES ICON */}
+                  <button 
+                    onClick={() => { playSound('pop'); window.open('https://pbfedu.github.io/historialab-notes', '_blank'); }}
+                    className="text-slate-400 hover:text-slate-600 transition-colors text-2xl sm:hidden ml-2"
+                  >
+                    <i className="fa-solid fa-book"></i>
+                  </button>
+
+                  <button 
+                    onClick={() => { playSound('pop'); window.open('https://pbfedu.github.io/historialab-notes', '_blank'); }}
+                    className="hidden sm:flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors uppercase text-xs tracking-wider ml-4"
+                  >
+                    <i className="fa-solid fa-book text-xl"></i>
+                    <span>Apunts</span>
+                  </button>
 
                   {/* BOTIGA ICON */}
                   <button 
