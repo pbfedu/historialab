@@ -1116,7 +1116,7 @@ const CHAPTER_DATA = {
    id: 7,
    title: "Capítol 7: El Catalanisme Polític i Cultural (1833-1901)",
    desc: "Banc ampliat de preguntes sobre la Renaixença, el Federalisme, el Memorial de Greuges, les Bases de Manresa, el Tancament de Caixes i la Lliga Regionalista",
-   color: "bg-duoYellow",
+   color: "bg-orange-400",
    available: true,
  
    // 1. LÍNIA DEL TEMPS AMPLIADA (14 ESDEVENIMENTS)
@@ -1279,42 +1279,42 @@ const CHAPTER_DATA = {
  
    // 4. FRAGMENTS DOCUMENTALS (BOE / TEXTOS HISTÒRICS AMPLIATS)
    boe: [
-     { 
-       id: "b7_1", 
-       text: "«La llengua catalana serà l'única que, amb caràcter oficial, podrà usar-se a Catalunya i en les relacions d'aquesta regió amb lo Poder central.»", 
-       type: "conservador", 
-       sub: "Bases de Manresa (Base 3a, 1892)", 
-       exp: "La Unió Catalanista reclamava la plena oficialitat única del català a l'administració regional." 
-     },
-     { 
-       id: "b7_2", 
-       text: "«El sentiment catalanista ens diu que l'organització actual de l'Estat espanyol no permetrà mai a Catalunya recobrar el lloc a què el deure la crida.»", 
-       type: "progressista", 
-       sub: "Lo Catalanisme, Valentí Almirall (1886)", 
-       exp: "Almirall defensava la necessitat d'harmonitzar el particularisme català amb la regeneració de tot l'Estat." 
-     },
-     { 
-       id: "b7_3", 
-       text: "«Les tres antigues províncies d'Aragó, Catalunya i València, incloses les Illes Balears, estiguin unides i aliades sense pretendre separar-se de la resta d'Espanya.»", 
-       type: "progressista", 
-       sub: "Pacte Federal de Tortosa (1869)", 
-       exp: "Acord d'arrel federalista per construir una Espanya descentralitzada des de baix." 
-     },
-     { 
-       id: "b7_4", 
-       text: "«Catalunya serà cristiana o no serà. La tradició catalana és una tradició d'ordre, de família i de fe catòlica insubstituïble.»", 
-       type: "conservador", 
-       sub: "La tradició catalana, Josep Torras i Bages (1892)", 
-       exp: "Manifest del Vigatanisme que vinculava la identitat catalana al catolicisme i a la tradició." 
-     },
-     { 
-       id: "b7_5", 
-       text: "«On són els barcos? — On són els fills? / Pregunta-ho al Ponent i a l'ona brava: / tot ho perderes, — no tens ningú. / Espanya, Espanya, — retorna en tu, / arrenca el plor de mare! / ... Adeu, Espanya!»", 
-       type: "progressista", 
-       sub: "Oda a Espanya, Joan Maragall (1898)", 
-       exp: "Poema insígnia que expressa el distanciament de la intel·lectualitat catalana respecte a la política colonial espanyola." 
-     }
-   ],
+  {
+    id: "b7_1",
+    text: "«La llengua catalana serà l'única que, amb caràcter oficial, podrà usar-se a Catalunya i en les relacions d'aquesta regió amb lo Poder central.»",
+    type: "conservador_regionalista",
+    sub: "Bases de Manresa (Base 3a, 1892)",
+    exp: "La Unió Catalanista defensava l'oficialitat exclusiva del català i l'autogovern de Catalunya, dins d'un catalanisme conservador i regionalista."
+  },
+  {
+    id: "b7_2",
+    text: "«El sentiment catalanista ens diu que l'organització actual de l'Estat espanyol no permetrà mai a Catalunya recobrar el lloc a què el deure la crida.»",
+    type: "conservador_regionalista",
+    sub: "Lo Catalanisme, Valentí Almirall (1886)",
+    exp: "Almirall defensava un catalanisme polític i progressista, contrari al centralisme i partidari de reformar l'Estat espanyol. El seu pensament s'aproxima al federalisme, tot i que no s'ha de confondre amb el tradicionalisme conservador."
+  },
+  {
+    id: "b7_3",
+    text: "«Les tres antigues províncies d'Aragó, Catalunya i València, incloses les Illes Balears, estiguin unides i aliades sense pretendre separar-se de la resta d'Espanya.»",
+    type: "federal_progressista",
+    sub: "Pacte Federal de Tortosa (1869)",
+    exp: "Acord d'arrel federalista que defensava la unió dels territoris de l'antiga Corona d'Aragó i una Espanya descentralitzada, sense plantejar la separació."
+  },
+  {
+    id: "b7_4",
+    text: "«Catalunya serà cristiana o no serà. La tradició catalana és una tradició d'ordre, de família i de fe catòlica insubstituïble.»",
+    type: "tradicionalista_catolic",
+    sub: "La tradició catalana, Josep Torras i Bages (1892)",
+    exp: "El vigatanisme vinculava la identitat catalana amb el catolicisme, la família, l'ordre social i la preservació de les tradicions."
+  },
+  {
+    id: "b7_5",
+    text: "«On són els barcos? — On són els fills? / Pregunta-ho al Ponent i a l'ona brava: / tot ho perderes, — no tens ningú. / Espanya, Espanya, — retorna en tu, / arrenca el plor de mare! / ... Adeu, Espanya!»",
+    type: "conservador_regionalista",
+    sub: "Oda a Espanya, Joan Maragall (1898)",
+    exp: "Poema que expressa la decepció davant la política colonial espanyola i el distanciament entre Catalunya i l'Estat. És una crítica regeneracionista i catalanista, no pròpiament conservadora."
+  },
+],
  
    // 5. PARELLES DE CONCEPTES (CONECTA AMPLIAT - 8 PARELLES)
    conecta: [
