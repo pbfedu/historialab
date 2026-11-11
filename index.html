@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="ca" class="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,6 +46,7 @@
 
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -99,6 +100,13 @@
       overflow-x: hidden;
       background-image: radial-gradient(#f1f5f9 2px, transparent 2px);
       background-size: 24px 24px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    html.dark body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      background-image: radial-gradient(#1e293b 2px, transparent 2px);
     }
 
     .duo-pressable:active {
@@ -164,9 +172,15 @@
     ::-webkit-scrollbar-track {
       background: #E2E8F0;
     }
+    html.dark ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
     ::-webkit-scrollbar-thumb {
       background: #CBD5E1;
       border-radius: 5px;
+    }
+    html.dark ::-webkit-scrollbar-thumb {
+      background: #334155;
     }
     ::-webkit-scrollbar-thumb:hover {
       background: #94A3B8;
@@ -176,7 +190,7 @@
 <body class="min-h-screen selection:bg-duoGreen selection:text-white flex flex-col justify-between">
   <div id="root" class="flex-1 flex flex-col"></div>
 
-  <footer class="w-full text-center text-xs font-bold text-slate-400 py-6 border-t-2 border-slate-200 bg-white">
+  <footer class="w-full text-center text-xs font-bold text-slate-400 dark:text-slate-500 py-6 border-t-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-colors">
     Aquesta plataforma pot cometre errors. Inspirat en la gamificació.
   </footer>
 
@@ -548,18 +562,18 @@
           <h2 className="text-4xl sm:text-5xl font-display font-black text-duoYellow drop-shadow-md">
             Lliçó Completada!
           </h2>
-          <p className="text-xl font-bold text-slate-600">
-            Has dominat el mòdul: <span className="text-slate-800">{moduleName}</span>
+          <p className="text-xl font-bold text-slate-600 dark:text-slate-300">
+            Has dominat el mòdul: <span className="text-slate-800 dark:text-white">{moduleName}</span>
           </p>
 
           <div className="flex gap-4 items-center justify-center my-6">
-            <div className="bg-amber-100 border-[3px] border-amber-300 rounded-[24px] p-6 w-32 flex flex-col items-center">
+            <div className="bg-amber-100 dark:bg-amber-900/40 border-[3px] border-amber-300 dark:border-amber-700 rounded-[24px] p-6 w-32 flex flex-col items-center">
               <i className="fa-solid fa-star text-4xl text-amber-500 mb-2"></i>
-              <span className="text-2xl font-black text-amber-700">+{stars}</span>
+              <span className="text-2xl font-black text-amber-700 dark:text-amber-300">+{stars}</span>
             </div>
-            <div className="bg-blue-100 border-[3px] border-blue-300 rounded-[24px] p-6 w-32 flex flex-col items-center">
+            <div className="bg-blue-100 dark:bg-blue-900/40 border-[3px] border-blue-300 dark:border-blue-700 rounded-[24px] p-6 w-32 flex flex-col items-center">
               <i className="fa-solid fa-bolt text-4xl text-blue-500 mb-2"></i>
-              <span className="text-2xl font-black text-blue-700">+{xpEarned}</span>
+              <span className="text-2xl font-black text-blue-700 dark:text-blue-300">+{xpEarned}</span>
             </div>
           </div>
 
@@ -574,7 +588,7 @@
     }
 
     // --- NOVA VISTA DE PERFIL, ESTADÍSTIQUES I IMPORTAR/EXPORTAR ---
-    function ProfileView({ xp, gems, streak, hearts, nodeProgress, setCurrentView }) {
+    function ProfileView({ xp, gems, streak, hearts, nodeProgress, setCurrentView, isDarkMode, toggleDarkMode }) {
       const fileInputRef = useRef(null);
 
       // Descarregar Progrés - 100% Encriptat i llegible
@@ -585,6 +599,8 @@
           hl_xp: localStorage.getItem('hl_xp'),
           hl_gems: localStorage.getItem('hl_gems'),
           hl_streak: localStorage.getItem('hl_streak'),
+          hl_last_study_date: localStorage.getItem('hl_last_study_date'),
+          hl_dark_mode: localStorage.getItem('hl_dark_mode'),
           hl_unlockedChapters: localStorage.getItem('hl_unlockedChapters'),
           hl_inventory: localStorage.getItem('hl_inventory'),
           hl_nodeProgress: localStorage.getItem('hl_nodeProgress')
@@ -651,7 +667,7 @@
                labels: ['Lliçons Completades', 'Lliçons Pendents'],
                datasets: [{
                  data: [completed, pending],
-                 backgroundColor: ['#58cc02', '#e2e8f0'],
+                 backgroundColor: ['#58cc02', isDarkMode ? '#334155' : '#e2e8f0'],
                  borderWidth: 3,
                  hoverOffset: 4
                }]
@@ -660,7 +676,7 @@
                responsive: true, 
                maintainAspectRatio: false,
                plugins: {
-                 legend: { position: 'bottom', labels: { font: { family: 'Outfit', weight: 'bold' } } }
+                 legend: { position: 'bottom', labels: { color: isDarkMode ? '#f8fafc' : '#1e293b', font: { family: 'Outfit', weight: 'bold' } } }
                }
              }
            });
@@ -668,14 +684,14 @@
         return () => {
           if (chartInstance) chartInstance.destroy();
         };
-      }, [nodeProgress]);
+      }, [nodeProgress, isDarkMode]);
 
       // Lligues
       const leagues = [
-        { id: 1, name: "Lliga Bronze", min: 0, max: 500, color: "text-amber-700", border: "border-amber-400", bg: "bg-amber-100", icon: "fa-shield-halved" },
-        { id: 2, name: "Lliga Plata", min: 500, max: 1500, color: "text-slate-600", border: "border-slate-400", bg: "bg-slate-200", icon: "fa-medal" },
-        { id: 3, name: "Lliga Or", min: 1500, max: 3000, color: "text-yellow-600", border: "border-yellow-400", bg: "bg-yellow-100", icon: "fa-trophy" },
-        { id: 4, name: "Lliga Diamant", min: 3000, max: Infinity, color: "text-cyan-600", border: "border-cyan-400", bg: "bg-cyan-100", icon: "fa-gem" }
+        { id: 1, name: "Lliga Bronze", min: 0, max: 500, color: "text-amber-700 dark:text-amber-400", border: "border-amber-400", bg: "bg-amber-100 dark:bg-amber-950/50", icon: "fa-shield-halved" },
+        { id: 2, name: "Lliga Plata", min: 500, max: 1500, color: "text-slate-600 dark:text-slate-300", border: "border-slate-400", bg: "bg-slate-200 dark:bg-slate-800", icon: "fa-medal" },
+        { id: 3, name: "Lliga Or", min: 1500, max: 3000, color: "text-yellow-600 dark:text-yellow-400", border: "border-yellow-400", bg: "bg-yellow-100 dark:bg-yellow-950/50", icon: "fa-trophy" },
+        { id: 4, name: "Lliga Diamant", min: 3000, max: Infinity, color: "text-cyan-600 dark:text-cyan-400", border: "border-cyan-400", bg: "bg-cyan-100 dark:bg-cyan-950/50", icon: "fa-gem" }
       ];
 
       let currentLeagueIndex = leagues.findIndex(l => xp >= l.min && xp < l.max);
@@ -688,45 +704,47 @@
         <div className="max-w-4xl mx-auto space-y-8 pb-10">
           
           <div className="flex items-center justify-between">
-            <button onClick={() => setCurrentView('path')} className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full font-bold text-2xl transition-colors">
+            <button onClick={() => setCurrentView('path')} className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full font-bold text-2xl transition-colors">
               <i className="fa-solid fa-arrow-left"></i>
             </button>
-            <h2 className="text-3xl font-display font-black text-slate-800">El Meu Perfil</h2>
-            <div className="w-12"></div>
+            <h2 className="text-3xl font-display font-black text-slate-800 dark:text-white">El Meu Perfil</h2>
+            <button onClick={toggleDarkMode} className="w-12 h-12 flex items-center justify-center text-amber-500 dark:text-yellow-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full font-bold text-2xl transition-colors">
+              <i className={`fa-solid ${isDarkMode ? 'fa-sun' : 'fa-moon'}`}></i>
+            </button>
           </div>
 
           <AdBanner728 />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Targeta Resum */}
-            <div className="bg-white rounded-[32px] p-6 sm:p-8 shadow-duo-card border-[3px] border-slate-200 space-y-6">
-              <div className="flex items-center gap-4 border-b-2 border-slate-100 pb-6">
-                <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center text-4xl text-slate-300 border-4 border-slate-200">
+            <div className="bg-white dark:bg-slate-900 rounded-[32px] p-6 sm:p-8 shadow-duo-card border-[3px] border-slate-200 dark:border-slate-800 space-y-6 transition-colors">
+              <div className="flex items-center gap-4 border-b-2 border-slate-100 dark:border-slate-800 pb-6">
+                <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-4xl text-slate-300 dark:text-slate-600 border-4 border-slate-200 dark:border-slate-700">
                   <i className="fa-solid fa-user-astronaut"></i>
                 </div>
                 <div>
-                  <h3 className="font-display font-black text-2xl text-slate-800">Historiador</h3>
-                  <p className="text-slate-500 font-bold text-sm mt-1">Estudiant Nivell 1</p>
+                  <h3 className="font-display font-black text-2xl text-slate-800 dark:text-white">Historiador</h3>
+                  <p className="text-slate-500 dark:text-slate-400 font-bold text-sm mt-1">Estudiant Nivell 1</p>
                 </div>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-slate-50 p-4 rounded-[20px] border-2 border-slate-200 flex flex-col">
+                <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-[20px] border-2 border-slate-200 dark:border-slate-700 flex flex-col">
                   <i className="fa-solid fa-fire text-duoOrange text-2xl mb-2"></i>
-                  <span className="font-display font-black text-xl">{streak} Dies</span>
+                  <span className="font-display font-black text-xl text-slate-800 dark:text-white">{streak} Dies</span>
                   <span className="text-xs text-slate-400 font-bold">Ratxa d'estudi</span>
                 </div>
-                <div className="bg-slate-50 p-4 rounded-[20px] border-2 border-slate-200 flex flex-col">
+                <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-[20px] border-2 border-slate-200 dark:border-slate-700 flex flex-col">
                   <i className="fa-solid fa-bolt text-duoBlue text-2xl mb-2"></i>
-                  <span className="font-display font-black text-xl">{xp} XP</span>
+                  <span className="font-display font-black text-xl text-slate-800 dark:text-white">{xp} XP</span>
                   <span className="text-xs text-slate-400 font-bold">Experiència total</span>
                 </div>
               </div>
             </div>
 
             {/* Targeta Gràfic */}
-            <div className="bg-white rounded-[32px] p-6 sm:p-8 shadow-duo-card border-[3px] border-slate-200 space-y-4">
-              <h3 className="font-display font-black text-xl text-slate-800 border-b-2 border-slate-100 pb-4">Progrés Curricular</h3>
+            <div className="bg-white dark:bg-slate-900 rounded-[32px] p-6 sm:p-8 shadow-duo-card border-[3px] border-slate-200 dark:border-slate-800 space-y-4 transition-colors">
+              <h3 className="font-display font-black text-xl text-slate-800 dark:text-white border-b-2 border-slate-100 dark:border-slate-800 pb-4">Progrés Curricular</h3>
               <div className="relative w-full h-[200px]">
                 <canvas id="statsChart"></canvas>
               </div>
@@ -734,13 +752,13 @@
           </div>
 
           {/* Secció Lligues */}
-          <div className="bg-gradient-to-b from-white to-blue-50 rounded-[32px] p-6 sm:p-8 shadow-duo-card border-[3px] border-blue-200 space-y-6">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b-2 border-blue-100 pb-4 gap-4">
-              <h3 className="font-display font-black text-2xl text-blue-900 flex items-center gap-3">
+          <div className="bg-gradient-to-b from-white to-blue-50 dark:from-slate-900 dark:to-slate-800/80 rounded-[32px] p-6 sm:p-8 shadow-duo-card border-[3px] border-blue-200 dark:border-blue-900/50 space-y-6 transition-colors">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b-2 border-blue-100 dark:border-slate-700 pb-4 gap-4">
+              <h3 className="font-display font-black text-2xl text-blue-900 dark:text-blue-300 flex items-center gap-3">
                 <i className="fa-solid fa-trophy text-blue-500 text-3xl"></i>
                 Lligues de Classificació
               </h3>
-              <div className="text-xs bg-blue-100 text-blue-800 font-bold px-3 py-1.5 rounded-full border border-blue-200">
+              <div className="text-xs bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200 font-bold px-3 py-1.5 rounded-full border border-blue-200 dark:border-blue-700">
                 Supera els teus límits!
               </div>
             </div>
@@ -750,38 +768,38 @@
                 <i className={`fa-solid ${currentLeague.icon}`}></i>
               </div>
               <div className="flex-1 w-full space-y-2">
-                <h4 className="font-display font-black text-slate-800 text-2xl">{currentLeague.name}</h4>
+                <h4 className="font-display font-black text-slate-800 dark:text-white text-2xl">{currentLeague.name}</h4>
                 {nextLeague ? (
                   <>
-                    <p className="text-sm font-bold text-slate-500">
+                    <p className="text-sm font-bold text-slate-500 dark:text-slate-400">
                       {xp} XP / {nextLeague.min} XP per a {nextLeague.name}
                     </p>
-                    <div className="w-full bg-slate-200 h-4 rounded-full overflow-hidden border-2 border-slate-300">
+                    <div className="w-full bg-slate-200 dark:bg-slate-700 h-4 rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-600">
                       <div className="bg-duoBlue h-full transition-all duration-500 rounded-full" style={{ width: `${progressPerc}%` }}></div>
                     </div>
                   </>
                 ) : (
-                   <p className="text-sm font-bold text-cyan-600">Has assolit la lliga màxima! Ets una llegenda de la història.</p>
+                   <p className="text-sm font-bold text-cyan-600 dark:text-cyan-400">Has assolit la lliga màxima! Ets una llegenda de la història.</p>
                 )}
               </div>
             </div>
           </div>
 
           {/* Zona de Gestió de Dades (Offline/PWA) */}
-          <div className="bg-slate-50 rounded-[32px] p-6 sm:p-8 border-2 border-slate-200 space-y-4">
+          <div className="bg-slate-50 dark:bg-slate-900 rounded-[32px] p-6 sm:p-8 border-2 border-slate-200 dark:border-slate-800 space-y-4 transition-colors">
             <div className="text-center pb-2">
-              <h3 className="font-display font-black text-lg text-slate-800">Còpia de Seguretat i Dades</h3>
-              <p className="text-sm text-slate-500 font-bold mt-1">Guarda el teu progrés per no perdre'l si esborres l'historial o canvies de navegador.</p>
+              <h3 className="font-display font-black text-lg text-slate-800 dark:text-white">Còpia de Seguretat i Dades</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 font-bold mt-1">Guarda el teu progrés per no perdre'l si esborres l'historial o canvies de navegador.</p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
-              <button onClick={handleExport} className="bg-white text-duoBlueDark font-display font-black py-4 px-6 rounded-[20px] shadow-sm border-[3px] border-slate-200 border-b-[6px] duo-pressable flex items-center justify-center gap-3 hover:bg-slate-50">
+              <button onClick={handleExport} className="bg-white dark:bg-slate-800 text-duoBlueDark dark:text-duoBlue font-display font-black py-4 px-6 rounded-[20px] shadow-sm border-[3px] border-slate-200 dark:border-slate-700 border-b-[6px] duo-pressable flex items-center justify-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-700">
                 <i className="fa-solid fa-download"></i>
                 Descarregar Progrés
               </button>
               
               <input type="file" accept=".txt,.json" ref={fileInputRef} onChange={handleImport} className="hidden" />
-              <button onClick={() => fileInputRef.current.click()} className="bg-white text-duoEmeraldDark font-display font-black py-4 px-6 rounded-[20px] shadow-sm border-[3px] border-slate-200 border-b-[6px] duo-pressable flex items-center justify-center gap-3 hover:bg-slate-50">
+              <button onClick={() => fileInputRef.current.click()} className="bg-white dark:bg-slate-800 text-duoEmeraldDark dark:text-duoEmerald font-display font-black py-4 px-6 rounded-[20px] shadow-sm border-[3px] border-slate-200 dark:border-slate-700 border-b-[6px] duo-pressable flex items-center justify-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-700">
                 <i className="fa-solid fa-upload"></i>
                 Importar Progrés
               </button>
@@ -828,14 +846,14 @@
                     isActive 
                       ? `${chap.color} text-white shadow-duo-3d border-black/20 scale-[1.02] border-x-black/10 border-t-black/10` 
                       : isChapLocked
-                        ? 'bg-slate-100 text-slate-400 border-slate-200 opacity-80'
-                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                        ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700 opacity-80'
+                        : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
                 >
                   <div className="flex items-center justify-between text-xs opacity-90 uppercase mb-2 font-bold tracking-wider">
                     <span>SECCIÓ {chap.id}</span>
                     {(!chap.available || isChapLocked) && (
-                      <span className="bg-amber-100 text-amber-800 text-[10px] font-black px-2 py-0.5 rounded-full border border-amber-300">
+                      <span className="bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 text-[10px] font-black px-2 py-0.5 rounded-full border border-amber-300 dark:border-amber-700">
                         {isChapLocked ? 'Bloquejat' : 'Aviat'}
                       </span>
                     )}
@@ -873,15 +891,15 @@
 
           {/* Si el capítol no està disponible o està bloquejat per no-pro */}
           {!chapter.available || isLockedForNonPro ? (
-            <div className="bg-white border-[3px] border-dashed border-slate-300 rounded-[32px] p-10 text-center space-y-6 shadow-sm">
-              <div className="w-24 h-24 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center text-4xl mx-auto border-[6px] border-slate-200 animate-float-duo">
+            <div className="bg-white dark:bg-slate-900 border-[3px] border-dashed border-slate-300 dark:border-slate-800 rounded-[32px] p-10 text-center space-y-6 shadow-sm transition-colors">
+              <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-full flex items-center justify-center text-4xl mx-auto border-[6px] border-slate-200 dark:border-slate-700 animate-float-duo">
                 <i className="fa-solid fa-lock"></i>
               </div>
               <div className="max-w-md mx-auto space-y-3">
-                <h3 className="text-2xl font-display font-black text-slate-800">
+                <h3 className="text-2xl font-display font-black text-slate-800 dark:text-white">
                   {!chapter.available ? "Nivell en expansió" : "Secció Bloquejada"}
                 </h3>
-                <p className="text-slate-500 text-base font-bold">
+                <p className="text-slate-500 dark:text-slate-400 text-base font-bold">
                   {!chapter.available 
                     ? "Aquest capítol estarà llest aviat. Mentrestant, repassa els capítols anteriors!"
                     : "Aquest capítol requereix una clau especial. Pots obrir-lo veient un missatge patrocinat o sent usuari PRO."}
@@ -901,7 +919,7 @@
             <div className="relative py-8 flex flex-col items-center space-y-12 w-full max-w-md mx-auto">
               
               {/* Línea conectora central gruesa como en Duolingo */}
-              <div className="absolute top-8 bottom-24 left-1/2 w-8 bg-slate-200 -translate-x-1/2 rounded-full z-0 border-x-[3px] border-slate-300 opacity-60"></div>
+              <div className="absolute top-8 bottom-24 left-1/2 w-8 bg-slate-200 dark:bg-slate-800 -translate-x-1/2 rounded-full z-0 border-x-[3px] border-slate-300 dark:border-slate-700 opacity-60"></div>
 
               {nodes.map((node, index) => {
                 const progressKey = `c${selectedChapter}_${node.key}`;
@@ -926,7 +944,7 @@
                       
                       {/* Corona d'Estrelles si està completat */}
                       {stars > 0 && (
-                        <div className="absolute -top-4 bg-white text-amber-500 border-4 border-amber-400 text-sm px-3 py-1 rounded-full font-black flex items-center gap-1.5 shadow-md transform rotate-6 animate-float-duo">
+                        <div className="absolute -top-4 bg-white dark:bg-slate-800 text-amber-500 dark:text-amber-400 border-4 border-amber-400 text-sm px-3 py-1 rounded-full font-black flex items-center gap-1.5 shadow-md transform rotate-6 animate-float-duo">
                           <i className="fa-solid fa-crown text-xs"></i>
                           <span>{stars}</span>
                         </div>
@@ -935,7 +953,7 @@
 
                     {/* Nom del Mòdul flotante */}
                     <div className="absolute -bottom-8 w-[160px] text-center">
-                      <span className="font-display font-black text-sm text-slate-500">
+                      <span className="font-display font-black text-sm text-slate-500 dark:text-slate-400">
                         {node.name}
                       </span>
                     </div>
@@ -1038,7 +1056,7 @@
           price: 0,
           icon: 'fa-tv',
           color: isPro ? 'bg-slate-400 text-white' : 'bg-duoEmerald text-white',
-          btnColor: isPro ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none' : 'bg-duoEmerald shadow-btn-emerald hover:bg-duoEmeraldDark text-white',
+          btnColor: isPro ? 'bg-slate-300 dark:bg-slate-700 text-slate-500 cursor-not-allowed shadow-none' : 'bg-duoEmerald shadow-btn-emerald hover:bg-duoEmeraldDark text-white',
           disabled: isPro,
           disabledText: isPro ? 'Gratis en PRO' : 'Rebre (+15 💎)',
           ownedText: isPro ? 'Usuari PRO' : null,
@@ -1053,12 +1071,12 @@
       ];
 
       return (
-        <div className="max-w-3xl mx-auto bg-white rounded-[32px] p-6 sm:p-10 shadow-duo-card border-[3px] border-slate-200 space-y-8">
+        <div className="max-w-3xl mx-auto bg-white dark:bg-slate-900 rounded-[32px] p-6 sm:p-10 shadow-duo-card border-[3px] border-slate-200 dark:border-slate-800 space-y-8 transition-colors">
           <div className="flex items-center justify-between">
-            <button onClick={() => setCurrentView('path')} className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full font-bold text-2xl transition-colors">
+            <button onClick={() => setCurrentView('path')} className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full font-bold text-2xl transition-colors">
               <i className="fa-solid fa-xmark"></i>
             </button>
-            <span className="bg-emerald-100 text-duoEmeraldDark border-2 border-emerald-200 text-sm font-black px-4 py-2 rounded-2xl shadow-sm flex items-center gap-2">
+            <span className="bg-emerald-100 dark:bg-emerald-950/60 text-duoEmeraldDark dark:text-duoEmerald border-2 border-emerald-200 dark:border-emerald-800 text-sm font-black px-4 py-2 rounded-2xl shadow-sm flex items-center gap-2">
               <i className="fa-solid fa-gem text-amber-400 text-lg"></i>
               {gems} Gemes
             </span>
@@ -1067,38 +1085,38 @@
           <AdBanner728 />
 
           <div className="text-center space-y-4">
-            <div className="w-24 h-24 bg-amber-100 text-amber-500 rounded-[28px] flex items-center justify-center text-5xl mx-auto border-[4px] border-amber-200 shadow-sm animate-float-duo">
+            <div className="w-24 h-24 bg-amber-100 dark:bg-amber-950/50 text-amber-500 rounded-[28px] flex items-center justify-center text-5xl mx-auto border-[4px] border-amber-200 dark:border-amber-800 shadow-sm animate-float-duo">
               <i className="fa-solid fa-store"></i>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-display font-black text-slate-800">
+            <h2 className="text-3xl sm:text-4xl font-display font-black text-slate-800 dark:text-white">
               La Botiga del Temps
             </h2>
-            <p className="text-slate-500 text-base sm:text-lg font-bold max-w-lg mx-auto leading-relaxed">
+            <p className="text-slate-500 dark:text-slate-400 text-base sm:text-lg font-bold max-w-lg mx-auto leading-relaxed">
               Utilitza les teves gemes per obtenir avantatges històrics!
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {shopItems.map(item => (
-              <div key={item.id} className="bg-white border-[3px] border-slate-200 rounded-[24px] p-5 flex flex-col justify-between space-y-5 hover:border-slate-300 transition-colors shadow-sm">
+              <div key={item.id} className="bg-white dark:bg-slate-800/80 border-[3px] border-slate-200 dark:border-slate-700 rounded-[24px] p-5 flex flex-col justify-between space-y-5 hover:border-slate-300 dark:hover:border-slate-600 transition-colors shadow-sm">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className={`w-14 h-14 rounded-[20px] ${item.color} flex items-center justify-center text-2xl font-black shadow-sm border-2 border-black/10`}>
                       <i className={`fa-solid ${item.icon}`}></i>
                     </div>
                     {item.ownedText && (
-                      <span className="text-xs font-black bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl border border-slate-300">
+                      <span className="text-xs font-black bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-600">
                         {item.ownedText}
                       </span>
                     )}
                     {item.id === 'doubleXp' && inventory.doubleXp && (
-                      <span className="text-xs font-black bg-sky-100 text-sky-700 border border-sky-200 px-3 py-1.5 rounded-xl animate-pulse">
+                      <span className="text-xs font-black bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800 px-3 py-1.5 rounded-xl animate-pulse">
                         ¡Actiu!
                       </span>
                     )}
                   </div>
-                  <h3 className="font-display font-black text-slate-800 text-xl">{item.title}</h3>
-                  <p className="text-sm text-slate-500 font-bold leading-relaxed">{item.desc}</p>
+                  <h3 className="font-display font-black text-slate-800 dark:text-white text-xl">{item.title}</h3>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 font-bold leading-relaxed">{item.desc}</p>
                 </div>
 
                 <button
@@ -1106,7 +1124,7 @@
                   onClick={() => { playSound('pop'); item.onBuy(); }}
                   className={`w-full font-display font-black text-base py-4 rounded-[20px] transition-transform duo-pressable border-b-[6px] border-x-2 border-t-2 flex items-center justify-center gap-2 ${
                     item.disabled 
-                      ? 'bg-slate-100 text-slate-400 border-slate-200 shadow-none' 
+                      ? 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-600 shadow-none' 
                       : `${item.btnColor} border-black/10`
                   }`}
                 >
@@ -1133,11 +1151,11 @@
       <div className="flex items-center gap-4 mb-8">
         <button 
           onClick={() => setCurrentView('path')} 
-          className="text-slate-400 hover:text-slate-600 text-2xl font-black transition-transform hover:scale-110 active:scale-95"
+          className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-2xl font-black transition-transform hover:scale-110 active:scale-95"
         >
           <i className="fa-solid fa-xmark"></i>
         </button>
-        <div className="flex-1 bg-slate-200 h-4 rounded-full overflow-hidden border-2 border-slate-300">
+        <div className="flex-1 bg-slate-200 dark:bg-slate-700 h-4 rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-600">
           <div 
             className="bg-duoGreen h-full transition-all duration-500 rounded-full"
             style={{ width: `${currentProgress}%` }}
@@ -1191,10 +1209,10 @@
           <GameHeader setCurrentView={setCurrentView} currentProgress={20} />
 
           <div className="space-y-2 text-center pb-4">
-            <h2 className="text-3xl font-display font-black text-slate-800">
+            <h2 className="text-3xl font-display font-black text-slate-800 dark:text-white">
               Ordena la Línia del Temps
             </h2>
-            <p className="text-slate-500 text-base font-bold">
+            <p className="text-slate-500 dark:text-slate-400 text-base font-bold">
               Des del més antic (a dalt) al més recent (a baix)
             </p>
           </div>
@@ -1206,15 +1224,15 @@
               <motion.div 
                 key={item.id}
                 layout
-                className="bg-white border-[3px] border-slate-200 border-b-[6px] rounded-[24px] p-5 flex items-center justify-between gap-4 shadow-sm hover:border-duoGreen transition-colors"
+                className="bg-white dark:bg-slate-800 border-[3px] border-slate-200 dark:border-slate-700 border-b-[6px] rounded-[24px] p-5 flex items-center justify-between gap-4 shadow-sm hover:border-duoGreen transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-[20px] bg-emerald-100 text-duoGreen border-2 border-emerald-200 flex items-center justify-center text-2xl font-black shrink-0">
+                  <div className="w-14 h-14 rounded-[20px] bg-emerald-100 dark:bg-emerald-950/60 text-duoGreen border-2 border-emerald-200 dark:border-emerald-800 flex items-center justify-center text-2xl font-black shrink-0">
                     <i className={`fa-solid ${item.icon}`}></i>
                   </div>
                   <div>
-                    <h4 className="font-display font-black text-slate-800 text-lg">{item.text}</h4>
-                    <span className="text-sm font-black text-duoGreen bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-xl mt-1 inline-block">{item.year}</span>
+                    <h4 className="font-display font-black text-slate-800 dark:text-white text-lg">{item.text}</h4>
+                    <span className="text-sm font-black text-duoGreen bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-3 py-1 rounded-xl mt-1 inline-block">{item.year}</span>
                   </div>
                 </div>
 
@@ -1222,14 +1240,14 @@
                   <button 
                     disabled={idx === 0}
                     onClick={() => moveItem(idx, idx - 1)}
-                    className="w-10 h-10 rounded-[14px] bg-slate-100 border-2 border-slate-200 hover:bg-duoGreen hover:text-white hover:border-duoGreenDark disabled:opacity-30 flex items-center justify-center font-bold text-lg transition-colors active:scale-95"
+                    className="w-10 h-10 rounded-[14px] bg-slate-100 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:bg-duoGreen hover:text-white hover:border-duoGreenDark disabled:opacity-30 flex items-center justify-center font-bold text-lg transition-colors active:scale-95"
                   >
                     <i className="fa-solid fa-chevron-up"></i>
                   </button>
                   <button 
                     disabled={idx === items.length - 1}
                     onClick={() => moveItem(idx, idx + 1)}
-                    className="w-10 h-10 rounded-[14px] bg-slate-100 border-2 border-slate-200 hover:bg-duoGreen hover:text-white hover:border-duoGreenDark disabled:opacity-30 flex items-center justify-center font-bold text-lg transition-colors active:scale-95"
+                    className="w-10 h-10 rounded-[14px] bg-slate-100 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:bg-duoGreen hover:text-white hover:border-duoGreenDark disabled:opacity-30 flex items-center justify-center font-bold text-lg transition-colors active:scale-95"
                   >
                     <i className="fa-solid fa-chevron-down"></i>
                   </button>
@@ -1328,7 +1346,7 @@
         <div className="max-w-2xl mx-auto space-y-6 pt-4">
           <GameHeader setCurrentView={setCurrentView} currentProgress={progress || 10} />
 
-          <h2 className="text-2xl sm:text-3xl font-display font-black text-slate-800 leading-tight">
+          <h2 className="text-2xl sm:text-3xl font-display font-black text-slate-800 dark:text-white leading-tight">
             {q.question}
           </h2>
 
@@ -1362,9 +1380,9 @@
                   const isDisabled = disabledOptions.includes(i);
                   if (isDisabled) {
                     return (
-                      <div key={i} className="p-5 rounded-[20px] font-display font-bold text-slate-300 bg-slate-50 border-[3px] border-slate-200 line-through flex items-center justify-between">
+                      <div key={i} className="p-5 rounded-[20px] font-display font-bold text-slate-300 dark:text-slate-600 bg-slate-50 dark:bg-slate-800 border-[3px] border-slate-200 dark:border-slate-700 line-through flex items-center justify-between">
                         <span>{opt.text}</span>
-                        <span className="text-xs bg-slate-200 text-slate-500 px-3 py-1 rounded-full font-black border border-slate-300">Descartat</span>
+                        <span className="text-xs bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 px-3 py-1 rounded-full font-black border border-slate-300 dark:border-slate-600">Descartat</span>
                       </div>
                     );
                   }
@@ -1373,7 +1391,7 @@
                     <button
                       key={i}
                       onClick={() => handleClassicAnswer(opt)}
-                      className={`p-5 rounded-[20px] font-display font-black text-left text-lg bg-white border-2 border-b-[6px] border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 duo-pressable active:bg-slate-100 transition-all`}
+                      className={`p-5 rounded-[20px] font-display font-black text-left text-lg bg-white dark:bg-slate-800 border-2 border-b-[6px] border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 duo-pressable active:bg-slate-100 transition-all`}
                     >
                       {opt.text}
                     </button>
@@ -1395,7 +1413,7 @@
                 max={q.maxYear} 
                 value={sliderVal} 
                 onChange={(e) => setSliderVal(parseInt(e.target.value))}
-                className="w-full h-4 bg-slate-200 rounded-full appearance-none cursor-pointer accent-duoOrange border-2 border-slate-300"
+                className="w-full h-4 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none cursor-pointer accent-duoOrange border-2 border-slate-300 dark:border-slate-600"
               />
               <button
                 onClick={handleSliderSubmit}
@@ -1420,11 +1438,11 @@
                         setMultiSelected(prev => isSel ? prev.filter(x => x !== opt.id) : [...prev, opt.id]);
                       }}
                       className={`p-5 rounded-[20px] font-display font-black text-left text-lg border-2 border-b-[6px] transition-all flex items-center justify-between active:translate-y-1 active:border-b-2 ${
-                        isSel ? 'bg-orange-50 border-duoOrange text-duoOrange' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        isSel ? 'bg-orange-50 dark:bg-orange-950/40 border-duoOrange text-duoOrange' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700'
                       }`}
                     >
                       <span>{opt.text}</span>
-                      <i className={`fa-solid text-2xl ${isSel ? 'fa-square-check text-duoOrange' : 'fa-square text-slate-300'}`}></i>
+                      <i className={`fa-solid text-2xl ${isSel ? 'fa-square-check text-duoOrange' : 'fa-square text-slate-300 dark:text-slate-600'}`}></i>
                     </button>
                   );
                 })}
@@ -1524,7 +1542,7 @@
              Repàs Extra
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-display font-black text-slate-800 leading-tight">
+          <h2 className="text-2xl sm:text-3xl font-display font-black text-slate-800 dark:text-white leading-tight">
             {q.question}
           </h2>
 
@@ -1558,9 +1576,9 @@
                   const isDisabled = disabledOptions.includes(i);
                   if (isDisabled) {
                     return (
-                      <div key={i} className="p-5 rounded-[20px] font-display font-bold text-slate-300 bg-slate-50 border-[3px] border-slate-200 line-through flex items-center justify-between">
+                      <div key={i} className="p-5 rounded-[20px] font-display font-bold text-slate-300 dark:text-slate-600 bg-slate-50 dark:bg-slate-800 border-[3px] border-slate-200 dark:border-slate-700 line-through flex items-center justify-between">
                         <span>{opt.text}</span>
-                        <span className="text-xs bg-slate-200 text-slate-500 px-3 py-1 rounded-full font-black border border-slate-300">Descartat</span>
+                        <span className="text-xs bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 px-3 py-1 rounded-full font-black border border-slate-300 dark:border-slate-600">Descartat</span>
                       </div>
                     );
                   }
@@ -1568,7 +1586,7 @@
                     <button
                       key={i}
                       onClick={() => handleClassicAnswer(opt)}
-                      className={`p-5 rounded-[20px] font-display font-black text-left text-lg bg-white border-2 border-b-[6px] border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 duo-pressable active:bg-slate-100 transition-all`}
+                      className={`p-5 rounded-[20px] font-display font-black text-left text-lg bg-white dark:bg-slate-800 border-2 border-b-[6px] border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 duo-pressable active:bg-slate-100 transition-all`}
                     >
                       {opt.text}
                     </button>
@@ -1590,7 +1608,7 @@
                 max={q.maxYear} 
                 value={sliderVal} 
                 onChange={(e) => setSliderVal(parseInt(e.target.value))}
-                className="w-full h-4 bg-slate-200 rounded-full appearance-none cursor-pointer accent-duoOrange border-2 border-slate-300"
+                className="w-full h-4 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none cursor-pointer accent-duoOrange border-2 border-slate-300 dark:border-slate-600"
               />
               <button
                 onClick={handleSliderSubmit}
@@ -1615,11 +1633,11 @@
                         setMultiSelected(prev => isSel ? prev.filter(x => x !== opt.id) : [...prev, opt.id]);
                       }}
                       className={`p-5 rounded-[20px] font-display font-black text-left text-lg border-2 border-b-[6px] transition-all flex items-center justify-between active:translate-y-1 active:border-b-2 ${
-                        isSel ? 'bg-orange-50 border-duoOrange text-duoOrange' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        isSel ? 'bg-orange-50 dark:bg-orange-950/40 border-duoOrange text-duoOrange' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700'
                       }`}
                     >
                       <span>{opt.text}</span>
-                      <i className={`fa-solid text-2xl ${isSel ? 'fa-square-check text-duoOrange' : 'fa-square text-slate-300'}`}></i>
+                      <i className={`fa-solid text-2xl ${isSel ? 'fa-square-check text-duoOrange' : 'fa-square text-slate-300 dark:text-slate-600'}`}></i>
                     </button>
                   );
                 })}
@@ -1680,10 +1698,10 @@
             <span className={`inline-block px-5 py-2 rounded-full text-white font-display font-black text-sm uppercase tracking-widest border-2 border-black/10 shadow-sm ${data.color}`}>
               {data.centerRole}
             </span>
-            <h2 className="text-3xl font-display font-black text-slate-800 drop-shadow-sm">
+            <h2 className="text-3xl font-display font-black text-slate-800 dark:text-white drop-shadow-sm">
               {data.title}
             </h2>
-            <p className="text-slate-500 text-base font-bold max-w-md mx-auto">
+            <p className="text-slate-500 dark:text-slate-400 text-base font-bold max-w-md mx-auto">
               {data.desc}
             </p>
           </div>
@@ -1691,18 +1709,18 @@
           {/* Slots a omplir */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4">
             {data.slots.map(slot => (
-              <div key={slot.id} className="bg-white border-[3px] border-b-[6px] border-slate-200 rounded-[24px] p-5 space-y-3 hover:border-slate-300 transition-colors">
+              <div key={slot.id} className="bg-white dark:bg-slate-800 border-[3px] border-b-[6px] border-slate-200 dark:border-slate-700 rounded-[24px] p-5 space-y-3 hover:border-slate-300 dark:hover:border-slate-600 transition-colors">
                 <div className="flex items-center gap-3 text-duoBlue font-display font-black text-sm uppercase tracking-wider">
-                  <div className="w-10 h-10 bg-sky-100 rounded-full flex items-center justify-center text-xl border-2 border-sky-200">
+                  <div className="w-10 h-10 bg-sky-100 dark:bg-sky-950/60 rounded-full flex items-center justify-center text-xl border-2 border-sky-200 dark:border-sky-800">
                     <i className={`fa-solid ${slot.icon}`}></i>
                   </div>
                   <span>{slot.label}</span>
                 </div>
-                <p className="text-sm text-slate-500 font-bold">{slot.relation}</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400 font-bold">{slot.relation}</p>
                 <select
                   value={assigned[slot.id] || ""}
                   onChange={(e) => handleAssign(slot.id, e.target.value)}
-                  className="w-full bg-slate-50 border-2 border-slate-300 rounded-[16px] p-3 font-display font-black text-base text-slate-800 focus:border-duoBlue focus:bg-white outline-none cursor-pointer appearance-none"
+                  className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 rounded-[16px] p-3 font-display font-black text-base text-slate-800 dark:text-white focus:border-duoBlue focus:bg-white dark:focus:bg-slate-900 outline-none cursor-pointer appearance-none"
                 >
                   <option value="">-- Tria l'Historiador --</option>
                   {data.chars.map((c, i) => (
@@ -1763,18 +1781,18 @@
 
           <AdBanner728 />
 
-          <div className="bg-[#fff9e6] border-[4px] border-amber-200 rounded-[32px] p-8 relative space-y-4 shadow-sm">
-            <i className="fa-solid fa-quote-left text-amber-300 text-5xl opacity-50 absolute top-6 left-6"></i>
-            <p className="font-serif italic text-xl text-slate-800 leading-relaxed relative z-10 font-medium pl-6">
+          <div className="bg-[#fff9e6] dark:bg-amber-950/30 border-[4px] border-amber-200 dark:border-amber-800/60 rounded-[32px] p-8 relative space-y-4 shadow-sm transition-colors">
+            <i className="fa-solid fa-quote-left text-amber-300 dark:text-amber-700 text-5xl opacity-50 absolute top-6 left-6"></i>
+            <p className="font-serif italic text-xl text-slate-800 dark:text-amber-100 leading-relaxed relative z-10 font-medium pl-6">
               {currentDoc.text}
             </p>
-            <div className="text-right text-sm font-black text-amber-700 uppercase tracking-widest mt-4">
+            <div className="text-right text-sm font-black text-amber-700 dark:text-amber-400 uppercase tracking-widest mt-4">
               — {currentDoc.sub}
             </div>
           </div>
 
           <div className="space-y-4 pt-4">
-            <h4 className="font-display font-black text-slate-800 text-xl text-center">
+            <h4 className="font-display font-black text-slate-800 dark:text-white text-xl text-center">
               A quin corrent ideològic correspon?
             </h4>
             {chapter.id <= 6 ? (
@@ -1880,7 +1898,7 @@
           <GameHeader setCurrentView={setCurrentView} currentProgress={progress || 5} />
 
           <div className="text-center pb-2">
-            <h2 className="text-3xl font-display font-black text-slate-800">Toca les parelles</h2>
+            <h2 className="text-3xl font-display font-black text-slate-800 dark:text-white">Toca les parelles</h2>
           </div>
 
           <AdBanner728 />
@@ -1897,9 +1915,9 @@
                     disabled={isMatched}
                     onClick={() => handleLeftClick(item)}
                     className={`w-full p-4 rounded-[20px] font-display font-black text-sm sm:text-lg text-center border-2 border-b-[6px] transition-all active:translate-y-1 active:border-b-2 ${
-                      isMatched ? 'bg-slate-100 border-slate-200 text-slate-300 opacity-50 cursor-default' :
-                      isSelected ? 'bg-blue-50 text-duoBlue border-duoBlue' :
-                      'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300'
+                      isMatched ? 'bg-slate-100 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800 text-slate-300 dark:text-slate-600 opacity-50 cursor-default' :
+                      isSelected ? 'bg-blue-50 dark:bg-blue-950/60 text-duoBlue border-duoBlue' :
+                      'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     {item.left}
@@ -1918,8 +1936,8 @@
                     disabled={isMatched}
                     onClick={() => handleRightClick(item)}
                     className={`w-full p-4 rounded-[20px] font-display font-bold text-sm sm:text-base text-center border-2 border-b-[6px] transition-all active:translate-y-1 active:border-b-2 ${
-                      isMatched ? 'bg-slate-100 border-slate-200 text-slate-300 opacity-50 cursor-default' :
-                      'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300'
+                      isMatched ? 'bg-slate-100 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800 text-slate-300 dark:text-slate-600 opacity-50 cursor-default' :
+                      'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     {item.right}
@@ -1970,11 +1988,11 @@
 
           <AdBanner728 />
 
-          <div className="bg-white border-[4px] border-b-[8px] border-slate-200 rounded-[32px] p-10 space-y-6 shadow-sm">
-            <div className="w-20 h-20 bg-yellow-100 text-duoYellow rounded-full flex items-center justify-center text-4xl mx-auto border-4 border-yellow-200 animate-float-duo">
+          <div className="bg-white dark:bg-slate-800 border-[4px] border-b-[8px] border-slate-200 dark:border-slate-700 rounded-[32px] p-10 space-y-6 shadow-sm transition-colors">
+            <div className="w-20 h-20 bg-yellow-100 dark:bg-yellow-950/60 text-duoYellow rounded-full flex items-center justify-center text-4xl mx-auto border-4 border-yellow-200 dark:border-yellow-800 animate-float-duo">
               <i className="fa-solid fa-lightbulb"></i>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-display font-black text-slate-800 leading-snug">
+            <h3 className="text-2xl sm:text-3xl font-display font-black text-slate-800 dark:text-white leading-snug">
               «{current.statement}»
             </h3>
           </div>
@@ -2037,25 +2055,25 @@
 
           <AdBanner728 />
 
-          <h2 className="text-3xl font-display font-black text-slate-800 text-center pb-2">
+          <h2 className="text-3xl font-display font-black text-slate-800 dark:text-white text-center pb-2">
             Completa la història
           </h2>
 
-          <div className="bg-white border-[3px] border-b-[6px] border-slate-200 rounded-[32px] p-8 text-lg sm:text-xl font-bold text-slate-700 leading-relaxed shadow-sm">
+          <div className="bg-white dark:bg-slate-800 border-[3px] border-b-[6px] border-slate-200 dark:border-slate-700 rounded-[32px] p-8 text-lg sm:text-xl font-bold text-slate-700 dark:text-slate-200 leading-relaxed shadow-sm transition-colors">
             {data.text}
           </div>
 
           <div className="space-y-4 pt-2">
             {data.blanks.map((b, i) => (
-              <div key={b.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-5 rounded-[24px] border-[3px] border-slate-200">
-                <span className="font-display font-black text-slate-500 text-base">Espai {i + 1}:</span>
+              <div key={b.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-900 p-5 rounded-[24px] border-[3px] border-slate-200 dark:border-slate-800 transition-colors">
+                <span className="font-display font-black text-slate-500 dark:text-slate-400 text-base">Espai {i + 1}:</span>
                 <div className="flex flex-wrap gap-2">
                   {b.options.map((opt, j) => (
                     <button
                       key={j}
                       onClick={() => handleSelect(b.id, opt)}
                       className={`px-5 py-3 rounded-[16px] font-display font-black text-sm sm:text-base border-2 border-b-4 transition-all active:translate-y-1 active:border-b-2 ${
-                        answers[b.id] === opt ? 'bg-duoBlue text-white border-duoBlueDark' : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-100'
+                        answers[b.id] === opt ? 'bg-duoBlue text-white border-duoBlueDark' : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700'
                       }`}
                     >
                       {opt}
@@ -2090,6 +2108,26 @@
         return localStorage.getItem('hl_is_pro') === 'true';
       });
 
+      // MODO OSCURO (DARK MODE) REAL
+      const [isDarkMode, setIsDarkMode] = useState(() => {
+        const saved = localStorage.getItem('hl_dark_mode');
+        return saved === 'true';
+      });
+
+      useEffect(() => {
+        if (isDarkMode) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        localStorage.setItem('hl_dark_mode', isDarkMode);
+      }, [isDarkMode]);
+
+      const toggleDarkMode = () => {
+        playSound('pop');
+        setIsDarkMode(prev => !prev);
+      };
+
       // CARGA DE PROGRESS PERMANENT LOCALSTORAGE
       const [hearts, setHearts] = useState(() => {
         const saved = localStorage.getItem('hl_hearts');
@@ -2106,10 +2144,45 @@
         return saved !== null ? parseInt(saved, 10) : 20;
       });
 
+      // RACHA 100% FUNCIONAL I AUTOMÀTICA PER DIES
       const [streak, setStreak] = useState(() => {
-        const saved = localStorage.getItem('hl_streak');
-        return saved !== null ? parseInt(saved, 10) : 1;
+        const savedStreak = localStorage.getItem('hl_streak');
+        return savedStreak !== null ? parseInt(savedStreak, 10) : 1;
       });
+
+      useEffect(() => {
+        const todayStr = new Date().toISOString().split('T')[0];
+        const lastStudyDate = localStorage.getItem('hl_last_study_date');
+
+        if (!lastStudyDate) {
+          localStorage.setItem('hl_last_study_date', todayStr);
+        } else if (lastStudyDate !== todayStr) {
+          const lastDate = new Date(lastStudyDate);
+          const currentDate = new Date(todayStr);
+          const diffDays = Math.round((currentDate - lastDate) / (1000 * 60 * 60 * 24));
+
+          if (diffDays === 1) {
+            setStreak(prev => {
+              const updated = prev + 1;
+              localStorage.setItem('hl_streak', updated);
+              return updated;
+            });
+            localStorage.setItem('hl_last_study_date', todayStr);
+          } else if (diffDays > 1) {
+            setStreak(1);
+            localStorage.setItem('hl_streak', 1);
+            localStorage.setItem('hl_last_study_date', todayStr);
+          }
+        }
+      }, []);
+
+      const updateLastStudyActivity = () => {
+        const todayStr = new Date().toISOString().split('T')[0];
+        const lastStudyDate = localStorage.getItem('hl_last_study_date');
+        if (lastStudyDate !== todayStr) {
+          localStorage.setItem('hl_last_study_date', todayStr);
+        }
+      };
 
       const [unlockedChapters, setUnlockedChapters] = useState(() => {
         const saved = localStorage.getItem('hl_unlockedChapters');
@@ -2147,6 +2220,17 @@
       const [cprClicks, setCprClicks] = useState(0);
       const [extraLifeToast, setExtraLifeToast] = useState(false);
       const [lastResultData, setLastResultData] = useState(null);
+
+      // FÍSICA DE RECOMPENSES ANIMADES
+      const [flyingRewards, setFlyingRewards] = useState([]);
+
+      const spawnRewardAnimation = (iconClass, colorClass) => {
+        const id = Date.now() + Math.random();
+        setFlyingRewards(prev => [...prev, { id, iconClass, colorClass }]);
+        setTimeout(() => {
+          setFlyingRewards(prev => prev.filter(r => r.id !== id));
+        }, 1200);
+      };
       
       // Estado Modal Publicidad
       const [showAdModal, setShowAdModal] = useState(false);
@@ -2247,6 +2331,7 @@
 
       const triggerSuccess = (title, message, exp, points = 20, callback = null) => {
         playSound('success');
+        updateLastStudyActivity();
 
         let earnedXp = points;
         if (inventory.doubleXp) {
@@ -2257,6 +2342,9 @@
         setXp(x => x + earnedXp);
         setGems(g => g + 5);
         playSound('gemGain');
+
+        spawnRewardAnimation('fa-bolt', 'text-duoBlue');
+        spawnRewardAnimation('fa-gem', 'text-amber-400');
 
         setScreenEffect('flash-green');
         setTimeout(() => setScreenEffect(''), 500);
@@ -2324,6 +2412,7 @@
       };
 
       const completeNode = (nodeKey, stars) => {
+        updateLastStudyActivity();
         setNodeProgress(prev => ({
           ...prev,
           [nodeKey]: Math.max(prev[nodeKey] || 0, stars)
@@ -2332,11 +2421,11 @@
       };
 
       return (
-        <div className={`min-h-screen text-slate-800 flex flex-col font-sans transition-all duration-300 ${screenEffect}`}>
+        <div className={`min-h-screen text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-all duration-300 ${screenEffect}`}>
           
           {/* HEADER FIX DUOLINGO STYLE - Només visible a la pantalla de path */}
           {currentView === 'path' && (
-            <header className="sticky top-0 z-40 bg-white border-b-[3px] border-slate-200 shadow-sm px-4 py-3">
+            <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 border-b-[3px] border-slate-200 dark:border-slate-800 shadow-sm px-4 py-3 transition-colors">
               <div className="max-w-4xl mx-auto flex items-center justify-between">
                 
                 <div 
@@ -2348,7 +2437,7 @@
                   </div>
                   <div className="hidden sm:block">
                     <div className="flex items-center gap-2">
-                      <h1 className="text-2xl font-display font-black tracking-tight text-slate-800 leading-none">
+                      <h1 className="text-2xl font-display font-black tracking-tight text-slate-800 dark:text-white leading-none">
                         Història<span className="text-duoGreen">Lab</span>
                       </h1>
                       {isPro && (
@@ -2366,14 +2455,14 @@
                   {/* APUNTES ICON */}
                   <button 
                     onClick={() => { playSound('pop'); window.open('https://pbfedu.github.io/historialab-notes', '_blank'); }}
-                    className="text-slate-400 hover:text-slate-600 transition-colors text-2xl sm:hidden ml-2"
+                    className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors text-2xl sm:hidden ml-2"
                   >
                     <i className="fa-solid fa-book"></i>
                   </button>
 
                   <button 
                     onClick={() => { playSound('pop'); window.open('https://pbfedu.github.io/historialab-notes', '_blank'); }}
-                    className="hidden sm:flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors uppercase text-xs tracking-wider ml-4"
+                    className="hidden sm:flex items-center gap-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors uppercase text-xs tracking-wider ml-4"
                   >
                     <i className="fa-solid fa-book text-xl"></i>
                     <span>Apunts</span>
@@ -2382,14 +2471,14 @@
                   {/* BOTIGA ICON */}
                   <button 
                     onClick={() => { playSound('pop'); setCurrentView('shop'); }}
-                    className="text-slate-400 hover:text-slate-600 transition-colors text-2xl sm:hidden ml-2"
+                    className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors text-2xl sm:hidden ml-2"
                   >
                     <i className="fa-solid fa-store"></i>
                   </button>
 
                   <button 
                     onClick={() => { playSound('pop'); setCurrentView('shop'); }}
-                    className="hidden sm:flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors uppercase text-xs tracking-wider"
+                    className="hidden sm:flex items-center gap-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors uppercase text-xs tracking-wider"
                   >
                     <i className="fa-solid fa-store text-xl"></i>
                     <span>Botiga</span>
@@ -2398,17 +2487,26 @@
                   {/* PERFIL / ESTATS ICON */}
                   <button 
                     onClick={() => { playSound('pop'); setCurrentView('profile'); }}
-                    className="text-slate-400 hover:text-slate-600 transition-colors text-2xl sm:hidden ml-2"
+                    className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors text-2xl sm:hidden ml-2"
                   >
                     <i className="fa-solid fa-user"></i>
                   </button>
 
                   <button 
                     onClick={() => { playSound('pop'); setCurrentView('profile'); }}
-                    className="hidden sm:flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors uppercase text-xs tracking-wider ml-4"
+                    className="hidden sm:flex items-center gap-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors uppercase text-xs tracking-wider ml-4"
                   >
                     <i className="fa-solid fa-user text-xl"></i>
                     <span>Perfil</span>
+                  </button>
+
+                  {/* MODO OSCURO TOGGLE */}
+                  <button
+                    onClick={toggleDarkMode}
+                    className="text-amber-500 dark:text-yellow-400 hover:opacity-80 transition-opacity text-xl ml-1"
+                    title="Alternar Mode Fosc"
+                  >
+                    <i className={`fa-solid ${isDarkMode ? 'fa-sun' : 'fa-moon'}`}></i>
                   </button>
 
                   {/* RATXA */}
@@ -2425,7 +2523,7 @@
 
                   {/* VIDES */}
                   <div className="flex items-center gap-2 text-duoRed relative">
-                    <i className={`fa-solid fa-heart text-xl sm:text-2xl ${hearts === 0 ? 'text-slate-300' : ''}`}></i>
+                    <i className={`fa-solid fa-heart text-xl sm:text-2xl ${hearts === 0 ? 'text-slate-300 dark:text-slate-600' : ''}`}></i>
                     <span>{hearts}</span>
 
                     <AnimatePresence>
@@ -2448,78 +2546,146 @@
             </header>
           )}
 
-          {/* CONTINGUT PRINCIPAL */}
-          <main className="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 my-2">
+          {/* FÍSICA DE RECOMPENSES (ANIMACIÓ DE GEMES/XP VOLADORS) */}
+          <div className="fixed inset-0 pointer-events-none z-[120] overflow-hidden">
+            <AnimatePresence>
+              {flyingRewards.map(reward => (
+                <motion.div
+                  key={reward.id}
+                  initial={{ opacity: 0, scale: 0.5, x: '50vw', y: '60vh' }}
+                  animate={{ 
+                    opacity: [0, 1, 1, 0], 
+                    scale: [0.5, 1.8, 1.2, 0.6], 
+                    x: ['50vw', `${45 + Math.random() * 10}vw`, '75vw'], 
+                    y: ['60vh', '30vh', '3vh'] 
+                  }}
+                  transition={{ duration: 1.1, ease: 'easeOut' }}
+                  className={`absolute text-4xl drop-shadow-lg ${reward.colorClass}`}
+                >
+                  <i className={`fa-solid ${reward.iconClass}`}></i>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+
+          {/* CONTINGUT PRINCIPAL AMB TRANSICIONS FLUIDES */}
+          <main className="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 my-2 overflow-hidden">
             <AnimatePresence mode="wait">
               {currentView === 'path' && (
-                <PathMap 
-                  key="path" 
-                  selectedChapter={selectedChapter} 
-                  setSelectedChapter={setSelectedChapter} 
-                  nodeProgress={nodeProgress} 
-                  setCurrentView={setCurrentView} 
-                  isPro={isPro}
-                  unlockedChapters={unlockedChapters}
-                  handleUnlockChapter={handleUnlockChapter}
-                />
+                <motion.div
+                  key="path"
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -30 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                >
+                  <PathMap 
+                    selectedChapter={selectedChapter} 
+                    setSelectedChapter={setSelectedChapter} 
+                    nodeProgress={nodeProgress} 
+                    setCurrentView={setCurrentView} 
+                    isPro={isPro}
+                    unlockedChapters={unlockedChapters}
+                    handleUnlockChapter={handleUnlockChapter}
+                  />
+                </motion.div>
               )}
               {currentView === 'shop' && (
-                <ShopView 
+                <motion.div
                   key="shop"
-                  gems={gems} 
-                  setGems={setGems} 
-                  hearts={hearts} 
-                  setHearts={setHearts} 
-                  inventory={inventory} 
-                  setInventory={setInventory} 
-                  setCurrentView={setCurrentView} 
-                  isPro={isPro}
-                  startAd={startAd}
-                />
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                >
+                  <ShopView 
+                    gems={gems} 
+                    setGems={setGems} 
+                    hearts={hearts} 
+                    setHearts={setHearts} 
+                    inventory={inventory} 
+                    setInventory={setInventory} 
+                    setCurrentView={setCurrentView} 
+                    isPro={isPro}
+                    startAd={startAd}
+                  />
+                </motion.div>
               )}
               {currentView === 'profile' && (
-                <ProfileView 
+                <motion.div
                   key="profile"
-                  xp={xp}
-                  gems={gems}
-                  streak={streak}
-                  hearts={hearts}
-                  nodeProgress={nodeProgress}
-                  setCurrentView={setCurrentView}
-                />
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                >
+                  <ProfileView 
+                    xp={xp}
+                    gems={gems}
+                    streak={streak}
+                    hearts={hearts}
+                    nodeProgress={nodeProgress}
+                    setCurrentView={setCurrentView}
+                    isDarkMode={isDarkMode}
+                    toggleDarkMode={toggleDarkMode}
+                  />
+                </motion.div>
               )}
               {currentView === 'results' && lastResultData && (
-                <ResultsView
+                <motion.div
                   key="results"
-                  resultData={lastResultData}
-                  setCurrentView={setCurrentView}
-                  xp={xp}
-                  gems={gems}
-                />
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <ResultsView
+                    resultData={lastResultData}
+                    setCurrentView={setCurrentView}
+                    xp={xp}
+                    gems={gems}
+                  />
+                </motion.div>
               )}
               {currentView === 'timeline' && (
-                <GameTimeline chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_timeline`, s, xp, name)} />
+                <motion.div key="timeline" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.25 }}>
+                  <GameTimeline chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_timeline`, s, xp, name)} />
+                </motion.div>
               )}
               {currentView === 'kahoot' && (
-                <GameKahoot chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_kahoot`, s, xp, name)} inventory={inventory} setInventory={setInventory} />
+                <motion.div key="kahoot" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.25 }}>
+                  <GameKahoot chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_kahoot`, s, xp, name)} inventory={inventory} setInventory={setInventory} />
+                </motion.div>
               )}
               {currentView === 'extraKahoot' && (
-                <GameExtraKahoot chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_extraKahoot`, s, xp, name)} inventory={inventory} setInventory={setInventory} />
+                <motion.div key="extraKahoot" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.25 }}>
+                  <GameExtraKahoot chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_extraKahoot`, s, xp, name)} inventory={inventory} setInventory={setInventory} />
+                </motion.div>
               )}
               {currentView === 'xafarderia' && (
-                <GameXafarderia chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_xafarderia`, s, xp, name)} />
+                <motion.div key="xafarderia" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.25 }}>
+                  <GameXafarderia chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_xafarderia`, s, xp, name)} />
+                </motion.div>
               )}
               {currentView === 'boe' && (
-                <GameBOE chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_boe`, s, xp, name)} />
+                <motion.div key="boe" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.25 }}>
+                  <GameBOE chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_boe`, s, xp, name)} />
+                </motion.div>
               )}
               {currentView === 'conecta' && (
-                <GameConecta chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_conecta`, s, xp, name)} />
+                <motion.div key="conecta" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.25 }}>
+                  <GameConecta chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_conecta`, s, xp, name)} />
+                </motion.div>
               )}
               {currentView === 'veritat' && (
-                <GameVeritat chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_veritat`, s, xp, name)} />
+                <motion.div key="veritat" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.25 }}>
+                  <GameVeritat chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_veritat`, s, xp, name)} />
+                </motion.div>
               )}
               {currentView === 'motPerdut' && (
-                <GameMotPerdut chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_motPerdut`, s, xp, name)} />
+                <motion.div key="motPerdut" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.25 }}>
+                  <GameMotPerdut chapter={window.QuestionBank.getChapter(selectedChapter)} setCurrentView={setCurrentView} onSuccess={triggerSuccess} onError={triggerError} onFinish={(s, xp, name) => handleGameFinish(`c${selectedChapter}_motPerdut`, s, xp, name)} />
+                </motion.div>
               )}
             </AnimatePresence>
           </main>
@@ -2622,10 +2788,10 @@
                 exit={{ opacity: 0, scale: 0.9 }}
                 className="fixed inset-0 z-50 bg-slate-900/90 flex flex-col items-center justify-center p-6"
               >
-                <div className="bg-white rounded-[32px] p-8 max-w-sm w-full text-center space-y-6 shadow-2xl border-4 border-slate-200 relative overflow-hidden">
+                <div className="bg-white dark:bg-slate-800 rounded-[32px] p-8 max-w-sm w-full text-center space-y-6 shadow-2xl border-4 border-slate-200 dark:border-slate-700 relative overflow-hidden transition-colors">
                   <div className="text-7xl mb-4 relative z-10 drop-shadow-md">💔</div>
-                  <h2 className="text-3xl font-display font-black text-slate-800 relative z-10">T'has quedat sense vides</h2>
-                  <p className="text-slate-500 font-bold text-lg relative z-10">
+                  <h2 className="text-3xl font-display font-black text-slate-800 dark:text-white relative z-10">T'has quedat sense vides</h2>
+                  <p className="text-slate-500 dark:text-slate-300 font-bold text-lg relative z-10">
                     Pots recuperar vides esperant o aconseguint-les ara mateix.
                   </p>
                   <div className="space-y-3 relative z-10">
@@ -2637,7 +2803,7 @@
                     </button>
                     <button 
                       onClick={() => { setShowNoLivesModal(false); setCurrentView('path'); }}
-                      className="w-full bg-slate-100 text-slate-500 font-display font-black text-xl py-4 rounded-[20px] active:translate-y-1 transition-transform border-x-2 border-t-2 border-b-[6px] border-slate-300"
+                      className="w-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 font-display font-black text-xl py-4 rounded-[20px] active:translate-y-1 transition-transform border-x-2 border-t-2 border-b-[6px] border-slate-300 dark:border-slate-600"
                     >
                       Sortir
                     </button>
@@ -2664,29 +2830,29 @@
                   exit={{ y: "100%" }}
                   transition={{ type: "spring", damping: 25, stiffness: 200 }}
                   className={`fixed bottom-0 left-0 right-0 z-50 p-6 sm:p-8 rounded-t-[32px] border-t-2 ${
-                    sheet.type === 'success' ? 'bg-duoBgSuccess border-duoGreen' : 'bg-duoBgError border-duoRed'
+                    sheet.type === 'success' ? 'bg-duoBgSuccess dark:bg-emerald-950 border-duoGreen' : 'bg-duoBgError dark:bg-rose-950 border-duoRed'
                   }`}
                 >
                   <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                     <div className="flex items-start gap-4">
-                      <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-3xl shrink-0 bg-white shadow-sm border-2 ${
-                        sheet.type === 'success' ? 'text-duoGreen border-duoBgSuccess' : 'text-duoRed border-duoBgError'
+                      <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-3xl shrink-0 bg-white dark:bg-slate-800 shadow-sm border-2 ${
+                        sheet.type === 'success' ? 'text-duoGreen border-duoBgSuccess dark:border-emerald-900' : 'text-duoRed border-duoBgError dark:border-rose-900'
                       }`}>
                         <i className={`fa-solid ${sheet.type === 'success' ? 'fa-check' : 'fa-xmark'}`}></i>
                       </div>
                       <div className="space-y-1 pt-1">
                         <h3 className={`font-display font-black text-2xl ${
-                          sheet.type === 'success' ? 'text-duoTextSuccess' : 'text-duoTextError'
+                          sheet.type === 'success' ? 'text-duoTextSuccess dark:text-emerald-300' : 'text-duoTextError dark:text-rose-300'
                         }`}>
                           {sheet.title}
                         </h3>
                         <p className={`text-base sm:text-lg font-bold ${
-                          sheet.type === 'success' ? 'text-duoTextSuccess' : 'text-duoTextError'
+                          sheet.type === 'success' ? 'text-duoTextSuccess dark:text-emerald-200' : 'text-duoTextError dark:text-rose-200'
                         } opacity-90`}>
                           {sheet.message}
                         </p>
                         <p className={`text-sm font-bold ${
-                          sheet.type === 'success' ? 'text-duoTextSuccess' : 'text-duoTextError'
+                          sheet.type === 'success' ? 'text-duoTextSuccess dark:text-emerald-300' : 'text-duoTextError dark:text-rose-300'
                         } opacity-75 mt-1`}>
                           {sheet.explanation}
                         </p>
@@ -2717,14 +2883,71 @@
     root.render(<App />);
   </script>
 
-  <!-- PWA Service Worker Registration -->
+  <!-- PWA Service Worker Registration Real Offline Support -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').then(registration => {
-          console.log('SW registered: ', registration);
-        }).catch(registrationError => {
-          console.log('SW registration failed: ', registrationError);
+        const swCode = `
+          const CACHE_NAME = 'historialab-v1';
+          const ASSETS = [
+            './',
+            './questions.js',
+            './ads.js',
+            './manifest.json',
+            'https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap',
+            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
+            'https://cdn.tailwindcss.com',
+            'https://cdn.jsdelivr.net/npm/chart.js',
+            'https://unpkg.com/react@18/umd/react.production.min.js',
+            'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js',
+            'https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js',
+            'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js',
+            'https://unpkg.com/@babel/standalone/babel.min.js'
+          ];
+
+          self.addEventListener('install', (e) => {
+            e.waitUntil(
+              caches.open(CACHE_NAME).then((cache) => {
+                return cache.addAll(ASSETS).catch(() => Promise.resolve());
+              })
+            );
+            self.skipWaiting();
+          });
+
+          self.addEventListener('activate', (e) => {
+            e.waitUntil(
+              caches.keys().then((keys) => {
+                return Promise.all(
+                  keys.map((key) => {
+                    if (key !== CACHE_NAME) return caches.delete(key);
+                  })
+                );
+              })
+            );
+            self.clients.claim();
+          });
+
+          self.addEventListener('fetch', (e) => {
+            e.respondWith(
+              caches.match(e.request).then((res) => {
+                return res || fetch(e.request).then((fetchRes) => {
+                  return caches.open(CACHE_NAME).then((cache) => {
+                    cache.put(e.request, fetchRes.clone());
+                    return fetchRes;
+                  });
+                });
+              }).catch(() => caches.match('./'))
+            );
+          });
+        `;
+
+        const blob = new Blob([swCode], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(blob);
+
+        navigator.serviceWorker.register(swUrl).then(registration => {
+          console.log('SW PWA Real registered:', registration);
+        }).catch(err => {
+          navigator.serviceWorker.register('sw.js').catch(e => console.log('SW fallback:', e));
         });
       });
     }
