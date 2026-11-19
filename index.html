@@ -198,6 +198,16 @@
     const { useState, useEffect, useRef } = React;
     const { motion, AnimatePresence } = window.Motion;
 
+    // --- HELPER PER ALEATORITZAR LLISTES ---
+    const shuffleArray = (array) => {
+      let shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
     // Capítol 4 (La Restauració Borbònica) afegit a QuestionBank
     if (window.QuestionBank && window.QuestionBank.CHAPTER_DATA) {
       if (!window.QuestionBank.CHAPTER_DATA[7]) {
@@ -346,7 +356,7 @@
 
     // --- COMPONENTS DE BANNER ---
     const AdBanner728 = () => {
-      const isPro = localStorage.getItem('hl_is_pro') === 'true' || (new URLSearchParams(window.location.search)).get('pro') === 'true';
+      const isPro = true; // localStorage.getItem('hl_is_pro') === 'true' || (new URLSearchParams(window.location.search)).get('pro') === 'true';
       if (isPro) return null;
 
       const [ad, setAd] = useState(null);
@@ -394,7 +404,7 @@
     };
 
     const AdBanner300 = ({ overrideAd }) => {
-      const isPro = localStorage.getItem('hl_is_pro') === 'true' || (new URLSearchParams(window.location.search)).get('pro') === 'true';
+      const isPro = true; // localStorage.getItem('hl_is_pro') === 'true' || (new URLSearchParams(window.location.search)).get('pro') === 'true';
       if (isPro) return null;
 
       const [ad, setAd] = useState(overrideAd || null);
@@ -982,6 +992,10 @@
 
     // --- COMPONENT BOTIGA (SHOP) ---
     function ShopView({ gems, setGems, hearts, setHearts, inventory, setInventory, setCurrentView, isPro, startAd }) {
+      useEffect(() => {
+        localStorage.setItem('hl_games_since_shop', '0');
+      }, []);
+      
       const shopItems = [
         {
           id: 'hearts',
@@ -1171,7 +1185,7 @@
 
       useEffect(() => {
         const randomItems = window.QuestionBank.getTimeline(chapter.id, 5);
-        setItems([...randomItems].sort(() => Math.random() - 0.5));
+        setItems(shuffleArray(randomItems));
       }, [chapter.id]);
 
       const moveItem = (from, to) => {
@@ -1279,11 +1293,15 @@
 
       useEffect(() => {
         const qList = window.QuestionBank.getKahoot(chapter.id, 3);
-        setQuestions(qList);
+        const shuffledList = shuffleArray(qList).map(q => {
+          if (q.options) return { ...q, options: shuffleArray(q.options) };
+          return q;
+        });
+        setQuestions(shuffledList);
         setDisabledOptions([]);
         setAccumulatedXp(0);
-        if (qList.length > 0 && qList[0].type === 'slider') {
-          setSliderVal(qList[0].minYear || 1800);
+        if (shuffledList.length > 0 && shuffledList[0].type === 'slider') {
+          setSliderVal(shuffledList[0].minYear || 1800);
         }
       }, [chapter.id]);
 
@@ -1363,7 +1381,7 @@
                       const incorrectIndexes = q.options
                         .map((opt, i) => opt.correct ? null : i)
                         .filter(val => val !== null);
-                      const shuffled = [...incorrectIndexes].sort(() => Math.random() - 0.5);
+                      const shuffled = shuffleArray(incorrectIndexes);
                       const toDisable = shuffled.slice(0, 2);
                       setDisabledOptions(toDisable);
                       setInventory(prev => ({ ...prev, fiftyFifty: prev.fiftyFifty - 1 }));
@@ -1470,11 +1488,15 @@
 
       useEffect(() => {
         const qList = window.QuestionBank.getKahoot(chapter.id, 999);
-        setQuestions(qList);
+        const shuffledList = shuffleArray(qList).map(q => {
+          if (q.options) return { ...q, options: shuffleArray(q.options) };
+          return q;
+        });
+        setQuestions(shuffledList);
         setDisabledOptions([]);
         setAccumulatedXp(0);
-        if (qList.length > 0 && qList[0].type === 'slider') {
-          setSliderVal(qList[0].minYear || 1800);
+        if (shuffledList.length > 0 && shuffledList[0].type === 'slider') {
+          setSliderVal(shuffledList[0].minYear || 1800);
         }
       }, [chapter.id]);
 
@@ -1559,7 +1581,7 @@
                       const incorrectIndexes = q.options
                         .map((opt, i) => opt.correct ? null : i)
                         .filter(val => val !== null);
-                      const shuffled = [...incorrectIndexes].sort(() => Math.random() - 0.5);
+                      const shuffled = shuffleArray(incorrectIndexes);
                       const toDisable = shuffled.slice(0, 2);
                       setDisabledOptions(toDisable);
                       setInventory(prev => ({ ...prev, fiftyFifty: prev.fiftyFifty - 1 }));
@@ -1660,7 +1682,12 @@
       const [assigned, setAssigned] = useState({});
 
       useEffect(() => {
-        setData(window.QuestionBank.getXafarderia(chapter.id));
+        const rawData = window.QuestionBank.getXafarderia(chapter.id);
+        if (rawData && rawData.chars) {
+           setData({ ...rawData, chars: shuffleArray(rawData.chars) });
+        } else {
+           setData(rawData);
+        }
         setAssigned({});
       }, [chapter.id]);
 
@@ -1748,14 +1775,28 @@
       const [docs, setDocs] = useState([]);
       const [idx, setIdx] = useState(0);
       const [accumulatedXp, setAccumulatedXp] = useState(0);
+      const [options, setOptions] = useState([]);
 
       useEffect(() => {
         setDocs(window.QuestionBank.getBOE(chapter.id, 2));
         setIdx(0);
         setAccumulatedXp(0);
+        
+        const opts1 = [
+          { id: 'absolutisme', text: 'Absolutista', color: 'bg-duoRed', shadow: 'shadow-btn-red', hover: 'hover:bg-duoRedDark' },
+          { id: 'liberal_conservador', text: 'Liberal Conservador', color: 'bg-duoBlue', shadow: 'shadow-btn-blue', hover: 'hover:bg-duoBlueDark' },
+          { id: 'liberal_progressista', text: 'Liberal Progresista', color: 'bg-duoGreen', shadow: 'shadow-btn-green', hover: 'hover:bg-duoGreenDark' }
+        ];
+        const opts2 = [
+          { id: 'federal_progressista', text: 'Federal i Progressista', color: 'bg-duoPurple', shadow: 'shadow-btn-purple', hover: 'hover:bg-duoPurpleDark' },
+          { id: 'tradicionalista_catolic', text: 'Tradicionalista i Catòlic', color: 'bg-duoOrange', shadow: 'shadow-btn-orange', hover: 'hover:bg-duoOrangeDark' },
+          { id: 'conservador_regionalista', text: 'Conservador Regionalista', color: 'bg-duoBlue', shadow: 'shadow-btn-blue', hover: 'hover:bg-duoBlueDark' },
+          { id: 'esquerra_obrera', text: 'Esquerra Obrera', color: 'bg-duoRed', shadow: 'shadow-btn-red', hover: 'hover:bg-duoRedDark' }
+        ];
+        setOptions(shuffleArray(chapter.id <= 6 ? opts1 : opts2));
       }, [chapter.id]);
 
-      if (docs.length === 0) return null;
+      if (docs.length === 0 || options.length === 0) return null;
       const currentDoc = docs[idx];
       const progress = ((idx) / docs.length) * 100 || 5;
 
@@ -1795,55 +1836,17 @@
             <h4 className="font-display font-black text-slate-800 dark:text-white text-xl text-center">
               A quin corrent ideològic correspon?
             </h4>
-            {chapter.id <= 6 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className={`grid grid-cols-1 sm:grid-cols-${options.length === 3 ? '3' : '2'} gap-4`}>
+              {options.map(opt => (
                 <button
-                  onClick={() => handleChoice('absolutisme')}
-                  className="bg-duoRed text-white font-display font-black p-4 rounded-[20px] shadow-btn-red text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoRedDark duo-pressable"
+                  key={opt.id}
+                  onClick={() => handleChoice(opt.id)}
+                  className={`${opt.color} text-white font-display font-black p-4 rounded-[20px] ${opt.shadow} text-base border-x-2 border-t-2 border-b-[6px] border-black/10 ${opt.hover} duo-pressable`}
                 >
-                  Absolutista
+                  {opt.text}
                 </button>
-                <button
-                  onClick={() => handleChoice('liberal_conservador')}
-                  className="bg-duoBlue text-white font-display font-black p-4 rounded-[20px] shadow-btn-blue text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoBlueDark duo-pressable"
-                >
-                  Liberal Conservador
-                </button>
-                <button
-                  onClick={() => handleChoice('liberal_progressista')}
-                  className="bg-duoGreen text-white font-display font-black p-4 rounded-[20px] shadow-btn-green text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoGreenDark duo-pressable"
-                >
-                  Liberal Progresista
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <button
-                  onClick={() => handleChoice('federal_progressista')}
-                  className="bg-duoPurple text-white font-display font-black p-4 rounded-[20px] shadow-btn-purple text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoPurpleDark duo-pressable"
-                >
-                  Federal i Progressista
-                </button>
-                <button
-                  onClick={() => handleChoice('tradicionalista_catolic')}
-                  className="bg-duoOrange text-white font-display font-black p-4 rounded-[20px] shadow-btn-orange text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoOrangeDark duo-pressable"
-                >
-                  Tradicionalista i Catòlic
-                </button>
-                <button
-                  onClick={() => handleChoice('conservador_regionalista')}
-                  className="bg-duoBlue text-white font-display font-black p-4 rounded-[20px] shadow-btn-blue text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoBlueDark duo-pressable"
-                >
-                  Conservador Regionalista
-                </button>
-                <button
-                  onClick={() => handleChoice('esquerra_obrera')}
-                  className="bg-duoRed text-white font-display font-black p-4 rounded-[20px] shadow-btn-red text-base border-x-2 border-t-2 border-b-[6px] border-black/10 hover:bg-duoRedDark duo-pressable"
-                >
-                  Esquerra Obrera
-                </button>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
         </div>
       );
@@ -1860,8 +1863,8 @@
       useEffect(() => {
         const loadedPairs = window.QuestionBank.getConecta(chapter.id, 4);
         setPairs(loadedPairs);
-        setLefts([...loadedPairs].sort(() => Math.random() - 0.5));
-        setRights([...loadedPairs].sort(() => Math.random() - 0.5));
+        setLefts(shuffleArray(loadedPairs));
+        setRights(shuffleArray(loadedPairs));
         setSelectedLeft(null);
         setMatched([]);
       }, [chapter.id]);
@@ -1955,14 +1958,19 @@
       const [items, setItems] = useState([]);
       const [idx, setIdx] = useState(0);
       const [accumulatedXp, setAccumulatedXp] = useState(0);
+      const [options, setOptions] = useState([]);
 
       useEffect(() => {
         setItems(window.QuestionBank.getVeritat(chapter.id, 3));
         setIdx(0);
         setAccumulatedXp(0);
+        setOptions(shuffleArray([
+          { val: true, text: 'VERITAT', icon: 'fa-check', color: 'bg-duoGreen', shadow: 'shadow-btn-green' },
+          { val: false, text: 'MENTIDA', icon: 'fa-xmark', color: 'bg-duoRed', shadow: 'shadow-btn-red' }
+        ]));
       }, [chapter.id]);
 
-      if (items.length === 0) return null;
+      if (items.length === 0 || options.length === 0) return null;
       const current = items[idx];
       const progress = ((idx) / items.length) * 100 || 10;
 
@@ -1998,18 +2006,15 @@
           </div>
 
           <div className="grid grid-cols-2 gap-4 pt-4">
-            <button
-              onClick={() => handleAnswer(true)}
-              className="bg-duoGreen text-white font-display font-black text-xl py-5 rounded-[24px] border-x-2 border-t-2 border-b-[6px] border-black/10 shadow-btn-green duo-pressable"
-            >
-              <i className="fa-solid fa-check text-2xl mb-1 block"></i> VERITAT
-            </button>
-            <button
-              onClick={() => handleAnswer(false)}
-              className="bg-duoRed text-white font-display font-black text-xl py-5 rounded-[24px] border-x-2 border-t-2 border-b-[6px] border-black/10 shadow-btn-red duo-pressable"
-            >
-              <i className="fa-solid fa-xmark text-2xl mb-1 block"></i> MENTIDA
-            </button>
+            {options.map(opt => (
+              <button
+                key={opt.text}
+                onClick={() => handleAnswer(opt.val)}
+                className={`${opt.color} text-white font-display font-black text-xl py-5 rounded-[24px] border-x-2 border-t-2 border-b-[6px] border-black/10 ${opt.shadow} duo-pressable`}
+              >
+                <i className={`fa-solid ${opt.icon} text-2xl mb-1 block`}></i> {opt.text}
+              </button>
+            ))}
           </div>
         </div>
       );
@@ -2021,7 +2026,13 @@
       const [answers, setAnswers] = useState({});
 
       useEffect(() => {
-        setData(window.QuestionBank.getMotPerdut(chapter.id));
+        const rawData = window.QuestionBank.getMotPerdut(chapter.id);
+        if (rawData && rawData.blanks) {
+           const shuffledBlanks = rawData.blanks.map(b => ({ ...b, options: shuffleArray(b.options) }));
+           setData({ ...rawData, blanks: shuffledBlanks });
+        } else {
+           setData(rawData);
+        }
         setAnswers({});
       }, [chapter.id]);
 
@@ -2105,7 +2116,7 @@
           localStorage.setItem('hl_is_pro', 'true');
           return true;
         }
-        return localStorage.getItem('hl_is_pro') === 'true';
+        return true; // Ets pro sempre
       });
 
       // MODO OSCURO (DARK MODE) REAL
@@ -2193,7 +2204,7 @@
         const saved = localStorage.getItem('hl_selectedChapter');
         let ch = saved !== null ? parseInt(saved, 10) : 1;
         const urlParams = new URLSearchParams(window.location.search);
-        const proStatus = urlParams.get('pro') === 'true' || localStorage.getItem('hl_is_pro') === 'true';
+        const proStatus = true; // urlParams.get('pro') === 'true' || localStorage.getItem('hl_is_pro') === 'true';
         if (!proStatus && !(saved && JSON.parse(localStorage.getItem('hl_unlockedChapters') || '[1]').includes(ch))) ch = 1;
         return ch;
       });
@@ -2220,6 +2231,11 @@
       const [cprClicks, setCprClicks] = useState(0);
       const [extraLifeToast, setExtraLifeToast] = useState(false);
       const [lastResultData, setLastResultData] = useState(null);
+
+      // NOUS ESTATS - FALLES SEGUIDES I RECORDATORIS BOTIGA/APUNTS
+      const [consecutiveFails, setConsecutiveFails] = useState(0);
+      const [showStudyModal, setShowStudyModal] = useState(false);
+      const [showShopReminder, setShowShopReminder] = useState(false);
 
       // FÍSICA DE RECOMPENSES ANIMADES
       const [flyingRewards, setFlyingRewards] = useState([]);
@@ -2250,6 +2266,21 @@
         localStorage.setItem('hl_nodeProgress', JSON.stringify(nodeProgress));
       }, [hearts, xp, gems, streak, selectedChapter, unlockedChapters, inventory, nodeProgress]);
 
+      // LÒGICA DEL RECORDATORI DE LA BOTIGA
+      useEffect(() => {
+        if (currentView === 'path') {
+            const gamesSince = parseInt(localStorage.getItem('hl_games_since_shop') || '0', 10);
+            if (gems >= 60 && gamesSince >= 3) {
+                setShowShopReminder(true);
+                localStorage.setItem('hl_games_since_shop', '0');
+            }
+        }
+      }, [currentView, gems]);
+
+      const handleShopVisit = () => {
+          setShowShopReminder(false);
+          setCurrentView('shop');
+      };
 
       // Lógica de cuenta regresiva del anuncio
       useEffect(() => {
@@ -2274,7 +2305,7 @@
       });
 
       const startAd = (callback) => {
-        if (isPro) {
+        if (true) { // isPro siempre activo
           if (callback) callback();
           return;
         }
@@ -2317,6 +2348,9 @@
 
         setScreenEffect('screen-shake flash-red');
         setTimeout(() => setScreenEffect(''), 500);
+        
+        let newFails = consecutiveFails + 1;
+        setConsecutiveFails(newFails);
 
         setSheet({
           isOpen: true,
@@ -2325,13 +2359,20 @@
           message: wasShielded ? "L'escut protector t'ha salvat de perdre una vida." : (message || "Aquesta opció no és correcta."),
           explanation: exp || "Revisa els conceptes de la lliçó.",
           xpEarned: 0,
-          onContinue: () => setSheet(s => ({ ...s, isOpen: false }))
+          onContinue: () => {
+            setSheet(s => ({ ...s, isOpen: false }));
+            if (newFails >= 3) {
+                setTimeout(() => setShowStudyModal(true), 300);
+                setConsecutiveFails(0);
+            }
+          }
         });
       };
 
       const triggerSuccess = (title, message, exp, points = 20, callback = null) => {
         playSound('success');
         updateLastStudyActivity();
+        setConsecutiveFails(0);
 
         let earnedXp = points;
         if (inventory.doubleXp) {
@@ -2418,6 +2459,8 @@
           [nodeKey]: Math.max(prev[nodeKey] || 0, stars)
         }));
         setGems(g => g + 10);
+        const currentGames = parseInt(localStorage.getItem('hl_games_since_shop') || '0', 10);
+        localStorage.setItem('hl_games_since_shop', (currentGames + 1).toString());
       };
 
       return (
@@ -2690,6 +2733,82 @@
             </AnimatePresence>
           </main>
 
+          {/* MODAL RECORDATORI BOTIGA (Gemes altes i fa temps que no compra) */}
+          <AnimatePresence>
+            {showShopReminder && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[100] bg-slate-900/90 flex flex-col items-center justify-center p-6"
+              >
+                <motion.div 
+                  initial={{ scale: 0.8, y: 50 }} 
+                  animate={{ scale: 1, y: 0 }} 
+                  className="bg-gradient-to-br from-amber-400 to-duoOrange rounded-[32px] p-8 max-w-sm w-full text-center space-y-6 shadow-2xl border-4 border-amber-200 relative overflow-hidden"
+                >
+                  <div className="text-7xl mb-4 relative z-10 animate-bounce">💎</div>
+                  <h2 className="text-3xl font-display font-black text-white relative z-10">Tens {gems} Gemes!</h2>
+                  <p className="text-white/90 font-bold text-lg relative z-10">
+                    Fa temps que no visites la botiga. Sabies que pots comprar power-ups com multiplicadors i escuts?
+                  </p>
+                  <div className="space-y-3 relative z-10">
+                    <button 
+                      onClick={handleShopVisit}
+                      className="w-full bg-white text-duoOrange font-display font-black text-xl py-4 rounded-[20px] shadow-sm active:translate-y-1 transition-transform border-x-2 border-t-2 border-b-[6px] border-amber-600/30"
+                    >
+                      Anar a la Botiga
+                    </button>
+                    <button 
+                      onClick={() => setShowShopReminder(false)}
+                      className="w-full bg-amber-500 text-white font-display font-black text-xl py-4 rounded-[20px] active:translate-y-1 transition-transform border-x-2 border-t-2 border-b-[6px] border-amber-700/50"
+                    >
+                      Més tard
+                    </button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* MODAL NECESSITES PRACTICAR (Fallades seguides) */}
+          <AnimatePresence>
+            {showStudyModal && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[100] bg-slate-900/90 flex flex-col items-center justify-center p-6"
+              >
+                <motion.div 
+                  initial={{ scale: 0.8, y: 50 }} 
+                  animate={{ scale: 1, y: 0 }} 
+                  className="bg-white dark:bg-slate-800 rounded-[32px] p-8 max-w-sm w-full text-center space-y-6 shadow-2xl border-4 border-slate-200 dark:border-slate-700 relative overflow-hidden transition-colors"
+                >
+                  <div className="text-7xl mb-4 relative z-10 animate-pulse">📚</div>
+                  <h2 className="text-3xl font-display font-black text-slate-800 dark:text-white relative z-10">Vols repassar-ho primer?</h2>
+                  <p className="text-slate-500 dark:text-slate-300 font-bold text-lg relative z-10">
+                    Has fallat diverses vegades seguides. Et recomanem que vagis a HistòriaLab Notes i descarreguis els apunts per a repassar aquest tema.
+                  </p>
+                  <div className="space-y-3 relative z-10">
+                    <button 
+                      onClick={() => { playSound('pop'); window.open('https://pbfedu.github.io/historialab-notes', '_blank'); setShowStudyModal(false); }}
+                      className="w-full bg-duoBlue text-white font-display font-black text-xl py-4 rounded-[20px] shadow-btn-blue active:translate-y-1 transition-transform border-x-2 border-t-2 border-b-[6px] border-black/10"
+                    >
+                      Descarregar Apunts
+                    </button>
+                    <button 
+                      onClick={() => setShowStudyModal(false)}
+                      className="w-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 font-display font-black text-xl py-4 rounded-[20px] active:translate-y-1 transition-transform border-x-2 border-t-2 border-b-[6px] border-slate-300 dark:border-slate-600"
+                    >
+                      Continuar Jugant
+                    </button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* MODAL ANUNCIO (Aleatorio de ads.js i 100% interactiu) */}
           <AnimatePresence>
             {showAdModal && !isPro && (
@@ -2763,7 +2882,7 @@
                   </div>
                   <div>
                     <h2 className="text-3xl font-display font-black mb-2">Reanimació!</h2>
-                    <p className="text-slate-300 font-bold">Fes clic ràpid per salvar la teva vida. (Usuari PRO)</p>
+                    <p className="text-slate-300 font-bold">Fes clic ràpid per salvar la teva vida</p>
                   </div>
                   <div className="w-full bg-slate-800 h-6 rounded-full overflow-hidden border-2 border-slate-700 relative">
                     <div 
