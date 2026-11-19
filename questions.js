@@ -561,14 +561,14 @@ const CHAPTER_DATA = {
    color: "bg-amber-600",
    available: true,
    timeline: [
-     { id: "t4_1", text: "Manifest de Sandhurst i cop de Martínez Campos", year: "1874", icon: "fa-scroll", exp: "Alfons XII promet una monarquia constitucional i d'ordre; el pronunciament de Sagunt restaura la dinastia borbònica." },
-     { id: "t4_2", text: "Constitució de 1876 i fi de la 3a Guerra Carlina", year: "1876", icon: "fa-building-columns", exp: "Text doctrinari de Cánovas amb sobirania compartida; paral·lelament es derrota militarment el carlisme." },
-     { id: "t4_3", text: "Llei Electoral censatària i Concerts Econòmics bascos", year: "1878", icon: "fa-file-signature", exp: "Aprovació del sufragi restrictiu i concessió d'autonomia fiscal al País Basc després de l'abolició foral." },
-     { id: "t4_4", text: "Fundació del PSOE per Pablo Iglesias", year: "1879", icon: "fa-users", exp: "Naixement del Partit Socialista Obrer Espanyol a Madrid com a organització de classe." },
-     { id: "t4_5", text: "Mort d'Alfons XII i Pacte del Pardo", year: "1885", icon: "fa-crown", exp: "Acord entre Cánovas i Sagasta per consolidar el torn pacífic i protegir la regència de Maria Cristina." },
-     { id: "t4_6", text: "Llei d'Associacions i legalització de la UGT", year: "1887-1888", icon: "fa-handshake", exp: "Permet la legalització dels sindicats i partits obrers; escissió integrista del carlisme (Partido Católico Nacional)." },
-     { id: "t4_7", text: "Aprovació del Sufragi Universal Masculí", year: "1890", icon: "fa-check-to-slot", exp: "El govern liberal de Sagasta aprova el dret a vot masculí, tot i que el caciquisme en neutralitza l'eficàcia." },
-     { id: "t4_8", text: "Fundació de la Unió Republicana", year: "1893", icon: "fa-landmark", exp: "Coalició de les forces republicanes encapçalada per Nicolás Salmerón que aconsegueix representació parlamentària." }
+     { id: "t4_1", text: "Manifest de Sandhurst i cop de Martínez Campos", year: "???", icon: "fa-scroll", exp: "Alfons XII promet una monarquia constitucional i d'ordre; el pronunciament de Sagunt restaura la dinastia borbònica." },
+     { id: "t4_2", text: "Constitució de 1876 i fi de la 3a Guerra Carlina", year: "???", icon: "fa-building-columns", exp: "Text doctrinari de Cánovas amb sobirania compartida; paral·lelament es derrota militarment el carlisme." },
+     { id: "t4_3", text: "Llei Electoral censatària i Concerts Econòmics bascos", year: "???", icon: "fa-file-signature", exp: "Aprovació del sufragi restrictiu i concessió d'autonomia fiscal al País Basc després de l'abolició foral." },
+     { id: "t4_4", text: "Fundació del PSOE per Pablo Iglesias", year: "???", icon: "fa-users", exp: "Naixement del Partit Socialista Obrer Espanyol a Madrid com a organització de classe." },
+     { id: "t4_5", text: "Mort d'Alfons XII i Pacte del Pardo", year: "???", icon: "fa-crown", exp: "Acord entre Cánovas i Sagasta per consolidar el torn pacífic i protegir la regència de Maria Cristina." },
+     { id: "t4_6", text: "Llei d'Associacions i legalització de la UGT", year: "???", icon: "fa-handshake", exp: "Permet la legalització dels sindicats i partits obrers; escissió integrista del carlisme (Partido Católico Nacional)." },
+     { id: "t4_7", text: "Aprovació del Sufragi Universal Masculí", year: "???", icon: "fa-check-to-slot", exp: "El govern liberal de Sagasta aprova el dret a vot masculí, tot i que el caciquisme en neutralitza l'eficàcia." },
+     { id: "t4_8", text: "Fundació de la Unió Republicana", year: "???", icon: "fa-landmark", exp: "Coalició de les forces republicanes encapçalada per Nicolás Salmerón que aconsegueix representació parlamentària." }
    ],
    kahoot: [
      {
@@ -701,10 +701,10 @@ const CHAPTER_DATA = {
        { id: "s4", label: "PODER LOCAL RURAL", relation: "Controla i coacciona el vot als districtes agraris", correct: "El Cacique", icon: "fa-user-tie" }
      ],
      chars: [
-       { name: "Cánovas del Castillo", role: "Partido Conservador" },
-       { name: "Mateo Sagasta", role: "Partido Liberal" },
-       { name: "Maria Cristina d'Habsburg", role: "Reina Regent" },
-       { name: "El Cacique", role: "Poder Local Rural" }
+       { name: "Cánovas del Castillo", role: "" },
+       { name: "Mateo Sagasta", role: "" },
+       { name: "Maria Cristina d'Habsburg", role: "" },
+       { name: "El Cacique", role: "" }
      ]
    },
    boe: [
@@ -747,14 +747,14 @@ const CHAPTER_DATA = {
    color: "bg-blue-800",
    available: true,
    timeline: [
-     { id: "t5_1", text: "Guerra dels Deu Anys i Pau de Zanjón", year: "1868-1878", icon: "fa-shield-halved", exp: "Primer gran conflicte independentista a Cuba; es tanca amb la promesa no complerta d'autonomia i amnistia." },
-     { id: "t5_2", text: "La Guerra Chiquita", year: "1879", icon: "fa-fire", exp: "Nou intent d'insurrecció cubana frustrat ràpidament per la manca d'armament i suport." },
-     { id: "t5_3", text: "Abolició definitiva de l'esclavitud a Cuba", year: "1886", icon: "fa-handshake-angle", exp: "El govern liberal de Sagasta decreta la fi de l'esclavitud a l'illa, mesura retardada per la pressió dels latifundistes." },
-     { id: "t5_4", text: "Aranzel Cánovas i creixement de la tensió amb els EUA", year: "1891", icon: "fa-coins", exp: "L'increment de tarifes aranzelàries als productes no peninsulars perjudica el comerç entre Cuba i els EUA." },
-     { id: "t5_5", text: "Fundació de la Liga Filipina i del Partido Revolucionario Cubano", year: "1892-1893", icon: "fa-users", exp: "José Rizal organitza el moviment reformista filipí i José Martí encapçala l'independentisme cubà." },
-     { id: "t5_6", text: "Inici del 'Grito de Baire' i aixecament del Katipunan", year: "1895-1896", icon: "fa-burst", exp: "Comença la darrera Guerra d'Independència a Cuba i la rebel·lió a Filipines; execució de José Rizal el 1896." },
-     { id: "t5_7", text: "Politica de 'Reconcentració' de Weyler i Autonomia de 1897", year: "1896-1897", icon: "fa-tent-arrow-down-to-line", exp: "Dura repressió de Weyler aïllant camperols; el 1897 el general Blanco decreta tardanament l'autonomia de Cuba." },
-     { id: "t5_8", text: "Explosió de l'USS Maine i derrotes de Cavite i Santiago", year: "1898", icon: "fa-ship", exp: "L'explosió del cuirassat americà a l'Havana actua de pretext per a la intervenció dels EUA i la desfeta militar espanyola." }
+     { id: "t5_1", text: "Guerra dels Deu Anys i Pau de Zanjón", year: "???", icon: "fa-shield-halved", exp: "Primer gran conflicte independentista a Cuba; es tanca amb la promesa no complerta d'autonomia i amnistia." },
+     { id: "t5_2", text: "La Guerra Chiquita", year: "???", icon: "fa-fire", exp: "Nou intent d'insurrecció cubana frustrat ràpidament per la manca d'armament i suport." },
+     { id: "t5_3", text: "Abolició definitiva de l'esclavitud a Cuba", year: "???", icon: "fa-handshake-angle", exp: "El govern liberal de Sagasta decreta la fi de l'esclavitud a l'illa, mesura retardada per la pressió dels latifundistes." },
+     { id: "t5_4", text: "Aranzel Cánovas i creixement de la tensió amb els EUA", year: "???", icon: "fa-coins", exp: "L'increment de tarifes aranzelàries als productes no peninsulars perjudica el comerç entre Cuba i els EUA." },
+     { id: "t5_5", text: "Fundació de la Liga Filipina i del Partido Revolucionario Cubano", year: "???", icon: "fa-users", exp: "José Rizal organitza el moviment reformista filipí i José Martí encapçala l'independentisme cubà." },
+     { id: "t5_6", text: "Inici del 'Grito de Baire' i aixecament del Katipunan", year: "???", icon: "fa-burst", exp: "Comença la darrera Guerra d'Independència a Cuba i la rebel·lió a Filipines; execució de José Rizal el 1896." },
+     { id: "t5_7", text: "Politica de 'Reconcentració' de Weyler i Autonomia de 1897", year: "???", icon: "fa-tent-arrow-down-to-line", exp: "Dura repressió de Weyler aïllant camperols; el 1897 el general Blanco decreta tardanament l'autonomia de Cuba." },
+     { id: "t5_8", text: "Explosió de l'USS Maine i derrotes de Cavite i Santiago", year: "???", icon: "fa-ship", exp: "L'explosió del cuirassat americà a l'Havana actua de pretext per a la intervenció dels EUA i la desfeta militar espanyola." }
    ],
    kahoot: [
      {
@@ -887,10 +887,10 @@ const CHAPTER_DATA = {
        { id: "s4", label: "PRESIDENT NORD-AMERICÀ", relation: "Envia l'ultimàtum i aprova la intervenció militar dels EUA", correct: "William McKinley", icon: "fa-building-flag" }
      ],
      chars: [
-       { name: "Valeriano Weyler", role: "General Espanyol" },
-       { name: "Ramón Blanco", role: "General Conciliador" },
-       { name: "José Rizal", role: "Intel·lectual Filipí" },
-       { name: "William McKinley", role: "President dels EUA" }
+       { name: "Valeriano Weyler", role: "" },
+       { name: "Ramón Blanco", role: "" },
+       { name: "José Rizal", role: "" },
+       { name: "William McKinley", role: "" }
      ]
    },
    boe: [
@@ -933,14 +933,14 @@ const CHAPTER_DATA = {
    color: "bg-stone-700",
    available: true,
    timeline: [
-     { id: "t6_1", text: "Tractat de París i impacte del 'Desastre'", year: "1898", icon: "fa-dumpster-fire", exp: "Espanya assumeix la pèrdua de Cuba, Puerto Rico i Filipines, desencadenant una profunda crisi moral i ideològica." },
-     { id: "t6_2", text: "Publicació de l'Oda a Espanya de Joan Maragall", year: "1898", icon: "fa-scroll", exp: "El poeta català expressa el dolor pel sacrifici inútil dels joves i el distanciament respecte a la política centralista." },
-     { id: "t6_3", text: "Manifest Regeneracionista del General Polavieja", year: "1898-1899", icon: "fa-pen-to-square", exp: "Intent de reforma de l'administració pública i descentralització des del govern conservador de Silvela." },
-     { id: "t6_4", text: "Reforma fiscal de Villaverde i Tancament de Caixes", year: "1899", icon: "fa-store-slash", exp: "Vaga de tributs dels comerciants de Barcelona, encapçalada per l'alcalde Bartomeu Robert, contra els impostos de la guerra." },
-     { id: "t6_5", text: "Venda de les darreres illes del Pacífic a Alemanya", year: "1899", icon: "fa-earth-oceania", exp: "Espanya ven les illes Marianes, Carolines i Palau a l'Imperi Alemany, posant fi definitivament a l'imperi colonial." },
-     { id: "t6_6", text: "Repatriació de capitals i reconversió econòmica", year: "1900", icon: "fa-vault", exp: "El retorn dels capitals colonials finança la creació de nous bancs i la modernització industrial a la Península." },
-     { id: "t6_7", text: "Publicació d'Oligarquía y Caciquismo de Joaquín Costa", year: "1901", icon: "fa-book-open", exp: "Obra cabdal del Regeneracionisme que proposa la reforma educativa i agrària sota el lema 'Escola i Rebost'." },
-     { id: "t6_8", text: "Consolidació de la Generació del 98 i del catalanisme polític", year: "1901-1902", icon: "fa-brain", exp: "Intel·lectuals (Unamuno, Baroja, Machado) i forces com la Lliga Regionalista emergeixen com a alternativa al buit del 98." }
+     { id: "t6_1", text: "Tractat de París i impacte del 'Desastre'", year: "???", icon: "fa-dumpster-fire", exp: "Espanya assumeix la pèrdua de Cuba, Puerto Rico i Filipines, desencadenant una profunda crisi moral i ideològica." },
+     { id: "t6_2", text: "Publicació de l'Oda a Espanya de Joan Maragall", year: "???", icon: "fa-scroll", exp: "El poeta català expressa el dolor pel sacrifici inútil dels joves i el distanciament respecte a la política centralista." },
+     { id: "t6_3", text: "Manifest Regeneracionista del General Polavieja", year: "???", icon: "fa-pen-to-square", exp: "Intent de reforma de l'administració pública i descentralització des del govern conservador de Silvela." },
+     { id: "t6_4", text: "Reforma fiscal de Villaverde i Tancament de Caixes", year: "???", icon: "fa-store-slash", exp: "Vaga de tributs dels comerciants de Barcelona, encapçalada per l'alcalde Bartomeu Robert, contra els impostos de la guerra." },
+     { id: "t6_5", text: "Venda de les darreres illes del Pacífic a Alemanya", year: "???", icon: "fa-earth-oceania", exp: "Espanya ven les illes Marianes, Carolines i Palau a l'Imperi Alemany, posant fi definitivament a l'imperi colonial." },
+     { id: "t6_6", text: "Repatriació de capitals i reconversió econòmica", year: "???", icon: "fa-vault", exp: "El retorn dels capitals colonials finança la creació de nous bancs i la modernització industrial a la Península." },
+     { id: "t6_7", text: "Publicació d'Oligarquía y Caciquismo de Joaquín Costa", year: "???", icon: "fa-book-open", exp: "Obra cabdal del Regeneracionisme que proposa la reforma educativa i agrària sota el lema 'Escola i Rebost'." },
+     { id: "t6_8", text: "Consolidació de la Generació del 98 i del catalanisme polític", year: "???", icon: "fa-brain", exp: "Intel·lectuals (Unamuno, Baroja, Machado) i forces com la Lliga Regionalista emergeixen com a alternativa al buit del 98." }
    ],
    kahoot: [
      {
@@ -1073,10 +1073,10 @@ const CHAPTER_DATA = {
        { id: "s4", label: "ALCALDE PROTESTATARI", relation: "Encapçala la vaga de tributs del Tancament de Caixes a Barcelona", correct: "Bartomeu Robert", icon: "fa-building-user" }
      ],
      chars: [
-       { name: "Camilo Polavieja", role: "General Reformista" },
-       { name: "Giner de los Ríos", role: "Pedagog de la ILE" },
-       { name: "Joan Maragall", role: "Poeta i Intel·lectual" },
-       { name: "Bartomeu Robert", role: "Alcalde de Barcelona" }
+       { name: "Camilo Polavieja", role: "" },
+       { name: "Giner de los Ríos", role: "" },
+       { name: "Joan Maragall", role: "" },
+       { name: "Bartomeu Robert", role: "" }
      ]
    },
    boe: [
@@ -1121,20 +1121,20 @@ const CHAPTER_DATA = {
  
    // 1. LÍNIA DEL TEMPS AMPLIADA (14 ESDEVENIMENTS)
    timeline: [
-     { id: "t7_1", text: "Oda a la Pàtria (Aribau)", year: "1833", icon: "fa-feather", exp: "Inici simbòlic de la Renaixença literària i de la reivindicació de la llengua catalana." },
-     { id: "t7_2", text: "La Jamància i Bullangues", year: "1843", icon: "fa-fire", exp: "Revoltes populars i urbanes a Barcelona contra el centralisme i el sistema de quintes." },
-     { id: "t7_3", text: "Guerra dels Matiners", year: "1846-1849", icon: "fa-shield-halved", exp: "Segona Guerra Carlina a Catalunya amb participació de camperols i crisis agràries." },
-     { id: "t7_4", text: "Restauració dels Jocs Florals", year: "1859", icon: "fa-award", exp: "Consolidació del català com a llengua culta i de prestigi literari." },
-     { id: "t7_5", text: "Pacte Federal de Tortosa", year: "1869", icon: "fa-handshake", exp: "Acord dels republicans federals dels territoris de la Corona d'Aragó per un Estat federal des de baix." },
-     { id: "t7_6", text: "Fundació de La Jove Catalunya", year: "1870", icon: "fa-users", exp: "Primera associació cultural catalanista d'orientació reivindicativa." },
-     { id: "t7_7", text: "Fundació del Diari Català", year: "1879", icon: "fa-newspaper", exp: "Primer periòdic redactat íntegrament en català, creat per Valentí Almirall." },
-     { id: "t7_8", text: "1r Congrés Catalanista i Centre Català", year: "1880-1882", icon: "fa-landmark", exp: "Organització de la primera entitat política del catalanisme sota el lema 'Catalunya i avant'." },
-     { id: "t7_9", text: "Memorial de Greuges", year: "1885", icon: "fa-scroll", exp: "Primer manifest polític unitari lliurat al rei Alfons XII en defensa del dret civil i del proteccionisme." },
-     { id: "t7_10", text: "Publicació de 'Lo Catalanisme'", year: "1886", icon: "fa-book", exp: "Obra doctrinal fonamental de Valentí Almirall que defineix Catalunya com a Nació." },
-     { id: "t7_11", text: "Campanya del Dret Civil Català", year: "1889", icon: "fa-scale-balanced", exp: "Primera victòria política del catalanisme per preservar el dret civil autòcton davant el Codi Civil estatal." },
-     { id: "t7_12", text: "Aprovació de les Bases de Manresa", year: "1892", icon: "fa-file-contract", exp: "Projecte d'autogovern regional aprovat per la Unió Catalanista amb ponència d'Enric Prat de la Riba." },
-     { id: "t7_13", text: "El Tancament de Caixes", year: "1899", icon: "fa-store-slash", exp: "Vaga de tributs dels gremis de Barcelona dirigida pel batlle Bartomeu Robert contra els impostos de la guerra del 98." },
-     { id: "t7_14", text: "Victòria de la Lliga Regionalista", year: "1901", icon: "fa-check-to-slot", exp: "Fundació del partit i victòria electoral històrica a Barcelona amb la Candidatura dels Quatre Presidents." }
+     { id: "t7_1", text: "Oda a la Pàtria (Aribau)", year: "???", icon: "fa-feather", exp: "Inici simbòlic de la Renaixença literària i de la reivindicació de la llengua catalana." },
+     { id: "t7_2", text: "La Jamància i Bullangues", year: "???", icon: "fa-fire", exp: "Revoltes populars i urbanes a Barcelona contra el centralisme i el sistema de quintes." },
+     { id: "t7_3", text: "Guerra dels Matiners", year: "???", icon: "fa-shield-halved", exp: "Segona Guerra Carlina a Catalunya amb participació de camperols i crisis agràries." },
+     { id: "t7_4", text: "Restauració dels Jocs Florals", year: "???", icon: "fa-award", exp: "Consolidació del català com a llengua culta i de prestigi literari." },
+     { id: "t7_5", text: "Pacte Federal de Tortosa", year: "???", icon: "fa-handshake", exp: "Acord dels republicans federals dels territoris de la Corona d'Aragó per un Estat federal des de baix." },
+     { id: "t7_6", text: "Fundació de La Jove Catalunya", year: "???", icon: "fa-users", exp: "Primera associació cultural catalanista d'orientació reivindicativa." },
+     { id: "t7_7", text: "Fundació del Diari Català", year: "???", icon: "fa-newspaper", exp: "Primer periòdic redactat íntegrament en català, creat per Valentí Almirall." },
+     { id: "t7_8", text: "1r Congrés Catalanista i Centre Català", year: "???", icon: "fa-landmark", exp: "Organització de la primera entitat política del catalanisme sota el lema 'Catalunya i avant'." },
+     { id: "t7_9", text: "Memorial de Greuges", year: "???", icon: "fa-scroll", exp: "Primer manifest polític unitari lliurat al rei Alfons XII en defensa del dret civil i del proteccionisme." },
+     { id: "t7_10", text: "Publicació de 'Lo Catalanisme'", year: "???", icon: "fa-book", exp: "Obra doctrinal fonamental de Valentí Almirall que defineix Catalunya com a Nació." },
+     { id: "t7_11", text: "Campanya del Dret Civil Català", year: "???", icon: "fa-scale-balanced", exp: "Primera victòria política del catalanisme per preservar el dret civil autòcton davant el Codi Civil estatal." },
+     { id: "t7_12", text: "Aprovació de les Bases de Manresa", year: "???", icon: "fa-file-contract", exp: "Projecte d'autogovern regional aprovat per la Unió Catalanista amb ponència d'Enric Prat de la Riba." },
+     { id: "t7_13", text: "El Tancament de Caixes", year: "???", icon: "fa-store-slash", exp: "Vaga de tributs dels gremis de Barcelona dirigida pel batlle Bartomeu Robert contra els impostos de la guerra del 98." },
+     { id: "t7_14", text: "Victòria de la Lliga Regionalista", year: "???", icon: "fa-check-to-slot", exp: "Fundació del partit i victòria electoral històrica a Barcelona amb la Candidatura dels Quatre Presidents." }
    ],
  
    // 2. BANCO KAHOOT AMPLIAT (12 PREGUNTES: CLÀSSIQUES, SLIDERS I MULTI-OPCIÓ)
@@ -1268,12 +1268,12 @@ const CHAPTER_DATA = {
        { id: "s6", label: "REPUBLICÀ FEDERAL", relation: "President de la I República i teòric del federalisme", correct: "Pi i Margall", icon: "fa-building-columns" }
      ],
      chars: [
-       { name: "B.C. Aribau", role: "Poeta de la Renaixença" },
-       { name: "Torras i Bages", role: "Bisbe de Vic" },
-       { name: "Prat de la Riba", role: "Ideòleg de la Lliga" },
-       { name: "Dr. Bartomeu Robert", role: "Metge i Alcalde" },
-       { name: "Joan Maragall", role: "Intel·lectual Modernista" },
-       { name: "Pi i Margall", role: "Líder Federalista" }
+       { name: "B.C. Aribau", role: "" },
+       { name: "Torras i Bages", role: "" },
+       { name: "Prat de la Riba", role: "" },
+       { name: "Dr. Bartomeu Robert", role: "" },
+       { name: "Joan Maragall", role: "" },
+       { name: "Pi i Margall", role: "" }
      ]
    },
  
