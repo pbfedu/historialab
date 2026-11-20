@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="ca" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>HistòriaLab Trimestral - Ruta PAU</title>
+  
+  <!-- Fonts: Fredoka & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6.5.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React, Framer Motion, Confetti, html2pdf & Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Banc de Preguntes -->
+  <script src="questions.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'sans-serif'], display: ['Fredoka', 'sans-serif'] },
+          colors: {
+            duoGreen: '#58cc02', duoGreenDark: '#46a302',
+            duoBlue: '#1cb0f6', duoBlueDark: '#1899d6',
+            duoOrange: '#ff9600', duoOrangeDark: '#e08400',
+            duoPurple: '#ce82ff', duoPurpleDark: '#b060e0',
+            duoRed: '#ff4b4b', duoRedDark: '#ea2b2b',
+            duoYellow: '#ffc800', duoYellowDark: '#e0b000',
+            duoEmerald: '#10b981', duoEmeraldDark: '#059669',
+            duoBgSuccess: '#d7ffb8', duoTextSuccess: '#58a700',
+            duoBgWarning: '#fff3cd', duoTextWarning: '#b45309',
+            duoBgError: '#ffdfe0', duoTextError: '#ea2b2b',
+          },
+          boxShadow: {
+            'duo-3d': '0 6px 0 0 rgba(0, 0, 0, 0.1)',
+            'btn-green': '0 6px 0 0 #46a302',
+            'btn-blue': '0 6px 0 0 #1899d6',
+            'btn-orange': '0 6px 0 0 #e08400',
+            'btn-purple': '0 6px 0 0 #b060e0',
+            'btn-red': '0 6px 0 0 #ea2b2b',
+            'btn-yellow': '0 6px 0 0 #e0b000',
+            'duo-card': '0 4px 0 0 #e2e8f0',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #ffffff;
+      color: #1E293B;
+      user-select: none;
+      overflow-x: hidden;
+      background-image: radial-gradient(#f1f5f9 2px, transparent 2px);
+      background-size: 24px 24px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    html.dark body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      background-image: radial-gradient(#1e293b 2px, transparent 2px);
+    }
+    textarea, input { user-select: text; }
+    .duo-pressable:active { transform: translateY(6px) !important; box-shadow: none !important; }
+
+    @keyframes shake {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-10px, 6px) rotate(-1deg); }
+      40% { transform: translate(10px, -6px) rotate(1deg); }
+      60% { transform: translate(-6px, -4px); }
+      80% { transform: translate(6px, 4px); }
+    }
+    .screen-shake { animation: shake 0.45s cubic-bezier(.36,.07,.19,.97) both; }
+
+    @keyframes flashRed { 0%, 100% { box-shadow: inset 0 0 0 0 rgba(255,75,75,0); } 30% { box-shadow: inset 0 0 60px 15px rgba(255,75,75,0.45); } }
+    .flash-red { animation: flashRed 0.5s ease-out; }
+    @keyframes flashYellow { 0%, 100% { box-shadow: inset 0 0 0 0 rgba(255,200,0,0); } 30% { box-shadow: inset 0 0 60px 15px rgba(255,200,0,0.45); } }
+    .flash-yellow { animation: flashYellow 0.5s ease-out; }
+    @keyframes flashGreen { 0%, 100% { box-shadow: inset 0 0 0 0 rgba(88,204,2,0); } 30% { box-shadow: inset 0 0 60px 15px rgba(88,204,2,0.45); } }
+    .flash-green { animation: flashGreen 0.5s ease-out; }
+
+    @keyframes floatDuo { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+    .animate-float-duo { animation: floatDuo 3s ease-in-out infinite; }
+
+    /* Estil Paper de Llibretes pel PDF */
+    .ruled-paper {
+      background-image: linear-gradient(transparent 95%, #cbd5e1 5%);
+      background-size: 100% 2.5rem;
+      line-height: 2.5rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen selection:bg-duoGreen selection:text-white flex flex-col justify-between">
+  
+  <div id="root" class="flex-1 flex flex-col"></div>
+
+  <footer class="w-full text-center text-xs font-bold text-slate-400 dark:text-slate-500 py-6 border-t-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-colors">
+    HistòriaLab Trimestral — Preparació PAU Catalunya.
+  </footer>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { motion, AnimatePresence } = window.Motion;
+
+    const HISTORIALAB_MAIN_URL = "../index.html";
+
+    const shuffleArray = (arr) => [...arr].sort(() => Math.random() - 0.5);
+    const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const countWords = (str) => (str || "").trim().split(/\s+/).filter(Boolean).length;
+
+    const copyExerciseLink = (type, id, onToast) => {
+      const url = new URL(window.location.origin + window.location.pathname);
+      url.searchParams.set('exercise', type);
+      url.searchParams.set('id', id);
+      navigator.clipboard.writeText(url.toString());
+      if (onToast) onToast("Enllaç copiat al portapapers!");
+    };
+
+    const playSound = (type) => {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        const now = ctx.currentTime;
+
+        if (type === 'pop') {
+          osc.type = 'sine'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+          gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.start(now); osc.stop(now + 0.05);
+        } else if (type === 'success') {
+          osc.type = 'triangle'; [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => osc.frequency.setValueAtTime(f, now + i * 0.08));
+          gain.gain.setValueAtTime(0.25, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+          osc.start(now); osc.stop(now + 0.45);
+        } else if (type === 'partial') {
+          osc.type = 'sine'; osc.frequency.setValueAtTime(440, now); osc.frequency.setValueAtTime(554.37, now + 0.12);
+          gain.gain.setValueAtTime(0.22, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.start(now); osc.stop(now + 0.35);
+        } else if (type === 'error') {
+          osc.type = 'sawtooth'; osc.frequency.setValueAtTime(240, now); osc.frequency.exponentialRampToValueAtTime(120, now + 0.3);
+          gain.gain.setValueAtTime(0.25, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+          osc.start(now); osc.stop(now + 0.3);
+        } else if (type === 'fanfare') {
+          osc.type = 'triangle'; [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => osc.frequency.setValueAtTime(f, now + i * 0.09));
+          gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+          osc.start(now); osc.stop(now + 0.65);
+        }
+      } catch (e) {}
+    };
+
+    const triggerConfetti = () => {
+      if (window.confetti) window.confetti({ particleCount: 90, spread: 75, origin: { y: 0.6 }, colors: ['#58cc02', '#1cb0f6', '#ff9600', '#ce82ff', '#ffc800'] });
+    };
+
+    const normalizeText = (str) => {
+      if (!str) return "";
+      return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/['’\-.,;:!?()«»"“”]/g, " ").replace(/\s+/g, " ").trim();
+    };
+
+    const matchesCluster = (normalizedInput, synonymsArray) => {
+      return synonymsArray.some(syn => {
+        const normSyn = normalizeText(syn);
+        if (normSyn.includes(" ")) return normalizedInput.includes(normSyn);
+        return new RegExp(`\\b${normSyn}`, "i").test(normalizedInput);
+      });
+    };
+
+    const evaluateCohesion = (normInput) => {
+      const connectors = ["aixi doncs", "per tant", "en conclusio", "d'altra banda", "tanmateix", "en canvi", "degut a", "ja que", "no obstant", "com a resultat", "a mes", "per aquest motiu", "conseguentment"];
+      let count = 0;
+      connectors.forEach(c => { if (normInput.includes(c)) count++; });
+      return count;
+    };
+
+    const evaluateTextAnswer = (userText, config) => {
+      // --- MODO INSPECTOR ADMIN ---
+      if (window.IS_ADMIN_MODE && userText && userText.includes("adminpass")) {
+        const clustersInfo = config.clusters ? config.clusters.map(c => `${c.label} (${c.terms.slice(0,3).join(', ')})`).join(' | ') : 'Cap';
+        const forbiddenInfo = config.forbiddenTerms ? config.forbiddenTerms.map(f => f.terms.join(', ')).join(' | ') : 'Cap';
+        return {
+          status: 'success',
+          score: 1,
+          title: '🛠️ PAS SUPERAT (INSPECTOR)',
+          message: `CLÚSTERS: [${clustersInfo}] || PROHIBIDES: [${forbiddenInfo}]`
+        };
+      }
+      // ----------------------------
+      const norm = normalizeText(userText);
+      const wordCount = norm ? norm.split(" ").length : 0;
+
+      if (wordCount < (config.minWords || 6)) {
+        return { status: 'error', score: 0, title: 'RESPOSTA MASSA CURTA', message: `Has escrit ${wordCount} paraules (mínim ${config.minWords || 6}). Desenvolupa més l'explicació històrica.` };
+      }
+
+      if (config.forbiddenTerms) {
+        for (const bad of config.forbiddenTerms) {
+          if (matchesCluster(norm, bad.terms)) {
+            return { status: 'error', score: 0, title: 'ERROR ANACRÒNIC / CONCEPTUAL', message: bad.reason };
+          }
+        }
+      }
+
+      let missingMandatory = [];
+      if (config.mandatoryWords) {
+        config.mandatoryWords.forEach(mw => {
+          if (!matchesCluster(norm, mw.variants)) missingMandatory.push(mw.display);
+        });
+      }
+
+      let totalWeight = 0, earnedWeight = 0, matchedLabels = [], missingLabels = [];
+      if (config.clusters) {
+        config.clusters.forEach(cluster => {
+          const w = cluster.weight || 1;
+          totalWeight += w;
+          if (matchesCluster(norm, cluster.terms)) { earnedWeight += w; matchedLabels.push(cluster.label); }
+          else { missingLabels.push(cluster.label); }
+        });
+      }
+
+      const connectorsCount = evaluateCohesion(norm);
+      let conceptRatio = totalWeight > 0 ? (earnedWeight / totalWeight) : 1;
+      let structuralFeedback = connectorsCount >= 2 ? " 🧠 Bona cohesió i connectors." : "";
+      if (connectorsCount >= 2) conceptRatio += 0.12;
+
+      if (missingMandatory.length > 0) {
+        if (missingMandatory.length < config.mandatoryWords.length && conceptRatio >= 0.45) {
+          return { status: 'partial', score: 0.5, title: 'PARCIALMENT BÉ', message: `El context va ben encaminat, però t'ha faltat incloure: ${missingMandatory.join(', ')}.` };
+        }
+        return { status: 'error', score: 0, title: 'FALTEN TERMES OBLIGATORIS', message: `És obligatori usar el 100% dels conceptes indicats. Et falten: ${missingMandatory.join(', ')}.` };
+      }
+
+      if (conceptRatio >= 0.72) {
+        return { status: 'success', score: 1, title: 'RESPOSTA EXCEL·LENT!', message: `Has captat els eixos principals (${matchedLabels.length}/${config.clusters.length}).${structuralFeedback}` };
+      } else if (conceptRatio >= 0.38) {
+        return { status: 'partial', score: 0.5, title: 'PARCIALMENT BÉ', message: `Tens part de la resposta (${matchedLabels.length}/${config.clusters.length}), però falta concretar: ${missingLabels.slice(0, 2).join(', ')}.` };
+      } else {
+        return { status: 'error', score: 0, title: 'RESPOSTA INCOMPLETA O ERRÒNIA', message: `No s'han detectat les idees principals esperades. Revisa els conceptes i torna-ho a provar.` };
+      }
+    };
+
+    const GameHeader = ({ onExit, currentProgress, badgeText, exerciseType, exerciseId, onToast }) => (
+      <div className="flex items-center gap-3 sm:gap-4 mb-6">
+        <button onClick={() => { playSound('pop'); onExit(); }} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-2xl font-black transition-transform hover:scale-110 active:scale-95" title="Tornar al mapa">
+          <i className="fa-solid fa-xmark"></i>
+        </button>
+        <div className="flex-1 bg-slate-200 dark:bg-slate-700 h-4 rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-600">
+          <div className="bg-duoGreen h-full transition-all duration-500 rounded-full" style={{ width: `${currentProgress}%` }}></div>
+        </div>
+        {badgeText && (
+          <span className="hidden sm:inline-block bg-slate-800 dark:bg-slate-700 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider shrink-0">
+            {badgeText}
+          </span>
+        )}
+        {exerciseType && exerciseId && (
+          <button onClick={() => { playSound('pop'); copyExerciseLink(exerciseType, exerciseId, onToast); }} className="bg-sky-100 dark:bg-sky-950/60 text-duoBlue border-2 border-sky-200 dark:border-sky-800 hover:bg-duoBlue hover:text-white text-xs font-black px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1.5 shrink-0">
+            <i className="fa-solid fa-share-nodes"></i>
+            <span className="hidden sm:inline">Copiar Link</span>
+          </button>
+        )}
+      </div>
+    );
+
+    const SelectionMenu = ({ pool, onSelect, iconClass, colorClass, onExit }) => (
+      <div className="max-w-2xl mx-auto space-y-6 pt-4 text-center">
+        <div className="flex justify-start">
+          <button onClick={onExit} className="text-slate-400 hover:text-slate-600 font-black text-xl flex items-center gap-2">
+            <i className="fa-solid fa-arrow-left"></i> Tornar
+          </button>
+        </div>
+        <div className={`w-24 h-24 rounded-full flex items-center justify-center text-5xl mx-auto border-4 shadow-sm animate-float-duo ${colorClass}`}>
+          <i className={`fa-solid ${iconClass}`}></i>
+        </div>
+        <h2 className="text-3xl font-display font-black text-slate-800 dark:text-white">Has completat totes les variants!</h2>
+        <p className="font-bold text-slate-500 dark:text-slate-400">Tria quina vols repassar o comparteix-ne l'enllaç:</p>
+        <div className="grid grid-cols-1 gap-4 pt-2">
+          {pool.map((item, i) => (
+            <button key={item.id} onClick={() => { playSound('pop'); onSelect(item); }} className="p-5 rounded-[22px] font-display font-black text-left text-lg bg-white dark:bg-slate-800 border-[3px] border-b-[6px] border-slate-200 dark:border-slate-700 hover:border-duoBlue text-slate-800 dark:text-white active:translate-y-1 transition-all flex items-center justify-between group">
+              <span>Opció {i + 1}: {item.title || item.font1?.title || "Repàs"}</span>
+              <i className="fa-solid fa-play text-slate-300 group-hover:text-duoBlue transition-colors"></i>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+
+    // --- GAMES ---
+    function GameEx1Fonts({ trimester, forcedExercise, completedIds, onExit, onResult, onFinish, onToast }) {
+      const [exercise, setExercise] = useState(forcedExercise || null);
+      const [step, setStep] = useState(1);
+      const [answers, setAnswers] = useState({ f1: "", f2: "", com: "" });
+      const [totalScore, setTotalScore] = useState(0);
+
+      const pool = trimester?.ex1_fonts || [];
+
+      useEffect(() => {
+        if (forcedExercise) { setExercise(forcedExercise); setStep(1); setAnswers({ f1: "", f2: "", com: "" }); return; }
+        if (completedIds.length < pool.length && pool.length > 0) { setExercise(pickRandom(pool.filter(p => !completedIds.includes(p.id)))); }
+      }, [forcedExercise]);
+
+      if (!forcedExercise && completedIds.length >= pool.length && !exercise) {
+        return <SelectionMenu pool={pool} onSelect={(e) => { setExercise(e); setStep(1); setAnswers({ f1: "", f2: "", com: "" }); }} iconClass="fa-file-lines" colorClass="bg-blue-100 text-duoBlue border-blue-200" onExit={onExit} />;
+      }
+      if (!exercise) return null;
+
+      const renderSource = (src, label) => (
+        <div className="bg-[#fff9e6] dark:bg-slate-800/90 border-[3px] border-amber-200 dark:border-slate-700 rounded-[28px] p-6 shadow-sm space-y-3">
+          <div className="flex items-center justify-between border-b-2 border-amber-200/60 dark:border-slate-700 pb-2">
+            <span className="bg-amber-400 text-slate-900 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">{label} • {src.type === 'image' ? 'Font Visual' : 'Font Textual'}</span>
+            <span className="text-xs font-black text-amber-800 dark:text-amber-400">{src.year}</span>
+          </div>
+          <h4 className="font-display font-black text-lg text-slate-800 dark:text-white">{src.title}</h4>
+          {src.type === 'text' ? (
+            <blockquote className="font-serif italic text-base sm:text-lg text-slate-800 dark:text-slate-200 bg-white/70 dark:bg-slate-900/60 p-4 rounded-2xl border border-amber-200/50 dark:border-slate-700">«{src.content}»</blockquote>
+          ) : (
+            <div className="p-5 bg-slate-100 dark:bg-slate-900 rounded-2xl text-center border-2 border-dashed border-slate-300 dark:border-slate-600 space-y-2">
+              {src.imageUrl ? <img src={src.imageUrl} alt={src.title} className="max-h-56 mx-auto rounded-xl" /> : <i className="fa-solid fa-image text-4xl text-duoBlue"></i>}
+              <p className="text-sm font-bold text-slate-600 dark:text-slate-300">{src.imageDesc}</p>
+            </div>
+          )}
+          {src.author && <div className="text-right text-xs font-bold text-slate-500">Font: {src.author}</div>}
+        </div>
+      );
+
+      const handleCheck = () => {
+        if (step === 1) { onResult(evaluateTextAnswer(answers.f1, exercise.font1.eval), exercise.font1.modelAnswer, 15, (e) => { setTotalScore(s => s + e); setStep(2); }); }
+        else if (step === 2) { onResult(evaluateTextAnswer(answers.f2, exercise.font2.eval), exercise.font2.modelAnswer, 15, (e) => { setTotalScore(s => s + e); setStep(3); }); }
+        else { onResult(evaluateTextAnswer(answers.com, exercise.commonEval), exercise.commonModelAnswer, 20, (e) => onFinish(3, totalScore + e, 'Exercici 1: Fonts', exercise.id)); }
+      };
+
+      const currentAnswer = step === 1 ? answers.f1 : step === 2 ? answers.f2 : answers.com;
+
+      return (
+        <div className="max-w-3xl mx-auto space-y-6 pt-2 pb-12">
+          <GameHeader onExit={onExit} currentProgress={(step / 3) * 100} badgeText={`Pas ${step} de 3`} exerciseType="ex1" exerciseId={exercise.id} onToast={onToast} />
+          <div className="text-center space-y-1">
+            <h2 className="text-2xl sm:text-3xl font-display font-black text-slate-800 dark:text-white">Exercici 1. Anàlisi crítica de fonts </h2>
+            <p className="text-sm font-bold text-slate-500 dark:text-slate-400">
+              {step === 1 ? "Identifiqueu les idees fonamentals de la primera font" : step === 2 ? "Identifiqueu les idees fonamentals de la segona font" : "Prenent com a punt de partida les dues fonts, feu una breu redacció."}
+            </p>
+          </div>
+          {step === 1 && renderSource(exercise.font1, "FONT 1")}
+          {step === 2 && renderSource(exercise.font2, "FONT 2")}
+          {step === 3 && <div className="grid grid-cols-1 md:grid-cols-2 gap-4">{renderSource(exercise.font1, "FONT 1")}{renderSource(exercise.font2, "FONT 2")}</div>}
+          <div className="bg-white dark:bg-slate-800 border-[3px] border-slate-200 dark:border-slate-700 rounded-[28px] p-5 shadow-sm">
+            <div className="flex justify-between items-center text-xs font-black text-slate-400 uppercase mb-2">
+              <span>La teva resposta</span>
+              <span>{countWords(currentAnswer)} paraules</span>
+            </div>
+            <textarea rows="4" value={currentAnswer} onChange={(e) => setAnswers({ ...answers, [step === 1 ? 'f1' : step === 2 ? 'f2' : 'com']: e.target.value })} placeholder="Redacta la teva resposta aquí..." className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-[20px] p-4 font-sans font-semibold text-base text-slate-800 dark:text-white outline-none focus:border-duoBlue transition-colors" />
+          </div>
+          <button onClick={handleCheck} className="w-full bg-duoBlue hover:bg-duoBlueDark border-x-2 border-t-2 border-b-[6px] border-black/10 text-white font-display font-black text-xl py-4 rounded-[24px] shadow-btn-blue duo-pressable uppercase tracking-wider">
+            {step < 3 ? "Corregir i Següent Font" : "Avaluar Connexió Final"}
+          </button>
+        </div>
+      );
+    }
+
+    function GameEx2Situacio({ trimester, forcedExercise, completedIds, onExit, onResult, onFinish, onToast }) {
+      const [item, setItem] = useState(forcedExercise || null);
+      const [text, setText] = useState("");
+      const pool = trimester?.ex2_situacions || [];
+
+      useEffect(() => {
+        if (forcedExercise) { setItem(forcedExercise); setText(""); return; }
+        if (completedIds.length < pool.length && pool.length > 0) { setItem(pickRandom(pool.filter(p => !completedIds.includes(p.id)))); }
+      }, [forcedExercise]);
+
+      if (!forcedExercise && completedIds.length >= pool.length && !item) {
+        return <SelectionMenu pool={pool} onSelect={(e) => { setItem(e); setText(""); }} iconClass="fa-spell-check" colorClass="bg-orange-100 text-duoOrange border-orange-200" onExit={onExit} />;
+      }
+      if (!item) return null;
+
+      const norm = normalizeText(text);
+      const words = item.mandatoryWords.map(w => ({ ...w, used: matchesCluster(norm, w.variants) }));
+      const allUsed = words.every(w => w.used);
+
+      return (
+        <div className="max-w-3xl mx-auto space-y-6 pt-2 pb-12">
+          <GameHeader onExit={onExit} currentProgress={(words.filter(w => w.used).length / words.length) * 100} badgeText="100% Conceptes" exerciseType="ex2" exerciseId={item.id} onToast={onToast} />
+          <div className="bg-gradient-to-br from-duoOrange to-amber-500 text-white rounded-[32px] p-6 sm:p-8 shadow-duo-3d border-b-[6px] border-black/15 space-y-3">
+            <span className="bg-white/20 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest border border-white/30">Exercici 2: Situeu-vos en el temps utilitzant termes històrics</span>
+            <h2 className="text-2xl sm:text-3xl font-display font-black">{item.title}</h2>
+            <p className="font-bold text-base sm:text-lg bg-black/15 p-4 rounded-2xl">{item.situation}</p>
+          </div>
+          <div className="bg-white dark:bg-slate-800 border-[3px] border-slate-200 dark:border-slate-700 rounded-[28px] p-5 shadow-sm space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="font-display font-black text-slate-800 dark:text-white">Paraules obligatòries:</span>
+              <span className={`text-xs font-black px-3 py-1 rounded-full ${allUsed ? 'bg-duoBgSuccess text-duoTextSuccess' : 'bg-amber-100 text-amber-800'}`}>{allUsed ? '100% Incloses!' : 'Usa-les totes'}</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {words.map((w, i) => (
+                <span key={i} className={`px-3.5 py-1.5 rounded-xl font-display font-black text-sm border-2 transition-all flex items-center gap-2 ${w.used ? 'bg-duoGreen text-white border-duoGreenDark scale-105 shadow-sm' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'}`}>
+                  <i className={`fa-solid ${w.used ? 'fa-circle-check' : 'fa-circle-dot opacity-40'}`}></i>{w.display}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="bg-white dark:bg-slate-800 border-[3px] border-slate-200 dark:border-slate-700 rounded-[28px] p-5 shadow-sm">
+            <div className="flex justify-between items-center text-xs font-black text-slate-400 uppercase mb-2">
+              <span>La teva explicació</span>
+              <span>{countWords(text)} paraules</span>
+            </div>
+            <textarea rows="5" value={text} onChange={e => setText(e.target.value)} placeholder="Redacta utilitzant obligatòriament els conceptes de dalt..." className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-[20px] p-4 font-semibold text-base text-slate-800 dark:text-white outline-none focus:border-duoOrange transition-colors" />
+          </div>
+          <button onClick={() => onResult(evaluateTextAnswer(text, { minWords: 15, mandatoryWords: item.mandatoryWords, clusters: item.clusters, forbiddenTerms: item.forbiddenTerms }), item.modelAnswer, 35, e => onFinish(3, e, 'Exercici 2: Situació', item.id))} className="w-full bg-duoOrange hover:bg-duoOrangeDark border-x-2 border-t-2 border-b-[6px] border-black/10 text-white font-display font-black text-xl py-4 rounded-[24px] shadow-btn-orange duo-pressable uppercase tracking-wider">
+            Avaluar Explicació
+          </button>
+        </div>
+      );
+    }
+
+    function GameEx3Tema({ trimester, forcedExercise, completedIds, onExit, onResult, onFinish, onToast }) {
+      const [topic, setTopic] = useState(forcedExercise || null);
+      const [essay, setEssay] = useState("");
+      const pool = trimester?.ex3_temes || [];
+
+      useEffect(() => {
+        if (forcedExercise) { setTopic(forcedExercise); setEssay(""); return; }
+        if (completedIds.length < pool.length && pool.length > 0) { setTopic(pickRandom(pool.filter(p => !completedIds.includes(p.id)))); }
+      }, [forcedExercise]);
+
+      if (!forcedExercise && completedIds.length >= pool.length && !topic) {
+        return <SelectionMenu pool={pool} onSelect={(e) => { setTopic(e); setEssay(""); }} iconClass="fa-pen-nib" colorClass="bg-purple-100 text-duoPurple border-purple-200" onExit={onExit} />;
+      }
+      if (!topic) return null;
+
+      const wordCount = essay.trim().split(/\s+/).filter(Boolean).length;
+
+      return (
+        <div className="max-w-3xl mx-auto space-y-6 pt-2 pb-12">
+          <GameHeader onExit={onExit} currentProgress={Math.min(100, (wordCount / 50) * 100)} badgeText="Redacció PAU" exerciseType="ex3" exerciseId={topic.id} onToast={onToast} />
+          <div className="bg-gradient-to-br from-duoPurple to-indigo-600 text-white rounded-[32px] p-6 sm:p-8 shadow-duo-3d border-b-[6px] border-black/15 space-y-3">
+            <span className="bg-white/20 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest border border-white/30">Exercici 3. Exposeu un tema a través dels descriptors d’un glossari</span>
+            <h2 className="text-2xl sm:text-3xl font-display font-black">{topic.title}</h2>
+            <p className="font-bold text-white/90">{topic.prompt}</p>
+            <div className="bg-black/20 rounded-2xl p-4 space-y-1.5 mt-2">
+              <div className="text-xs font-black uppercase text-purple-200">Aquí tens algunes pistes que et poden ajudar aquest primer trimestre, recorda que no les tindràs a l'exàmen així que intenta no mirar-les molt:</div>
+              <ul className="text-sm font-bold space-y-1">{topic.guidingPoints.map((pt, i) => <li key={i}><i className="fa-solid fa-caret-right text-amber-300 mr-2"></i>{pt}</li>)}</ul>
+            </div>
+          </div>
+          <div className="bg-white dark:bg-slate-800 border-[3px] border-slate-200 dark:border-slate-700 rounded-[28px] p-5 shadow-sm space-y-3">
+            <div className="flex justify-between items-center text-xs font-black text-slate-400 uppercase">
+              <span>El teu desenvolupament</span><span>{wordCount} paraules</span>
+            </div>
+            <textarea rows="7" value={essay} onChange={e => setEssay(e.target.value)} placeholder="Estructura la resposta amb rigor històric..." className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-[20px] p-4 font-semibold text-base text-slate-800 dark:text-white outline-none focus:border-duoPurple transition-colors" />
+          </div>
+          <button onClick={() => onResult(evaluateTextAnswer(essay, { minWords: 25, clusters: topic.clusters, forbiddenTerms: topic.forbiddenTerms }), topic.modelOutline, 45, e => onFinish(3, e, 'Exercici 3: Tema', topic.id))} className="w-full bg-duoPurple hover:bg-duoPurpleDark border-x-2 border-t-2 border-b-[6px] border-black/10 text-white font-display font-black text-xl py-4 rounded-[24px] shadow-btn-purple duo-pressable uppercase tracking-wider">
+            Avaluar Tema
+          </button>
+        </div>
+      );
+    }
+
+    function GameEx4ABC({ trimester, forcedId, completedIds, onExit, onResult, onFinish, onToast }) {
+      const [questions, setQuestions] = useState([]);
+      const [answers, setAnswers] = useState({});
+      const [currentIndex, setCurrentIndex] = useState(0);
+
+      const pool = trimester?.ex4_abc || [];
+      const isReviewMode = completedIds.length >= pool.length;
+
+      useEffect(() => {
+        let available = pool.filter(p => !completedIds.includes(p.id));
+        if (available.length < 5) available = shuffleArray(pool);
+        setQuestions(shuffleArray(available).slice(0, 5));
+        setAnswers({});
+        setCurrentIndex(0);
+      }, [trimester?.id, forcedId]);
+
+      if (questions.length === 0) return null;
+
+      const toggleAns = (val) => { playSound('pop'); setAnswers(p => ({ ...p, [currentIndex]: p[currentIndex] === val ? null : val })); };
+
+      const handleGrade = () => {
+        let pts = 0, errs = [];
+        questions.forEach((q, i) => {
+          if (answers[i] === q.correct) pts += 1;
+          else if (answers[i] !== null && answers[i] !== undefined) {
+            pts -= 0.5;
+            const chosen = q.options[answers[i]];
+            const correctOpt = q.options[q.correct];
+            errs.push(`• Pregunta ${i+1}: Vas marcar "${chosen}" i era "${correctOpt}". ${q.exp || ''}`);
+          }
+        });
+        const finalPts = Math.max(0, pts);
+        const ratio = finalPts / questions.length;
+        const status = ratio >= 0.7 ? 'success' : ratio >= 0.4 ? 'partial' : 'error';
+        onResult({ status, title: `Nota PAU: ${finalPts.toFixed(2)} / ${questions.length}`, message: errs.length > 0 ? errs.join(" \n") : "Excel·lent! No has comès cap error." }, "", Math.round(finalPts * 10), e => onFinish(ratio >= 0.8 ? 3 : 2, e, 'Test ABC', isReviewMode ? 'review' : questions.map(q => q.id).join(',')));
+      };
+
+      const answeredCount = Object.values(answers).filter(v => v !== null && v !== undefined).length;
+      const q = questions[currentIndex];
+
+      return (
+        <div className="max-w-3xl mx-auto space-y-6 pt-2 pb-12">
+          <GameHeader onExit={onExit} currentProgress={((currentIndex) / questions.length) * 100} badgeText="Resta -0.5 pts" exerciseType="ex4" exerciseId={`t${trimester.id}_test`} onToast={onToast} />
+          <div className="bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-300 dark:border-amber-800 rounded-[24px] p-4 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-duoYellow text-slate-900 flex items-center justify-center text-2xl font-black shrink-0"><i className="fa-solid fa-scale-balanced"></i></div>
+            <div className="text-sm font-bold text-amber-900 dark:text-amber-200"><strong>Recorda!</strong> Cada encert suma <strong>1 punt</strong>, cada error resta <strong>-0.5 punts</strong>. Deixar-la en blanc no resta. A LES PAU LA PUNTUACIÓ ÉS DIFERENT. Preguntes respostes: {answeredCount}/{questions.length}</div>
+          </div>
+          
+          <div className="bg-white dark:bg-slate-800 border-[3px] border-slate-200 dark:border-slate-700 rounded-[24px] p-6 shadow-sm min-h-[300px] flex flex-col justify-center gap-6">
+            <p className="font-display font-bold text-xl sm:text-2xl text-slate-800 dark:text-white leading-tight">
+              <span className="text-duoBlue font-black mr-2">Q{currentIndex + 1}.</span>{q.statement}
+            </p>
+            <div className="flex flex-col gap-3">
+              {['a', 'b', 'c', 'd'].map(optKey => (
+                <button key={optKey} onClick={() => toggleAns(optKey)} className={`w-full text-left px-5 py-4 font-bold border-2 border-b-4 rounded-2xl transition-all flex items-center gap-3 ${answers[currentIndex] === optKey ? 'bg-duoBlue text-white border-duoBlueDark scale-[1.02] shadow-sm' : 'bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800'}`}>
+                  <span className={`w-8 h-8 rounded-lg flex items-center justify-center font-display font-black shrink-0 border-2 ${answers[currentIndex] === optKey ? 'bg-white text-duoBlue border-white/20' : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'}`}>{optKey.toUpperCase()}</span>
+                  <span>{q.options[optKey]}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <button onClick={() => setCurrentIndex(c => Math.max(0, c - 1))} disabled={currentIndex === 0} className={`flex-1 font-display font-black text-lg py-4 rounded-[24px] border-x-2 border-t-2 border-b-[6px] border-black/10 uppercase tracking-wider transition-opacity ${currentIndex === 0 ? 'bg-slate-300 text-slate-500 opacity-50 cursor-not-allowed border-none' : 'bg-slate-300 hover:bg-slate-400 text-slate-800 shadow-btn-gray duo-pressable'}`}>Anterior</button>
+            {currentIndex < questions.length - 1 ? (
+              <button onClick={() => setCurrentIndex(c => Math.min(questions.length - 1, c + 1))} className="flex-[2] bg-duoBlue hover:bg-duoBlueDark text-white font-display font-black text-lg py-4 rounded-[24px] border-x-2 border-t-2 border-b-[6px] border-black/10 shadow-btn-blue duo-pressable uppercase tracking-wider">Següent</button>
+            ) : (
+              <button onClick={handleGrade} className="flex-[2] bg-duoYellow hover:bg-duoYellowDark text-slate-900 font-display font-black text-lg py-4 rounded-[24px] border-x-2 border-t-2 border-b-[6px] border-black/10 shadow-btn-yellow duo-pressable uppercase tracking-wider">Enviar i Corregir</button>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    function GameSimulacre({ trimester, onExit, onResult, onFinish, onToast }) {
+      const [stage, setStage] = useState(1);
+      const [examXp, setExamXp] = useState(0);
+
+      const handleStageDone = (stars, xp) => {
+        const total = examXp + xp;
+        setExamXp(total);
+        if (stage < 4) setStage(s => s + 1); else onFinish(3, total + 30, 'Simulacre Complet', null);
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="max-w-3xl mx-auto bg-slate-900 text-white px-5 py-3 rounded-2xl flex items-center justify-between border-2 border-amber-400">
+            <span className="font-display font-black text-sm text-amber-400 flex items-center gap-2"><i className="fa-solid fa-trophy"></i> SIMULACRE EXAMEN PAU</span>
+            <span className="text-xs font-black bg-white/10 px-3 py-1 rounded-full">Exercici {stage} / 4</span>
+          </div>
+          {stage === 1 && <GameEx1Fonts trimester={trimester} completedIds={[]} onExit={onExit} onResult={onResult} onFinish={handleStageDone} onToast={onToast} />}
+          {stage === 2 && <GameEx2Situacio trimester={trimester} completedIds={[]} onExit={onExit} onResult={onResult} onFinish={handleStageDone} onToast={onToast} />}
+          {stage === 3 && <GameEx3Tema trimester={trimester} completedIds={[]} onExit={onExit} onResult={onResult} onFinish={handleStageDone} onToast={onToast} />}
+          {stage === 4 && <GameEx4ABC trimester={trimester} completedIds={[]} onExit={onExit} onResult={onResult} onFinish={handleStageDone} onToast={onToast} />}
+        </div>
+      );
+    }
+
+    // --- PDF GENERATOR COMPONENT (NOVA FUNCIÓ DIRECTA A PDF) ---
+    function PdfContentBlock({ target, trimester }) {
+      return (
+        <>
+          {/* Capçalera PDF */}
+          <div className="text-center pb-8 border-b-4 border-slate-900 mb-10">
+            <h1 className="text-5xl font-display font-black uppercase text-slate-900 tracking-wide">HistòriaLab - {trimester.shortTitle}</h1>
+            <p className="text-2xl font-bold text-slate-500 mt-2">Dossier de Preparació PAU</p>
+          </div>
+
+          {/* Exercici 1 */}
+          {(target === 'all' || target === 'ex1') && (
+            <div className="space-y-12">
+              <div className="bg-duoBlue text-white p-5 rounded-3xl shadow-sm border-4 border-duoBlueDark">
+                <h2 className="text-3xl font-display font-black"><i className="fa-solid fa-file-lines mr-4"></i>Exercici 1: Anàlisi de Fonts</h2>
+              </div>
+              {trimester.ex1_fonts?.map((ex, i) => (
+                <div key={ex.id} className="space-y-6" style={{ pageBreakInside: 'avoid', marginBottom: '80px' }}>
+                  <h3 className="text-3xl font-black text-slate-800 border-b-[3px] border-slate-300 pb-3">Opció {i+1}</h3>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="border-[3px] border-slate-300 rounded-2xl p-6 bg-slate-50">
+                      <span className="bg-duoBlue text-white text-sm font-black px-4 py-1.5 rounded-full uppercase">FONT 1</span>
+                      <h4 className="font-display font-black text-xl mt-4 text-slate-800">{ex.font1.title}</h4>
+                      <p className="italic mt-3 text-base text-slate-700">{ex.font1.content}</p>
+                      <div className="mt-4 text-sm text-right font-bold text-slate-500">Font: {ex.font1.author} ({ex.font1.year})</div>
+                    </div>
+                    <div className="border-[3px] border-slate-300 rounded-2xl p-6 bg-slate-50">
+                      <span className="bg-duoBlue text-white text-sm font-black px-4 py-1.5 rounded-full uppercase">FONT 2</span>
+                      <h4 className="font-display font-black text-xl mt-4 text-slate-800">{ex.font2.title}</h4>
+                      <p className="mt-3 text-base text-slate-700">{ex.font2.imageDesc || "[Font Visual]"}</p>
+                      <div className="mt-4 text-sm text-right font-bold text-slate-500">Font: {ex.font2.author} ({ex.font2.year})</div>
+                    </div>
+                  </div>
+                  <div className="space-y-8 mt-6">
+                    <div>
+                      <p className="font-bold text-lg text-slate-800 mb-2">A) Explica les idees principals de la FONT 1.</p>
+                      <div className="w-full h-48 border-[3px] border-slate-300 rounded-2xl bg-white ruled-paper shadow-inner"></div>
+                    </div>
+                    <div>
+                      <p className="font-bold text-lg text-slate-800 mb-2">B) Explica les idees principals de la FONT 2.</p>
+                      <div className="w-full h-48 border-[3px] border-slate-300 rounded-2xl bg-white ruled-paper shadow-inner"></div>
+                    </div>
+                    <div>
+                      <p className="font-bold text-lg text-slate-800 mb-2">C) Explica què tenen en COMÚ ambdues fonts.</p>
+                      <div className="w-full h-56 border-[3px] border-slate-300 rounded-2xl bg-white ruled-paper shadow-inner"></div>
+                    </div>
+                  </div>
+                  <div style={{ pageBreakBefore: 'always' }}></div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Exercici 2 */}
+          {(target === 'all' || target === 'ex2') && (
+            <div className="space-y-12">
+              <div className="bg-duoOrange text-white p-5 rounded-3xl shadow-sm border-4 border-duoOrangeDark">
+                <h2 className="text-3xl font-display font-black"><i className="fa-solid fa-spell-check mr-4"></i>Exercici 2: Situació Històrica</h2>
+              </div>
+              {trimester.ex2_situacions?.map((ex, i) => (
+                <div key={ex.id} className="space-y-6" style={{ pageBreakInside: 'avoid', marginBottom: '80px' }}>
+                  <h3 className="text-3xl font-black text-slate-800 border-b-[3px] border-slate-300 pb-3">Context {i+1}: {ex.title}</h3>
+                  <div className="bg-orange-50 border-[3px] border-orange-200 rounded-2xl p-6">
+                    <p className="text-lg font-bold text-slate-800">{ex.situation}</p>
+                  </div>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="font-black text-lg text-slate-700">Utilitza obligatòriament:</span>
+                    {ex.mandatoryWords.map(w => (
+                      <span key={w.display} className="px-4 py-2 bg-slate-200 border-2 border-slate-300 rounded-xl text-base font-black text-slate-800">
+                        {w.display}
+                      </span>
+                    ))}
+                  </div>
+                  <div>
+                    <p className="font-bold text-lg text-slate-800 mb-2">Redacta la teva resposta desenvolupant tots els conceptes:</p>
+                    <div className="w-full h-80 border-[3px] border-slate-300 rounded-2xl bg-white ruled-paper shadow-inner"></div>
+                  </div>
+                  <div style={{ pageBreakBefore: 'always' }}></div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Exercici 3 */}
+          {(target === 'all' || target === 'ex3') && (
+            <div className="space-y-12">
+              <div className="bg-duoPurple text-white p-5 rounded-3xl shadow-sm border-4 border-duoPurpleDark">
+                <h2 className="text-3xl font-display font-black"><i className="fa-solid fa-pen-nib mr-4"></i>Exercici 3: Desenvolupar un Tema</h2>
+              </div>
+              {trimester.ex3_temes?.map((ex, i) => (
+                <div key={ex.id} className="space-y-6" style={{ pageBreakInside: 'avoid', marginBottom: '80px' }}>
+                  <h3 className="text-3xl font-black text-slate-800 border-b-[3px] border-slate-300 pb-3">Tema {i+1}: {ex.title}</h3>
+                  <div className="bg-purple-50 border-[3px] border-purple-200 rounded-2xl p-6 space-y-4">
+                    <p className="text-xl font-bold text-slate-800">{ex.prompt}</p>
+                    <ul className="list-disc pl-6 text-lg font-semibold text-slate-700">
+                      {ex.guidingPoints.map((pt, idx) => <li key={idx} className="mb-1">{pt}</li>)}
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="font-bold text-lg text-slate-800 mb-2">Escriu l'assaig històric (aprofita tot l'espai):</p>
+                    <div className="w-full h-[800px] border-[3px] border-slate-300 rounded-2xl bg-white ruled-paper shadow-inner"></div>
+                  </div>
+                  <div style={{ pageBreakBefore: 'always' }}></div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Exercici 4 */}
+          {(target === 'all' || target === 'ex4') && (
+            <div className="space-y-12">
+              <div className="bg-duoYellow text-slate-900 p-5 rounded-3xl shadow-sm border-4 border-duoYellowDark">
+                <h2 className="text-3xl font-display font-black"><i className="fa-solid fa-scale-balanced mr-4"></i>Exercici 4: Test ABC</h2>
+              </div>
+              <div className="space-y-8">
+                {trimester.ex4_abc?.map((q, i) => (
+                  <div key={q.id} className="border-[3px] border-slate-300 rounded-2xl p-6 bg-slate-50" style={{ pageBreakInside: 'avoid' }}>
+                    <p className="font-display font-black text-2xl text-slate-800 mb-6">
+                      <span className="text-duoYellow mr-3">{i+1}.</span> {q.statement}
+                    </p>
+                    <div className="space-y-4 pl-8">
+                      {['a', 'b', 'c'].map(opt => (
+                        <div key={opt} className="flex items-start gap-4">
+                          <div className="w-8 h-8 shrink-0 border-4 border-slate-400 rounded-full mt-0.5 bg-white"></div>
+                          <p className="text-xl font-semibold text-slate-700 leading-snug">
+                            <span className="uppercase font-black mr-2">{opt})</span> {q.options[opt]}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ pageBreakBefore: 'always' }}></div>
+            </div>
+          )}
+
+          {/* Full de Solucions */}
+          {(target === 'all' || target === 'answers') && (
+            <div className="space-y-12">
+              <div className="bg-slate-900 text-white p-5 rounded-3xl shadow-sm border-4 border-black">
+                <h2 className="text-3xl font-display font-black"><i className="fa-solid fa-key mr-4"></i>Full de Solucions Oficials (PAU)</h2>
+              </div>
+              
+              <div className="space-y-10">
+                <div className="border-l-[6px] border-duoBlue pl-6">
+                  <h3 className="text-2xl font-black text-duoBlue mb-4 uppercase">Solucions - Ex. 1 (Fonts)</h3>
+                  {trimester.ex1_fonts?.map((ex, i) => (
+                    <div key={ex.id} className="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                      <p className="font-black text-lg mb-2">Opció {i+1}:</p>
+                      <p className="text-base mb-2"><span className="font-black">F1:</span> {ex.font1.modelAnswer}</p>
+                      <p className="text-base mb-2"><span className="font-black">F2:</span> {ex.font2.modelAnswer}</p>
+                      <p className="text-base"><span className="font-black">Comú:</span> {ex.commonModelAnswer}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="border-l-[6px] border-duoOrange pl-6">
+                  <h3 className="text-2xl font-black text-duoOrange mb-4 uppercase">Solucions - Ex. 2 (Situació)</h3>
+                  {trimester.ex2_situacions?.map((ex, i) => (
+                    <div key={ex.id} className="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                      <p className="font-black text-lg mb-2">Context {i+1}:</p>
+                      <p className="text-base">{ex.modelAnswer}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="border-l-[6px] border-duoPurple pl-6">
+                  <h3 className="text-2xl font-black text-duoPurple mb-4 uppercase">Solucions - Ex. 3 (Temes)</h3>
+                  {trimester.ex3_temes?.map((ex, i) => (
+                    <div key={ex.id} className="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                      <p className="font-black text-lg mb-2">Tema {i+1}:</p>
+                      <p className="text-base">{ex.modelOutline}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="border-l-[6px] border-duoYellow pl-6">
+                  <h3 className="text-2xl font-black text-duoYellowDark mb-4 uppercase">Solucions - Ex. 4 (Test ABC)</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {trimester.ex4_abc?.map((ex, i) => (
+                      <div key={ex.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <span className="font-black text-lg">{i+1}. {ex.correct.toUpperCase()}</span> - <span className="text-base">{ex.exp}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      );
+    }
+
+    // --- PANTALLA CARGA GENERADOR PDF ---
+    function PdfOverlay({ target, trimester, onComplete }) {
+      useEffect(() => {
+        const timer = setTimeout(() => {
+          const element = document.getElementById('pdf-export-content');
+          if (element && window.html2pdf) {
+            const opt = {
+              margin:       12,
+              filename:     `Historialab_PAU_${target === 'all' ? 'Complet' : target}.pdf`,
+              image:        { type: 'jpeg', quality: 1 },
+              html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+              jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            window.html2pdf().set(opt).from(element).save().then(() => {
+              onComplete();
+            });
+          } else {
+            onComplete();
+          }
+        }, 1200);
+        return () => clearTimeout(timer);
+      }, [target, trimester, onComplete]);
+      
+      return (
+        <div className="fixed inset-0 z-[99999] bg-slate-900 text-white flex flex-col items-center justify-center space-y-6">
+          <i className="fa-solid fa-file-pdf text-7xl text-duoBlue animate-pulse"></i>
+          <h2 className="text-4xl font-display font-black text-center px-4">Generant el teu PDF...</h2>
+          <p className="text-slate-300 font-bold text-center px-4 max-w-lg text-lg">Això pot trigar uns segons mentre s'apliquen els colors, l'estètica i la marca d'aigua de fons. No tanquis aquesta finestra!</p>
+          
+          {/* Contenidor ocult a la vista però accessible per a html2canvas */}
+          <div className="absolute top-0 left-[-9999px] w-[900px] text-black bg-white">
+             <div id="pdf-export-content" className="relative font-sans min-h-screen">
+                {/* Patró marca d'aigua per sobre de tot */}
+                <div className="absolute inset-0 z-50 pointer-events-none opacity-[0.06]" style={{
+                  backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><text x='50%' y='50%' font-size='60' fill='black' font-family='sans-serif' font-weight='bold' text-anchor='middle' transform='rotate(-45 300 300)'>HISTÒRIALAB PAU</text></svg>")`,
+                  backgroundRepeat: 'repeat'
+                }}></div>
+                {/* Contingut Real */}
+                <div className="relative z-10 p-12">
+                   <PdfContentBlock target={target} trimester={trimester} />
+                </div>
+             </div>
+          </div>
+        </div>
+      );
+    }
+
+    // --- SETTINGS DIRECTORY ---
+    function SettingsDirectoryView({ onClose, onLaunchExercise, onResetProgress, onToast, onLaunchPdf }) {
+      const [openSection, setOpenSection] = useState({ t1_ex1: true });
+      const toggle = (k) => { playSound('pop'); setOpenSection(p => ({ ...p, [k]: !p[k] })); };
+      const TRIMESTERS = window.QuestionBank.TRIMESTER_DATA;
+
+      return (
+        <div className="max-w-3xl mx-auto space-y-6 pb-16">
+          <div className="flex items-center justify-between bg-white dark:bg-slate-900 p-5 rounded-[28px] border-[3px] border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-slate-800 text-white flex items-center justify-center text-2xl"><i className="fa-solid fa-sliders"></i></div>
+              <div>
+                <h2 className="text-2xl font-display font-black text-slate-800 dark:text-white">Configuració i Directori</h2>
+                <p className="text-xs font-bold text-slate-500">Accedeix directament o comparteix-ne l'enllaç</p>
+              </div>
+            </div>
+            <button onClick={() => { playSound('pop'); onClose(); }} className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white flex items-center justify-center text-2xl"><i className="fa-solid fa-xmark"></i></button>
+          </div>
+
+          {/* NOVA SECCIÓ: GENERAR PDF DIRÈCTAMENT */}
+          <div className="bg-sky-50 dark:bg-sky-950/30 border-2 border-sky-200 dark:border-sky-900 rounded-[24px] p-5 space-y-4">
+            <div>
+              <h4 className="font-display font-black text-sky-800 dark:text-sky-300">Generar PDF per a Imprimir (Nou Format!)</h4>
+              <p className="text-xs font-bold text-sky-600/80">Descarrega un PDF estil PAU, mantenint icones i l'estètica. Hem fet les capses de respostes més grans perquè puguis escriure molt!</p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <button onClick={() => { playSound('pop'); onLaunchPdf('all'); }} className="col-span-2 sm:col-span-1 bg-duoBlue hover:bg-duoBlueDark text-white font-display font-black text-xs px-3 py-3 rounded-xl shadow-btn-blue duo-pressable flex items-center justify-center gap-2"><i className="fa-solid fa-file-pdf text-base"></i> Quadern Complet</button>
+              <button onClick={() => { playSound('pop'); onLaunchPdf('ex1'); }} className="bg-white border-2 border-slate-200 text-slate-700 hover:border-duoBlue font-display font-black text-[11px] px-2 py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5"><i className="fa-solid fa-file-lines text-duoBlue"></i> Ex 1: Fonts</button>
+              <button onClick={() => { playSound('pop'); onLaunchPdf('ex2'); }} className="bg-white border-2 border-slate-200 text-slate-700 hover:border-duoOrange font-display font-black text-[11px] px-2 py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5"><i className="fa-solid fa-spell-check text-duoOrange"></i> Ex 2: Situació</button>
+              <button onClick={() => { playSound('pop'); onLaunchPdf('ex3'); }} className="bg-white border-2 border-slate-200 text-slate-700 hover:border-duoPurple font-display font-black text-[11px] px-2 py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5"><i className="fa-solid fa-pen-nib text-duoPurple"></i> Ex 3: Temes</button>
+              <button onClick={() => { playSound('pop'); onLaunchPdf('ex4'); }} className="bg-white border-2 border-slate-200 text-slate-700 hover:border-duoYellow font-display font-black text-[11px] px-2 py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5"><i className="fa-solid fa-scale-balanced text-duoYellow"></i> Ex 4: Test</button>
+              <button onClick={() => { playSound('pop'); onLaunchPdf('answers'); }} className="bg-slate-800 border-2 border-slate-800 text-white hover:bg-slate-700 font-display font-black text-[11px] px-2 py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5"><i className="fa-solid fa-key"></i> Full Respostes</button>
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            {[1, 2, 3].map(tId => {
+              const trim = TRIMESTERS[tId];
+              if (!trim) return null;
+
+              const categories = [
+                { key: 'ex1', label: 'Exercici 1: Anàlisi de 2 Fonts', icon: 'fa-file-lines', color: 'text-duoBlue', list: trim.ex1_fonts || [] },
+                { key: 'ex2', label: 'Exercici 2: Situació (100% Paraules)', icon: 'fa-spell-check', color: 'text-duoOrange', list: trim.ex2_situacions || [] },
+                { key: 'ex3', label: 'Exercici 3: Desenvolupar Tema', icon: 'fa-pen-nib', color: 'text-duoPurple', list: trim.ex3_temes || [] },
+              ];
+
+              return (
+                <div key={tId} className="bg-white dark:bg-slate-900 border-[3px] border-slate-200 dark:border-slate-800 rounded-[28px] overflow-hidden shadow-sm">
+                  <div className={`${trim.color} text-white px-6 py-4 flex items-center justify-between font-display font-black`}>
+                    <span className="text-lg">Trimestre {tId}: {trim.shortTitle}</span>
+                    {!trim.available && <span className="bg-black/30 text-xs px-3 py-1 rounded-full"><i className="fa-solid fa-lock mr-1"></i> Bloquejat</span>}
+                  </div>
+
+                  {!trim.available ? (
+                    <div className="p-6 text-center text-sm font-bold text-slate-400">Contingut del Trimestre {tId} bloquejat fins a nou avís.</div>
+                  ) : (
+                    <div className="p-4 space-y-3">
+                      {categories.map(cat => {
+                        const accKey = `t${tId}_${cat.key}`;
+                        const isOpen = !!openSection[accKey];
+                        return (
+                          <div key={cat.key} className="border-2 border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden">
+                            <button onClick={() => toggle(accKey)} className="w-full p-4 bg-slate-50 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between font-display font-black text-slate-700 dark:text-slate-200 transition-colors">
+                              <span className="flex items-center gap-3"><i className={`fa-solid ${cat.icon} ${cat.color} text-lg`}></i> {cat.label} <span className="text-xs bg-white dark:bg-slate-700 px-2.5 py-0.5 rounded-full border border-slate-200 dark:border-slate-600">{cat.list.length}</span></span>
+                              <i className={`fa-solid fa-chevron-${isOpen ? 'up' : 'down'} text-slate-400`}></i>
+                            </button>
+                            {isOpen && (
+                              <div className="p-3 bg-white dark:bg-slate-900 space-y-2">
+                                {cat.list.map((ex, idx) => (
+                                  <div key={ex.id} className="p-3.5 rounded-xl border-2 border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
+                                    <div>
+                                      <div className="font-display font-black text-sm text-slate-800 dark:text-white">#{idx + 1} • {ex.title || ex.font1?.title}</div>
+                                      <div className="text-[11px] font-mono text-slate-400">?exercise={cat.key}&id={ex.id}</div>
+                                    </div>
+                                    <div className="flex items-center gap-2 shrink-0">
+                                      <button onClick={() => { playSound('pop'); copyExerciseLink(cat.key, ex.id, onToast); }} className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-300 font-display font-black text-xs flex items-center gap-1.5"><i className="fa-solid fa-link"></i> Copiar Link</button>
+                                      <button onClick={() => onLaunchExercise(cat.key, ex.id)} className="px-4 py-2 rounded-xl bg-duoGreen hover:bg-duoGreenDark text-white font-display font-black text-xs flex items-center gap-1.5 shadow-sm"><i className="fa-solid fa-play"></i> Entrar</button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                      <div className="p-4 bg-slate-50 dark:bg-slate-800/70 rounded-2xl border-2 border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          <i className="fa-solid fa-scale-balanced text-duoYellow text-lg"></i>
+                          <div>
+                            <div className="font-display font-black text-sm text-slate-700 dark:text-slate-200">Exercici 4: Test ABC ({(trim.ex4_abc || []).length} preguntes)</div>
+                            <div className="text-[11px] font-mono text-slate-400">?exercise=ex4&id=t{tId}_test</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button onClick={() => copyExerciseLink('ex4', `t${tId}_test`, onToast)} className="px-3 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-display font-black text-xs"><i className="fa-solid fa-link"></i> Copiar Link</button>
+                          <button onClick={() => onLaunchExercise('ex4', `t${tId}_test`)} className="px-4 py-2 rounded-xl bg-duoYellow text-slate-900 font-display font-black text-xs"><i className="fa-solid fa-play"></i> Entrar</button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="bg-rose-50 dark:bg-rose-950/30 border-2 border-rose-200 dark:border-rose-900 rounded-[24px] p-5 flex items-center justify-between">
+            <div>
+              <h4 className="font-display font-black text-rose-800 dark:text-rose-300">Reiniciar Progrés de Repàs</h4>
+              <p className="text-xs font-bold text-rose-600/80">Torna a posar tots els comptadors a 0 per tornar a fer les rondes aleatòries.</p>
+            </div>
+            <button onClick={onResetProgress} className="bg-duoRed text-white font-display font-black text-xs px-4 py-3 rounded-xl shadow-btn-red duo-pressable">Reiniciar</button>
+          </div>
+        </div>
+      );
+    }
+
+    function PathMap({ selectedTrimester, setSelectedTrimester, nodeProgress, setCurrentView }) {
+      const trim = window.QuestionBank.TRIMESTER_DATA[selectedTrimester];
+
+      const nodes = [
+        { key: 'ex1', pool: 'ex1_fonts', name: 'Ex. 1: Anàlisi crítica de fonts ', icon: 'fa-file-lines', color: 'bg-duoBlue', shadow: 'shadow-btn-blue' },
+        { key: 'ex2', pool: 'ex2_situacions', name: 'Ex. 2: Situacions', icon: 'fa-spell-check', color: 'bg-duoOrange', shadow: 'shadow-btn-orange' },
+        { key: 'ex3', pool: 'ex3_temes', name: 'Ex. 3: Desenvolupar Tema', icon: 'fa-pen-nib', color: 'bg-duoPurple', shadow: 'shadow-btn-purple' },
+        { key: 'ex4', pool: 'ex4_abc', name: 'Ex. 4: Tipo Test', icon: 'fa-scale-balanced', color: 'bg-duoYellow', shadow: 'shadow-btn-yellow' },
+      ];
+
+      return (
+        <div className="space-y-8 pb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 px-1">
+            {[1, 2, 3].map(tId => {
+              const t = window.QuestionBank.TRIMESTER_DATA[tId];
+              const isActive = tId === selectedTrimester;
+              return (
+                <button key={tId} onClick={() => { playSound('pop'); setSelectedTrimester(tId); }} className={`p-4 rounded-[24px] border-b-[6px] border-2 font-display font-black text-left transition-all active:translate-y-1 active:border-b-2 ${isActive ? `${t.color} text-white shadow-duo-3d border-black/20 scale-[1.02]` : !t.available ? 'bg-slate-100 dark:bg-slate-800/80 text-slate-400 border-slate-200 dark:border-slate-700 opacity-85' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800'}`}>
+                  <div className="flex items-center justify-between text-xs uppercase mb-1.5 font-bold tracking-wider">
+                    <span>TRIMESTRE {tId}</span>
+                    {!t.available ? <span className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1"><i className="fa-solid fa-lock"></i> Bloquejat</span> : <span className="bg-white/25 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full">Actiu</span>}
+                  </div>
+                  <div className="text-base line-clamp-1">{t.shortTitle}</div>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className={`${trim.color} text-white p-8 rounded-[32px] shadow-duo-3d border-b-[8px] border-2 border-black/20 relative overflow-hidden`}>
+            <div className="relative z-10 max-w-xl space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest border border-white/30">Avaluació Trimestral {trim.id}</span>
+                {!trim.available && <span className="bg-slate-900/80 text-amber-300 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest border border-amber-400/40"><i className="fa-solid fa-lock mr-1"></i> Bloquejat</span>}
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-display font-black leading-tight drop-shadow-md">{trim.title}</h2>
+              <p className="text-white/90 text-base font-bold">{trim.desc}</p>
+            </div>
+            <i className="fa-solid fa-landmark-dome absolute -right-6 -bottom-10 text-[180px] opacity-15 pointer-events-none transform -rotate-12"></i>
+          </div>
+
+          {!trim.available ? (
+            <div className="bg-white dark:bg-slate-900 border-[3px] border-dashed border-slate-300 dark:border-slate-800 rounded-[32px] p-12 text-center space-y-5 shadow-sm">
+              <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-full flex items-center justify-center text-4xl mx-auto border-[6px] border-slate-200 dark:border-slate-700 animate-float-duo"><i className="fa-solid fa-lock"></i></div>
+              <div className="max-w-md mx-auto space-y-2">
+                <h3 className="text-2xl font-display font-black text-slate-800 dark:text-white">Trimestre {trim.id} Bloquejat</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-base font-bold">Aquest trimestre està bloquejat. Practica tots els formats d'examen al Trimestre 1!</p>
+              </div>
+            </div>
+          ) : (
+            <div className="relative py-8 flex flex-col items-center space-y-12 w-full max-w-md mx-auto">
+              <div className="absolute top-8 bottom-24 left-1/2 w-8 bg-slate-200 dark:bg-slate-800 -translate-x-1/2 rounded-full z-0 border-x-[3px] border-slate-300 dark:border-slate-700 opacity-60"></div>
+              {nodes.map((node, index) => {
+                const total = (trim[node.pool] || []).length;
+                const completedArr = nodeProgress[`t${trim.id}_${node.key}`] || [];
+                const doneCount = completedArr.length;
+                const isAllDone = total > 0 && doneCount >= total;
+                const offsetClass = index % 2 === 0 ? '-translate-x-16 sm:-translate-x-24' : 'translate-x-16 sm:translate-x-24';
+                const activeColor = isAllDone ? 'bg-amber-400 shadow-btn-yellow border-amber-500 text-amber-900' : `${node.color} ${node.shadow} text-white border-black/20`;
+
+                return (
+                  <div key={node.key} className={`relative flex flex-col items-center ${offsetClass} z-10`}>
+                    <button onClick={() => { playSound('pop'); setCurrentView(node.key); }} className={`w-24 h-24 sm:w-28 sm:h-28 rounded-full ${activeColor} flex flex-col items-center justify-center text-3xl sm:text-4xl font-black transition-transform hover:scale-110 active:scale-95 border-b-[8px] border-2 relative group shadow-lg`}>
+                      <i className={`fa-solid ${isAllDone ? 'fa-check text-4xl' : node.icon}`}></i>
+                      {isAllDone && <div className="absolute -top-4 bg-white dark:bg-slate-800 text-amber-500 border-4 border-amber-400 text-sm px-3 py-1 rounded-full font-black flex items-center gap-1.5 shadow-md transform rotate-6 animate-float-duo"><i className="fa-solid fa-crown text-xs"></i><span>100%</span></div>}
+                      {!isAllDone && doneCount > 0 && <div className="absolute -top-3 -right-3 bg-white dark:bg-slate-800 text-slate-800 dark:text-white border-2 border-slate-300 dark:border-slate-600 text-xs px-2.5 py-1 rounded-full font-black shadow-sm">{doneCount}/{total}</div>}
+                    </button>
+                    <div className="absolute -bottom-8 w-[180px] text-center"><span className="font-display font-black text-sm text-slate-600 dark:text-slate-300">{node.name}</span></div>
+                  </div>
+                );
+              })}
+              <div className="relative flex flex-col items-center pt-16 z-10">
+                <button onClick={() => { playSound('pop'); setCurrentView('simulacre'); }} className="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-amber-400 via-duoOrange to-duoRed shadow-btn-red text-white flex flex-col items-center justify-center text-5xl font-black transition-transform hover:scale-110 active:scale-95 border-b-[10px] border-4 border-amber-200 relative group animate-float-duo">
+                  <i className="fa-solid fa-shuffle text-amber-100 mb-1"></i><span className="text-[11px] font-black uppercase tracking-wider bg-black/40 px-3 py-1 rounded-full border border-white/30">EXAMEN</span>
+                </button>
+                <span className="mt-3 font-display font-black text-sm text-slate-600 dark:text-slate-300">Simulacre Trimestral Aleatori</span>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- APP PRINCIPAL ---
+    function App() {
+      const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('hlt_dark') === 'true');
+      useEffect(() => { document.documentElement.classList.toggle('dark', isDarkMode); localStorage.setItem('hlt_dark', isDarkMode); }, [isDarkMode]);
+
+      const [xp, setXp] = useState(() => parseInt(localStorage.getItem('hlt_xp') || '0', 10));
+      const [streak, setStreak] = useState(() => parseInt(localStorage.getItem('hlt_streak') || '1', 10));
+      const [selectedTrimester, setSelectedTrimester] = useState(1);
+      const [nodeProgress, setNodeProgress] = useState(() => JSON.parse(localStorage.getItem('hlt_nodeProgress_v4') || '{}'));
+
+      const [currentView, setCurrentView] = useState('path');
+      const [directExercise, setDirectExercise] = useState(null);
+      const [screenEffect, setScreenEffect] = useState('');
+      const [toastMsg, setToastMsg] = useState(null);
+      
+      const [pdfTarget, setPdfTarget] = useState(null);
+      const [isAdmin, setIsAdmin] = useState(false);
+      useEffect(() => { window.IS_ADMIN_MODE = isAdmin; }, [isAdmin]);
+
+      const [sheet, setSheet] = useState({ isOpen: false, status: 'success', title: '', message: '', modelAnswer: '', onContinue: null });
+
+      useEffect(() => {
+        localStorage.setItem('hlt_xp', xp); localStorage.setItem('hlt_streak', streak); localStorage.setItem('hlt_nodeProgress_v4', JSON.stringify(nodeProgress));
+      }, [xp, streak, nodeProgress]);
+
+      const showToast = (msg) => { setToastMsg(msg); setTimeout(() => setToastMsg(null), 2600); };
+
+      const resolveUrlParams = () => {
+        const params = new URLSearchParams(window.location.search);
+        const exType = params.get('exercise'); const exId = params.get('id');
+        if (!exType || !exId) { setDirectExercise(null); return; }
+
+        const banks = window.QuestionBank.TRIMESTER_DATA;
+        for (const tKey of Object.keys(banks)) {
+          const trim = banks[tKey];
+          if (exType === 'ex1') { const found = (trim.ex1_fonts || []).find(x => x.id === exId); if (found) { setSelectedTrimester(trim.id); setDirectExercise({ type: 'ex1', id: exId, data: found, trimesterId: trim.id }); setCurrentView('ex1'); return; } }
+          else if (exType === 'ex2') { const found = (trim.ex2_situacions || []).find(x => x.id === exId); if (found) { setSelectedTrimester(trim.id); setDirectExercise({ type: 'ex2', id: exId, data: found, trimesterId: trim.id }); setCurrentView('ex2'); return; } }
+          else if (exType === 'ex3') { const found = (trim.ex3_temes || []).find(x => x.id === exId); if (found) { setSelectedTrimester(trim.id); setDirectExercise({ type: 'ex3', id: exId, data: found, trimesterId: trim.id }); setCurrentView('ex3'); return; } }
+          else if (exType === 'ex4' && exId === `t${trim.id}_test`) { setSelectedTrimester(trim.id); setDirectExercise({ type: 'ex4', id: exId, trimesterId: trim.id }); setCurrentView('ex4'); return; }
+        }
+      };
+
+      useEffect(() => { resolveUrlParams(); window.addEventListener('popstate', resolveUrlParams); return () => window.removeEventListener('popstate', resolveUrlParams); }, []);
+
+      const launchDirectExercise = (type, id) => {
+        const url = new URL(window.location); url.searchParams.set('exercise', type); url.searchParams.set('id', id);
+        window.history.pushState({}, '', url); resolveUrlParams();
+      };
+
+      const exitToPath = () => {
+        const url = new URL(window.location); url.searchParams.delete('exercise'); url.searchParams.delete('id');
+        window.history.pushState({}, '', url); setDirectExercise(null); setCurrentView('path');
+      };
+
+      const handleEvalResult = (evalObj, modelAnswer, basePoints, callback) => {
+        let earnedXp = 0;
+        if (evalObj.status === 'success') { playSound('success'); earnedXp = basePoints; setXp(x => x + earnedXp); setScreenEffect('flash-green'); triggerConfetti(); }
+        else if (evalObj.status === 'partial') { playSound('partial'); earnedXp = Math.round(basePoints * 0.08); setXp(x => x + earnedXp); setScreenEffect('flash-yellow'); }
+        else { playSound('error'); setScreenEffect('screen-shake flash-red'); }
+
+        setTimeout(() => setScreenEffect(''), 500);
+
+        setSheet({ isOpen: true, status: evalObj.status, title: evalObj.title, message: evalObj.message, modelAnswer: modelAnswer, onContinue: () => {
+          setSheet(s => ({ ...s, isOpen: false })); if (evalObj.status !== 'error' && callback) { callback(earnedXp); }
+        }});
+      };
+
+      const handleGameFinish = (stars, xpEarned, moduleName, exerciseId) => {
+        const viewKey = currentView;
+        if (exerciseId && exerciseId !== 'review' && ['ex1', 'ex2', 'ex3', 'ex4'].includes(viewKey)) {
+          const storageKey = `t${selectedTrimester}_${viewKey}`;
+          setNodeProgress(prev => {
+            const current = prev[storageKey] || []; const idsToAdd = exerciseId.split(','); const updated = [...current];
+            idsToAdd.forEach(id => { if (!updated.includes(id)) updated.push(id); });
+            return { ...prev, [storageKey]: updated };
+          });
+        }
+        playSound('fanfare'); triggerConfetti(); exitToPath();
+      };
+
+      const activeTrim = window.QuestionBank.TRIMESTER_DATA[selectedTrimester];
+      // --- ACTIVADOR DE BARRA ADMIN ---
+      useEffect(() => {
+        let buffer = "";
+        const pass = "adminpass";
+        const onKey = (e) => {
+          if (e.key.length !== 1) return;
+          buffer = (buffer + e.key.toLowerCase()).slice(-pass.length);
+          if (buffer === pass) {
+            buffer = "";
+            setIsAdmin(prev => {
+              const next = !prev;
+              showToast(next ? "🛠️ Mode Inspector Admin ACTIVAT (Sense punts)" : "Mode Admin desactivat");
+              return next;
+            });
+          }
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+      }, []);
+
+      return (
+        <div className={`min-h-screen text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-all duration-300 ${screenEffect}`}>
+          
+          {pdfTarget && <PdfOverlay target={pdfTarget} trimester={activeTrim} onComplete={() => setPdfTarget(null)} />}
+
+          <AnimatePresence>
+            {toastMsg && (
+              <motion.div initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} className="fixed top-20 left-1/2 -translate-x-1/2 z-[150] bg-slate-900 text-white font-display font-black text-sm px-5 py-3 rounded-2xl shadow-xl border-2 border-duoBlue flex items-center gap-2"><i className="fa-solid fa-check-circle text-duoGreen"></i> {toastMsg}</motion.div>
+            )}
+          </AnimatePresence>
+
+          {!pdfTarget && currentView === 'path' && (
+            <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 border-b-[3px] border-slate-200 dark:border-slate-800 shadow-sm px-4 py-3 transition-colors">
+              <div className="max-w-4xl mx-auto flex items-center justify-between gap-2">
+                <div className="flex items-center gap-3">
+                  <a href={HISTORIALAB_MAIN_URL} onClick={() => playSound('pop')} className="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-display font-black text-xs sm:text-sm px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 dark:border-slate-700 flex items-center gap-2"><i className="fa-solid fa-arrow-left"></i><span className="hidden sm:inline">HistòriaLab</span></a>
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-11 h-11 rounded-[16px] bg-duoGreen flex items-center justify-center text-white text-xl font-black shadow-btn-green border-2 border-black/10"><i className="fa-solid fa-graduation-cap"></i></div>
+                    <div className="hidden md:block"><h1 className="text-xl font-display font-black tracking-tight text-slate-800 dark:text-white leading-none">Història<span className="text-duoGreen">Lab</span> <span className="text-xs bg-duoBlue text-white px-2 py-0.5 rounded-full ml-1">TRIMESTRAL</span></h1></div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 sm:gap-5 font-display font-black text-base">
+                  <div className="flex items-center gap-1.5 text-duoOrange" title="Ratxa"><i className="fa-solid fa-fire text-xl"></i><span>{streak}</span></div>
+                  <div className="flex items-center gap-1.5 text-duoBlue" title="Experiència PAU"><i className="fa-solid fa-bolt text-xl"></i><span>{xp}</span></div>
+                  <button onClick={() => { playSound('pop'); setIsDarkMode(d => !d); }} className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-amber-500 dark:text-yellow-400 flex items-center justify-center text-lg"><i className={`fa-solid ${isDarkMode ? 'fa-sun' : 'fa-moon'}`}></i></button>
+                  <button onClick={() => { playSound('pop'); setCurrentView('settings'); }} className="bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 text-white font-display font-black text-xs sm:text-sm px-3.5 py-2.5 rounded-2xl shadow-sm flex items-center gap-2"><i className="fa-solid fa-gear text-base"></i><span className="hidden sm:inline">Configuració</span></button>
+                </div>
+              </div>
+            </header>
+          )}
+
+          {!pdfTarget && (
+            <main className="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 my-2">
+              <AnimatePresence mode="wait">
+                {currentView === 'path' && (
+                  <motion.div key="path" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                    <PathMap selectedTrimester={selectedTrimester} setSelectedTrimester={setSelectedTrimester} nodeProgress={nodeProgress} setCurrentView={setCurrentView} />
+                  </motion.div>
+                )}
+                {currentView === 'settings' && (
+                  <motion.div key="settings" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                    <SettingsDirectoryView onClose={exitToPath} onLaunchExercise={launchDirectExercise} onResetProgress={() => { setNodeProgress({}); showToast("Progrés reiniciat!"); }} onToast={showToast} onLaunchPdf={setPdfTarget} />
+                  </motion.div>
+                )}
+                {currentView === 'ex1' && <GameEx1Fonts trimester={activeTrim} forcedExercise={directExercise?.type === 'ex1' ? directExercise.data : null} completedIds={nodeProgress[`t${selectedTrimester}_ex1`] || []} onExit={exitToPath} onResult={handleEvalResult} onFinish={handleGameFinish} onToast={showToast} />}
+                {currentView === 'ex2' && <GameEx2Situacio trimester={activeTrim} forcedExercise={directExercise?.type === 'ex2' ? directExercise.data : null} completedIds={nodeProgress[`t${selectedTrimester}_ex2`] || []} onExit={exitToPath} onResult={handleEvalResult} onFinish={handleGameFinish} onToast={showToast} />}
+                {currentView === 'ex3' && <GameEx3Tema trimester={activeTrim} forcedExercise={directExercise?.type === 'ex3' ? directExercise.data : null} completedIds={nodeProgress[`t${selectedTrimester}_ex3`] || []} onExit={exitToPath} onResult={handleEvalResult} onFinish={handleGameFinish} onToast={showToast} />}
+                {currentView === 'ex4' && <GameEx4ABC trimester={activeTrim} forcedId={directExercise?.type === 'ex4' ? directExercise.id : null} completedIds={nodeProgress[`t${selectedTrimester}_ex4`] || []} onExit={exitToPath} onResult={handleEvalResult} onFinish={handleGameFinish} onToast={showToast} />}
+                {currentView === 'simulacre' && <GameSimulacre trimester={activeTrim} onExit={exitToPath} onResult={handleEvalResult} onFinish={handleGameFinish} onToast={showToast} />}
+              </AnimatePresence>
+            </main>
+          )}
+
+          <AnimatePresence>
+            {/* --- BARRA FLOTANTE INSPECTOR ADMIN --- */}
+          {isAdmin && (
+            <div className="fixed bottom-4 right-4 z-[100] bg-slate-900 text-white border-2 border-amber-400 rounded-2xl p-4 shadow-2xl max-w-sm space-y-2 text-xs">
+              <div className="flex items-center justify-between border-b border-slate-700 pb-1.5">
+                <span className="font-display font-black text-amber-400 flex items-center gap-1.5">
+                  <i className="fa-solid fa-bug"></i> INSPECTOR ADMIN (0 XP)
+                </span>
+                <button onClick={() => setIsAdmin(false)} className="text-slate-400 hover:text-white"><i className="fa-solid fa-xmark"></i></button>
+              </div>
+              
+              <div className="text-slate-300 space-y-1">
+                <div><strong>Vista actual:</strong> <span className="text-duoBlue font-mono">{currentView}</span></div>
+                <div><strong>Connectors vàlids:</strong> <span className="text-[10px] text-slate-400">així doncs, per tant, en conclusió, d'altra banda, tanmateix, en canvi, degut a, ja que, no obstant, com a resultat, a més...</span></div>
+              </div>
+
+              {['ex1', 'ex2', 'ex3'].includes(currentView) && (
+                <div className="pt-1 flex gap-2">
+                  <button 
+                    onClick={() => {
+                      const textarea = document.querySelector('textarea');
+                      if (textarea) {
+                        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value").set;
+                        nativeInputValueSetter.call(textarea, "adminpass");
+                        textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                      }
+                    }}
+                    className="flex-1 bg-amber-400 hover:bg-amber-500 text-slate-900 font-display font-black py-2 px-3 rounded-xl transition-colors"
+                  >
+                    1. Omplir clau
+                  </button>
+                  <button 
+                    onClick={() => {
+                      const btns = Array.from(document.querySelectorAll('main button'));
+                      const submitBtn = btns[btns.length - 1];
+                      if (submitBtn) submitBtn.click();
+                    }}
+                    className="flex-1 bg-duoGreen hover:bg-duoGreenDark text-white font-display font-black py-2 px-3 rounded-xl transition-colors"
+                  >
+                    2. Corregir pas
+                  </button>
+                </div>
+              )}
+
+              {currentView === 'ex4' && (
+                <button 
+                  onClick={() => handleEvalResult(
+                    { status: 'success', title: '🔑 TEST REVISAT', message: 'Simulació de test aprovat.' },
+                    "", 0, () => handleGameFinish(3, 0, 'Admin', null)
+                  )}
+                  className="w-full bg-duoYellow text-slate-900 font-display font-black py-2 px-3 rounded-xl mt-1"
+                >
+                  Aprovar Test i sortir
+                </button>
+              )}
+            </div>
+          )}
+            {sheet.isOpen && (
+              
+              <>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-slate-900/25 z-40" onClick={() => sheet.onContinue && sheet.onContinue()} />
+                <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className={`fixed bottom-0 left-0 right-0 z-50 p-6 sm:p-8 rounded-t-[32px] border-t-4 shadow-2xl ${sheet.status === 'success' ? 'bg-duoBgSuccess dark:bg-emerald-950 border-duoGreen' : sheet.status === 'partial' ? 'bg-duoBgWarning dark:bg-amber-950 border-duoYellow' : 'bg-duoBgError dark:bg-rose-950 border-duoRed'}`}>
+                  <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                    <div className="flex items-start gap-4">
+                      <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-3xl shrink-0 bg-white dark:bg-slate-800 shadow-sm border-2 ${sheet.status === 'success' ? 'text-duoGreen border-duoGreen' : sheet.status === 'partial' ? 'text-amber-500 border-duoYellow' : 'text-duoRed border-duoRed'}`}>
+                        <i className={`fa-solid ${sheet.status === 'success' ? 'fa-check' : sheet.status === 'partial' ? 'fa-star-half-stroke' : 'fa-xmark'}`}></i>
+                      </div>
+                      <div className="space-y-1.5">
+                        <h3 className={`font-display font-black text-2xl ${sheet.status === 'success' ? 'text-duoTextSuccess dark:text-emerald-300' : sheet.status === 'partial' ? 'text-duoTextWarning dark:text-amber-300' : 'text-duoTextError dark:text-rose-300'}`}>{sheet.title}</h3>
+                        <p className="text-base font-bold text-slate-800 dark:text-slate-100">{sheet.message}</p>
+                        {sheet.modelAnswer && sheet.status !== 'error' && (
+                          <div className="bg-white/75 dark:bg-slate-900/75 p-3 rounded-xl text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 border border-black/10 mt-2">
+                            <span className="uppercase font-black block text-[10px] opacity-70 mb-0.5">Pauta / Resposta Model PAU:</span>
+                            {sheet.modelAnswer}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <button onClick={sheet.onContinue} className={`w-full sm:w-auto min-w-[200px] font-display font-black text-xl py-4 px-8 rounded-[24px] duo-pressable border-x-2 border-t-2 border-b-[6px] border-black/10 ${sheet.status === 'success' ? 'bg-duoGreen text-white shadow-btn-green' : sheet.status === 'partial' ? 'bg-duoYellow text-slate-900 shadow-btn-yellow' : 'bg-duoRed text-white shadow-btn-red'}`}>
+                      {sheet.status === 'error' ? 'Reintentar' : 'Continuar'}
+                    </button>
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
